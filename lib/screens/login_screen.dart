@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'home_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -16,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Column(
         children: [
           Expanded(
-            flex: 2,
+            flex: 1,
             child: SizedBox(
               width: double.infinity,
               child: Image.asset(
@@ -26,9 +28,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           Expanded(
-            flex: 6,
+            flex: 2,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(24.0),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Text(
                       'Welcome to Nekoshop!',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 22,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -100,9 +102,32 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Login'),
+                    Center(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomeScreen()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
