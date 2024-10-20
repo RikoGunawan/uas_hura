@@ -11,7 +11,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //Antisipasi Keyboard Menggeser Layout
+      //(Note) Antisipasi Keyboard Menggeser Layout
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
@@ -26,25 +26,78 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           Expanded(
-            flex: 4,
+            flex: 6,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        border: OutlineInputBorder(),
+                    const Text(
+                      'Welcome to Nekoshop!',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
-                    const TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Your Password',
-                        border: OutlineInputBorder(),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Email',
+                      style: TextStyle(
+                        fontSize: 12,
+                        // fontWeight: FontWeight.w800,
                       ),
-                      obscureText: true,
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 40,
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          hintText: 'Email',
+                          hintStyle: TextStyle(
+                            fontSize: 12,
+                          ),
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                        ),
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Password',
+                      style: TextStyle(
+                        fontSize: 12,
+                        // fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 40,
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          hintText: 'Your Password',
+                          hintStyle: TextStyle(
+                            fontSize: 12,
+                          ),
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                        ),
+                        obscureText: true,
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
