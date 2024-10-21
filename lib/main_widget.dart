@@ -71,27 +71,9 @@ class _MainWidgetState extends State<MainWidget> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Minecraft Papercraft Biome',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: _widgetOptions.elementAt(_selectedIndex),
-            ),
-          ],
-        ),
+      body: const Padding(
+        padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+        child: HomeScreen(), // Refer ke halaman grid
       ),
     );
   }
