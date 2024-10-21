@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'main_widget.dart';
-import 'screens/home_screen.dart';
+// import 'main_widget.dart';
+// import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 
+//Made by Riko Gunawan
 void main() {
   runApp(const MyApp());
 }
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.titilliumWebTextTheme(),
       ),
-      home: const MainWidget(),
+      home: const LoginScreen(),
     );
   }
 }

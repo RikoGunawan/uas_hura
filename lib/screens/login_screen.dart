@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'home_screen.dart';
+import 'package:myapp/main_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,10 +9,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //(Note) Antisipasi Keyboard Menggeser Layout
+      // Antisipasi Keyboard Menggeser Layout
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
@@ -32,104 +33,107 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Welcome to Nekoshop!',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Welcome to Nekoshop!',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Email',
-                      style: TextStyle(
-                        fontSize: 12,
-                        // fontWeight: FontWeight.w800,
+                      const SizedBox(height: 10),
+                      const Text(
+                        'Email',
+                        style: TextStyle(fontSize: 12),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 40,
-                      child: TextFormField(
+                      const SizedBox(height: 10),
+                      TextFormField(
                         decoration: const InputDecoration(
                           hintText: 'Email',
-                          hintStyle: TextStyle(
-                            fontSize: 12,
-                          ),
+                          hintStyle: TextStyle(fontSize: 12),
                           border: OutlineInputBorder(),
+                          isDense: true,
                           contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
+                              vertical: 14, horizontal: 10),
                         ),
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
+                        style: const TextStyle(fontSize: 12),
                         validator: (value) {
-                          if (value!.isEmpty) {
+                          if (value == null || value.isEmpty) {
                             return 'Please enter your email';
                           }
                           return null;
                         },
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Password',
-                      style: TextStyle(
-                        fontSize: 12,
-                        // fontWeight: FontWeight.w800,
+                      const SizedBox(height: 10),
+                      const Text(
+                        'Password',
+                        style: TextStyle(fontSize: 12),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 40,
-                      child: TextFormField(
+                      const SizedBox(height: 10),
+                      TextFormField(
                         decoration: const InputDecoration(
                           hintText: 'Your Password',
-                          hintStyle: TextStyle(
-                            fontSize: 12,
-                          ),
+                          hintStyle: TextStyle(fontSize: 12),
                           border: OutlineInputBorder(),
+                          isDense: true,
                           contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
+                              vertical: 14, horizontal: 10),
                         ),
                         obscureText: true,
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
+                        style: const TextStyle(fontSize: 12),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    Center(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                      const SizedBox(height: 20),
+                      Center(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const MainWidget(),
+                                  ),
+                                );
+                                // Terkesan Jadul ...
+                                // ScaffoldMessenger.of(context).showSnackBar(
+                                //   const SnackBar(
+                                //       content: Text('Login Success')),
+                                // );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Login Failed')),
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const Text(
+                              'Login',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
