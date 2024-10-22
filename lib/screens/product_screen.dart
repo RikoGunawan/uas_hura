@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../models/product.dart';
 import '../providers/product_provider.dart';
+
+import 'package:intl/intl.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -19,6 +19,13 @@ class _ProductScreenState extends State<ProductScreen> {
     // Mendapatkan product dari provider
     final product =
         Provider.of<ProductProvider>(context).products[0]; // Indeks barang
+
+    // (Note) Format harga menggunakan NumberFormat
+    final formattedPrice = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp ',
+      decimalDigits: 0,
+    ).format(product.price);
 
     return Scaffold(
       //(Note) Antisipasi Keyboard Menggeser Layout
@@ -54,7 +61,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        'Rp ${product.price}',
+                        formattedPrice,
                         style: const TextStyle(
                           fontSize: 18,
                         ),
