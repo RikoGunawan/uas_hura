@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../models/cart_item.dart';
 import '../models/product.dart';
 
 class ProductProvider extends ChangeNotifier {
@@ -15,11 +16,7 @@ class ProductProvider extends ChangeNotifier {
     // Tambahkan produk lain sesuai kebutuhan
   ];
 
-  final List<Map<Product, int>> _cart = []; // Keranjang produk
-
   List<Product> get products => _products;
-  List<Map<Product, int>> get cart =>
-      _cart; // Menambahkan getter untuk keranjang
 
   Product findById(int id) {
     return _products.firstWhere((prod) => prod.id == id);
@@ -61,18 +58,12 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<CartItem> _cartItems = [];
+
+  List<CartItem> get cartItems => _cartItems;
+
   void addToCart(Product product, int quantity) {
-    // Mengecek jika produk sudah ada di keranjang
-    final existingProductIndex =
-        _cart.indexWhere((item) => item.keys.first.id == product.id);
-    if (existingProductIndex != -1) {
-      // Jika produk sudah ada, update kuantitasnya
-      _cart[existingProductIndex][product] =
-          _cart[existingProductIndex][product]! + quantity;
-    } else {
-      // Jika produk belum ada, tambahkan ke keranjang
-      _cart.add({product: quantity});
-    }
+    _cartItems.add(CartItem(product: product, quantity: quantity));
     notifyListeners();
   }
 }

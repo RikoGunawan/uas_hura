@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:intl/intl.dart';
 import '../providers/product_provider.dart';
+import 'product_screen.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ProductProvider>(context);
+    final cartItems = provider.cartItems; // Mengambil item keranjang
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart'),
       ),
       body: Consumer<ProductProvider>(
         builder: (context, provider, child) {
-          if (provider.products.isEmpty) {
+          if (cartItems.isEmpty) {
             return const Center(
               child: Text('Your cart is empty'),
             );
@@ -24,17 +28,91 @@ class CartScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView.builder(
-                  itemCount: provider.products.length,
+                  itemCount: cartItems.length,
                   itemBuilder: (context, index) {
-                    final product = provider.products[index];
-                    return ListTile(
-                      title: Text(product.name),
-                      subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.remove),
-                        onPressed: () {
-                          provider.removeProduct(product);
-                        },
+                    final cartItem = cartItems[index];
+                    final totalPrice =
+                        cartItem.product.price * cartItem.quantity;
+
+                    return InkWell(
+                      onTap: () {
+                        // NAVIGASI
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductScreen(
+                              product:
+                                  cartItem.product, // Passing the product data
+                            ),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            // Gambar Mini di Sebelah Kiri
+                            SizedBox(
+                              width: 80, // Lebar gambar
+                              height: 80, // Tinggi gambar
+                              child: Image.asset(
+                                cartItem.product.image,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
+                                  color: Colors.grey,
+                                  child: const Center(
+                                      child: Text('Image not found')),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                                width: 8), // Spasi antara gambar dan teks
+                            // Kolom untuk Title dan Price
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    cartItem.product.name,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                      height:
+                                          4), // Spasi antara title dan price
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '${NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0).format(cartItem.product.price)} x${cartItem.quantity}',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      Text(
+                                        NumberFormat.currency(
+                                          locale: 'id_ID',
+                                          symbol: 'Rp ',
+                                          decimalDigits: 0,
+                                        ).format(totalPrice),
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -46,7 +124,7 @@ class CartScreen extends StatelessWidget {
                   children: [
                     // Displaying the total price
                     Text(
-                      'Total Price: \$${provider.totalPrice.toStringAsFixed(2)}',
+                      'Total Price: ${NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0).format(provider.totalPrice)}',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

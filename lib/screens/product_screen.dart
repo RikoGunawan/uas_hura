@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/product.dart';
 import 'package:intl/intl.dart';
+
+import '../providers/product_provider.dart';
+import 'cart_screen.dart';
 
 class ProductScreen extends StatefulWidget {
   final Product product;
@@ -155,14 +159,21 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                // final productProvider =
-                //     Provider.of<ProductProvider>(context, listen: false);
-                // productProvider.addToCart(product, quantity);
-                // ScaffoldMessenger.of(context).showSnackBar(
-                //   SnackBar(
-                //       content:
-                //           Text('${product.name} ditambahkan ke keranjang')),
-                // );
+                final productProvider =
+                    Provider.of<ProductProvider>(context, listen: false);
+                productProvider.addToCart(widget.product, quantity);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CartScreen()),
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content:
+                        Text('${widget.product.name} ditambahkan ke keranjang'),
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
