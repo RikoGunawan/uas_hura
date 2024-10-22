@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:myapp/screens/cart_screen.dart';
+import 'package:myapp/screens/manage_product_screen.dart';
 import 'screens/home_screen.dart';
 
 class MainWidget extends StatefulWidget {
@@ -11,6 +12,7 @@ class MainWidget extends StatefulWidget {
 
 class _MainWidgetState extends State<MainWidget> {
   int _selectedIndex = 0;
+
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     Text('Index 1: Profile'),
@@ -26,7 +28,9 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Nekoshop by Riko')),
+      appBar: AppBar(
+        title: const Text('Nekoshop by Riko'),
+      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -71,10 +75,24 @@ class _MainWidgetState extends State<MainWidget> {
           ],
         ),
       ),
-      body: const Padding(
-        padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
-        child: HomeScreen(), // Refer ke halaman grid
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+        child: _widgetOptions[_selectedIndex],
       ),
+      // (Note) FAB Cart hanya muncul untuk HomeScreen
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CartScreen(),
+                  ),
+                );
+              },
+              child: const Icon(Icons.shopping_cart),
+            )
+          : null, // Tidak ada FAB untuk halaman selain HomeScreen
     );
   }
 }

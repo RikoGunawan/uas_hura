@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'providers/product_provider.dart';
 import 'screens/login_screen.dart';
+import 'screens/product_screen.dart';
 // import 'main_widget.dart';
 // import 'screens/home_screen.dart';
 
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.titilliumWebTextTheme(),
       ),
-      home: const LoginScreen(),
+      home: const ProductScreen(),
     );
   }
 }

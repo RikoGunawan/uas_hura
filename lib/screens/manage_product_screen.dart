@@ -12,8 +12,9 @@ class ManageProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final nameController = TextEditingController();
-    final categoryController = TextEditingController();
     final priceController = TextEditingController();
+    final imageController = TextEditingController();
+    final descriptionController = TextEditingController();
 
     final existingProduct =
         ModalRoute.of(context)?.settings.arguments as Product?;
@@ -21,9 +22,9 @@ class ManageProductScreen extends StatelessWidget {
 
     if (isEdit) {
       nameController.text = existingProduct.name;
-      categoryController.text = existingProduct.category;
-      priceController.text = existingProduct.price
-          .toString(); // Konversi ke string untuk TextField
+      priceController.text = existingProduct.price.toString();
+      imageController.text = existingProduct.image;
+      descriptionController.text = existingProduct.description;
     }
 
     return Scaffold(
@@ -41,28 +42,34 @@ class ManageProductScreen extends StatelessWidget {
               ),
             ),
             TextField(
-              controller: categoryController,
-              decoration: const InputDecoration(
-                labelText: 'Category',
-              ),
-            ),
-            TextField(
               controller: priceController,
-              keyboardType: TextInputType.number, // Menggunakan keyboard angka
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 labelText: 'Price',
               ),
+            ),
+            TextField(
+              controller: imageController,
+              decoration: const InputDecoration(
+                labelText: 'Image URL',
+              ),
+            ),
+            TextField(
+              controller: descriptionController,
+              decoration: const InputDecoration(
+                labelText: 'Description',
+              ),
+              maxLines: 3,
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 final name = nameController.text;
-                final category = categoryController.text;
-
-                // Mengonversi price dari String ke double
                 final price = double.tryParse(priceController.text);
+                final image = imageController.text;
+                final description = descriptionController.text;
+
                 if (price == null) {
-                  // Menampilkan pesan kesalahan jika konversi gagal
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content:
@@ -77,8 +84,9 @@ class ManageProductScreen extends StatelessWidget {
                       ? existingProduct.id
                       : DateTime.now().millisecondsSinceEpoch,
                   name: name,
-                  category: category,
                   price: price,
+                  image: image,
+                  description: description,
                 );
 
                 if (isEdit) {

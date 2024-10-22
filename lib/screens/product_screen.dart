@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'cart_screen.dart';
+import '../models/product.dart';
+import '../providers/product_provider.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -14,6 +16,10 @@ class _ProductScreenState extends State<ProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Mendapatkan product dari provider
+    final product =
+        Provider.of<ProductProvider>(context).products[0]; // Indeks barang
+
     return Scaffold(
       //(Note) Antisipasi Keyboard Menggeser Layout
       resizeToAvoidBottomInset: false,
@@ -24,15 +30,15 @@ class _ProductScreenState extends State<ProductScreen> {
             child: SizedBox(
               width: double.infinity,
               child: Image.asset(
-                'assets/mc_papercraft.jpg',
+                product.image,
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          const Expanded(
+          Expanded(
             flex: 2,
             child: Padding(
-              padding: EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(24.0),
               child: SingleChildScrollView(
                 child: Align(
                   alignment: Alignment.topLeft,
@@ -40,29 +46,27 @@ class _ProductScreenState extends State<ProductScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Minecraft Papercraft Biome',
-                        style: TextStyle(
+                        product.name,
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
-                        'Rp 999.999',
-                        style: TextStyle(
+                        'Rp ${product.price}',
+                        style: const TextStyle(
                           fontSize: 18,
-                          // fontWeight: FontWeight.w800,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Text(
-                        'Minecraft Papercraft merupakan sebuah produk miniatur yang terbuat dari rangkaian kertas berwarna khusus dan magnet yang dapat kamu gabungkan menjadi sebuah bangunan atau biome yang kamu inginkan seperti lego! Kenapa tidak mencoba membelinya kalau kamu punya uang?',
-                        style: TextStyle(
+                        product.description,
+                        style: const TextStyle(
                           fontSize: 12,
-                          // fontWeight: FontWeight.w800,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
