@@ -15,12 +15,23 @@ class ProductProvider extends ChangeNotifier {
     ),
     // Tambahkan produk lain sesuai kebutuhan
   ];
+  List<Product> _filteredProducts = []; // Daftar produk yang difilter
+  List<Product> get products =>
+      _filteredProducts.isEmpty ? _products : _filteredProducts;
 
-  List<Product> get products => _products;
-
-  Product findById(int id) {
-    return _products.firstWhere((prod) => prod.id == id);
+  void searchProduct(String query) {
+    if (query.isEmpty) {
+      _filteredProducts = _products;
+    } else {
+      _filteredProducts = _products
+          .where((product) =>
+              product.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+    notifyListeners();
   }
+
+  // List<Product> get products => _products;
 
   void addProduct(Product product) {
     _products.add(product);

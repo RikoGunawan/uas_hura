@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/cart_screen.dart';
+import 'package:provider/provider.dart';
+import 'providers/product_provider.dart';
+import 'providers/product_search_delegate.dart';
 import 'screens/home_screen.dart';
 
 class MainWidget extends StatefulWidget {
@@ -24,14 +27,10 @@ class _MainWidgetState extends State<MainWidget> {
     });
   }
 
-  void _onSearchTap() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Search tapped!')),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+    
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 40.0,
@@ -44,7 +43,13 @@ class _MainWidgetState extends State<MainWidget> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: _onSearchTap,
+            onPressed: () {
+              // Menggunakan ProductSearchDelegate
+              showSearch(
+                context: context,
+                delegate: ProductSearchDelegate(productProvider),
+              );
+            },
           ),
         ],
       ),
