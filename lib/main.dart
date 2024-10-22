@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:provider/provider.dart';
+import 'providers/product_provider.dart';
+import 'screens/login_screen.dart';
 // import 'main_widget.dart';
 // import 'screens/home_screen.dart';
-import 'screens/login_screen.dart';
 
 //Made by Riko Gunawan
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ProductProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
