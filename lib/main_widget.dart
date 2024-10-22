@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/cart_screen.dart';
-import 'package:myapp/screens/manage_product_screen.dart';
 import 'screens/home_screen.dart';
 
 class MainWidget extends StatefulWidget {
@@ -25,11 +24,29 @@ class _MainWidgetState extends State<MainWidget> {
     });
   }
 
+  void _onSearchTap() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Search tapped!')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nekoshop by Riko'),
+        toolbarHeight: 40.0,
+        title: const Text(''),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.black, width: 1)),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: _onSearchTap,
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -76,21 +93,34 @@ class _MainWidgetState extends State<MainWidget> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
         child: _widgetOptions[_selectedIndex],
       ),
       // (Note) FAB Cart hanya muncul untuk HomeScreen
       floatingActionButton: _selectedIndex == 0
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CartScreen(),
-                  ),
-                );
-              },
-              child: const Icon(Icons.shopping_cart),
+          ? Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 10, 20),
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color.fromARGB(255, 69, 163, 240),
+                ),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CartScreen(),
+                      ),
+                    );
+                  },
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.white,
+                  child: const Icon(Icons.shopping_cart, size: 25),
+                ),
+              ),
             )
           : null, // Tidak ada FAB untuk halaman selain HomeScreen
     );
