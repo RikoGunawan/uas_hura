@@ -53,8 +53,8 @@ class CartScreen extends StatelessWidget {
                           children: [
                             // Gambar Mini di Sebelah Kiri
                             SizedBox(
-                              width: 80, // Lebar gambar
-                              height: 80, // Tinggi gambar
+                              width: 80,
+                              height: 80,
                               child: Image.asset(
                                 cartItem.product.image,
                                 fit: BoxFit.cover,
@@ -66,9 +66,8 @@ class CartScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                                width: 8), // Spasi antara gambar dan teks
-                            // Kolom untuk Title dan Price
+                            const SizedBox(width: 8),
+
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,9 +79,7 @@ class CartScreen extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const SizedBox(
-                                      height:
-                                          4), // Spasi antara title dan price
+                                  const SizedBox(height: 4),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -118,32 +115,57 @@ class CartScreen extends StatelessWidget {
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    // Displaying the total price
-                    Text(
-                      'Total Price: ${NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0).format(provider.totalPrice)}',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        provider.checkout(); // Proses checkout
-                        Navigator.pushNamed(context, '/checkout');
-                      },
-                      child: const Text('Checkout'),
-                    ),
-                  ],
-                ),
-              ),
             ],
           );
         },
+      ),
+      //BOTTOM APP BAR
+      bottomNavigationBar: BottomAppBar(
+        height: 56,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Text(
+                  'Total Price: ${NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0).format(provider.totalPrice)}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                provider.checkout();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Pesanan anda diproses ^_^'),
+                  ),
+                );
+                Navigator.pushNamed(context, '/checkout');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(2),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              ),
+              child: const Text(
+                'Checkout',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

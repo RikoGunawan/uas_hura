@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+//Made by Riko Gunawan
 import '../models/cart_item.dart';
 import '../models/product.dart';
 
@@ -43,20 +43,7 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Hitung Total Produk
-  double get totalPrice {
-    double total = 0;
-    for (var item in _products) {
-      total += item.price;
-    }
-    return total;
-  }
-
-  // Checkout
-  void checkout() {
-    _products.clear();
-    notifyListeners();
-  }
+//_________________________________________________________ Cart System
 
   List<CartItem> _cartItems = [];
 
@@ -64,6 +51,18 @@ class ProductProvider extends ChangeNotifier {
 
   void addToCart(Product product, int quantity) {
     _cartItems.add(CartItem(product: product, quantity: quantity));
+    notifyListeners();
+  }
+
+  // Hitung Total Produk (Getter)
+  double get totalPrice {
+    return _cartItems.fold(
+        0, (sum, item) => sum + (item.product.price * item.quantity));
+  }
+
+  // Checkout
+  void checkout() {
+    _cartItems.clear();
     notifyListeners();
   }
 }

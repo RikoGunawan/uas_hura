@@ -181,13 +181,13 @@ class _ProductScreenState extends State<ProductScreen> {
                   borderRadius: BorderRadius.circular(2),
                 ),
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               ),
               child: const Text(
                 'Add to Cart',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 9,
+                  fontSize: 12,
                 ),
               ),
             ),
