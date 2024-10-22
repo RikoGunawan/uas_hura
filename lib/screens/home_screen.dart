@@ -1,3 +1,4 @@
+//Made by Riko Gunawan
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
@@ -15,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    // Retrieve product data using the Provider
+    // Ambil Data Produk [Provider]
     final products = Provider.of<ProductProvider>(context).products;
 
     return SingleChildScrollView(
@@ -25,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const Text(
             'Our Products',
             style: TextStyle(
-              fontSize: 22,
+              fontSize: 20,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -35,14 +36,14 @@ class _HomeScreenState extends State<HomeScreen> {
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
+              mainAxisSpacing: 5,
+              crossAxisSpacing: 5,
             ),
             itemCount: products.length,
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  // Navigate to ProductScreen passing the selected product
+                  // NAVIGASI
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -60,23 +61,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       Expanded(
-                        child: Image.asset(
-                          products[index].image,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(
-                            color: Colors.grey,
-                            child: const Center(child: Text('Image not found')),
+                        flex: 4,
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Image.asset(
+                            products[index].image,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
+                              color: Colors.grey,
+                              child:
+                                  const Center(child: Text('Image not found')),
+                            ),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          products[index].name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 8.0),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              products[index].name,
+                              style: const TextStyle(
+                                fontSize: 9,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                       ),
