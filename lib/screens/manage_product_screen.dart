@@ -37,44 +37,36 @@ class ManageProductScreen extends StatelessWidget {
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-              ),
+              decoration: const InputDecoration(labelText: 'Name'),
             ),
             TextField(
               controller: priceController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Price',
-              ),
+              decoration: const InputDecoration(labelText: 'Price'),
             ),
             TextField(
               controller: imageController,
-              decoration: const InputDecoration(
-                labelText: 'Image URL',
-              ),
+              decoration: const InputDecoration(labelText: 'Image URL'),
             ),
             TextField(
               controller: descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description',
-              ),
+              decoration: const InputDecoration(labelText: 'Description'),
               maxLines: 3,
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                final name = nameController.text;
+                final name = nameController.text.trim();
                 final price = double.tryParse(priceController.text);
-                final image = imageController.text;
-                final description = descriptionController.text;
+                final image = imageController.text.trim();
+                final description = descriptionController.text.trim();
 
-                if (price == null) {
+                if (name.isEmpty ||
+                    price == null ||
+                    image.isEmpty ||
+                    description.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content:
-                          Text('Invalid price. Please enter a valid number.'),
-                    ),
+                    const SnackBar(content: Text('All fields are required.')),
                   );
                   return;
                 }
@@ -82,7 +74,8 @@ class ManageProductScreen extends StatelessWidget {
                 final newProduct = Product(
                   id: isEdit
                       ? existingProduct.id
-                      : DateTime.now().millisecondsSinceEpoch,
+                      : DateTime.now()
+                          .millisecondsSinceEpoch, // Ganti jika menggunakan ID unik
                   name: name,
                   price: price,
                   image: image,

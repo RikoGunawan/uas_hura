@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/product_provider.dart';
+import 'product_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  // const HomeScreen({super.key});
   const HomeScreen({Key? key}) : super(key: key);
 
   static const String routeName = '/';
@@ -13,6 +15,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    // Retrieve product data using the Provider
+    final products = Provider.of<ProductProvider>(context).products;
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,17 +38,19 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
             ),
-            itemCount: 20,
+            itemCount: products.length,
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) =>
-                  //         ProductScreen(productIndex: index),
-                  //   ),
-                  // );
+                  // Navigate to ProductScreen passing the selected product
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductScreen(
+                        product: products[index], // Passing the product data
+                      ),
+                    ),
+                  );
                 },
                 child: Card(
                   elevation: 4,
@@ -54,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Expanded(
                         child: Image.asset(
-                          'assets/product_$index.png',
+                          products[index].image,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
                               Container(
@@ -66,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Product ${index + 1}',
+                          products[index].name,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

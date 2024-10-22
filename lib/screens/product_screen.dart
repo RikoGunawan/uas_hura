@@ -1,34 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/product_provider.dart';
-
+import '../models/product.dart';
 import 'package:intl/intl.dart';
 
 class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key});
+  final Product product;
+
+  const ProductScreen({Key? key, required this.product}) : super(key: key);
 
   @override
-  State<ProductScreen> createState() => _ProductScreenState();
+  _ProductScreenState createState() => _ProductScreenState();
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  late String formattedPrice;
   int quantity = 1;
+  late TextEditingController _quantityController;
 
   @override
-  Widget build(BuildContext context) {
-    // Mendapatkan product dari provider
-    final product =
-        Provider.of<ProductProvider>(context).products[0]; // Indeks barang
-
-    // (Note) Format harga menggunakan NumberFormat
-    final formattedPrice = NumberFormat.currency(
+  void initState() {
+    super.initState();
+    _quantityController = TextEditingController(text: '$quantity');
+    formattedPrice = NumberFormat.currency(
       locale: 'id_ID',
       symbol: 'Rp ',
       decimalDigits: 0,
-    ).format(product.price);
+    ).format(widget.product.price);
+  }
 
+  @override
+  void dispose() {
+    _quantityController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      //(Note) Antisipasi Keyboard Menggeser Layout
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
@@ -37,7 +44,7 @@ class _ProductScreenState extends State<ProductScreen> {
             child: SizedBox(
               width: double.infinity,
               child: Image.asset(
-                product.image,
+                widget.product.image,
                 fit: BoxFit.cover,
               ),
             ),
@@ -53,7 +60,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product.name,
+                        widget.product.name,
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
@@ -68,7 +75,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        product.description,
+                        widget.product.description,
                         style: const TextStyle(
                           fontSize: 12,
                         ),
@@ -100,7 +107,10 @@ class _ProductScreenState extends State<ProductScreen> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          if (quantity > 1) quantity--;
+                          if (quantity > 1) {
+                            quantity--;
+                            _quantityController.text = '$quantity';
+                          }
                         });
                       },
                       child: const Icon(Icons.remove, size: 9),
@@ -117,9 +127,11 @@ class _ProductScreenState extends State<ProductScreen> {
                         isDense: true,
                         contentPadding: EdgeInsets.symmetric(vertical: 8.0),
                       ),
-                      controller: TextEditingController(text: '$quantity'),
+                      controller: _quantityController,
                       style: const TextStyle(fontSize: 9),
-                      onChanged: (value) => quantity = int.tryParse(value) ?? 1,
+                      onChanged: (value) {
+                        quantity = int.tryParse(value) ?? 1;
+                      },
                     ),
                   ),
                   Container(
@@ -132,6 +144,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       onTap: () {
                         setState(() {
                           quantity++;
+                          _quantityController.text = '$quantity';
                         });
                       },
                       child: const Icon(Icons.add, size: 9),
@@ -142,7 +155,14 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Aksi untuk add to cart
+                // final productProvider =
+                //     Provider.of<ProductProvider>(context, listen: false);
+                // productProvider.addToCart(product, quantity);
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //       content:
+                //           Text('${product.name} ditambahkan ke keranjang')),
+                // );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,

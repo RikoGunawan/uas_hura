@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/main_widget.dart';
 import 'package:provider/provider.dart';
 import 'providers/product_provider.dart';
-import 'screens/login_screen.dart';
-import 'screens/product_screen.dart';
-// import 'main_widget.dart';
-// import 'screens/home_screen.dart';
+import 'screens/home_screen.dart';
 
-//Made by Riko Gunawan
 void main() {
   runApp(
     ChangeNotifierProvider(
@@ -18,7 +15,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +30,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.titilliumWebTextTheme(),
       ),
-      home: const ProductScreen(),
+      home: const MainWidget(),
     );
   }
 }
