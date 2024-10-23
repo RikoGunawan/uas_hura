@@ -25,8 +25,25 @@ class CartScreen extends StatelessWidget {
       body: Consumer<ProductProvider>(
         builder: (context, provider, child) {
           if (cartItems.isEmpty) {
-            return const Center(
-              child: Text('Your cart is empty'),
+            return const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(22.0, 22.0, 22.0, 0),
+                  child: Text(
+                    'Cart',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text('Your cart is empty'),
+                  ),
+                ),
+              ],
             );
           }
 
@@ -35,7 +52,7 @@ class CartScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Padding(
-                  padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                  padding: EdgeInsets.fromLTRB(22.0, 22.0, 22.0, 22.0),
                   child: Text(
                     'Cart',
                     style: TextStyle(

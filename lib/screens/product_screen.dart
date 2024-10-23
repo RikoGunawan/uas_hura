@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../main_widget.dart';
 import '../models/product.dart';
 import 'package:intl/intl.dart';
 
 import '../providers/product_provider.dart';
-import 'cart_screen.dart';
 
 class ProductScreen extends StatefulWidget {
   final Product product;
@@ -165,7 +165,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CartScreen()),
+                  MaterialPageRoute(builder: (context) => const MainWidget()),
                 );
 
                 ScaffoldMessenger.of(context).showSnackBar(

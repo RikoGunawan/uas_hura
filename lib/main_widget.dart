@@ -3,7 +3,9 @@ import 'package:myapp/screens/cart_screen.dart';
 import 'package:provider/provider.dart';
 import 'providers/product_provider.dart';
 import 'providers/product_search_delegate.dart';
+import 'screens/contact_us_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/profile_screen.dart';
 
 class MainWidget extends StatefulWidget {
   const MainWidget({super.key});
@@ -17,8 +19,8 @@ class _MainWidgetState extends State<MainWidget> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    Text('Index 1: Profile'),
-    Text('Index 2: Contact Us ^_^'),
+    ProfileScreen(),
+    ContactUsScreen(),
   ];
 
   void _onItemTap(int index) {
@@ -29,8 +31,9 @@ class _MainWidgetState extends State<MainWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final productProvider = Provider.of<ProductProvider>(context, listen: false);
-    
+    final productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 40.0,

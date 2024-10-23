@@ -4,6 +4,7 @@ import 'package:myapp/main_widget.dart';
 import 'package:provider/provider.dart';
 import 'providers/product_provider.dart';
 import 'screens/home_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() {
   runApp(
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.titilliumWebTextTheme(),
       ),
-      home: const MainWidget(),
+      home: const LoginScreen(),
     );
   }
 }
