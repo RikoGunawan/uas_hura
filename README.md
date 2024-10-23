@@ -19,8 +19,8 @@ rikogunawan100@gmail.com
 ![Screenshot 2024-10-20 222430](https://github.com/user-attachments/assets/c25e34dd-ff14-4013-9293-d4c61533f685)
 ![Screenshot 2024-10-20 222400](https://github.com/user-attachments/assets/7580b855-2eaf-4e31-a4e5-37cc18bc330b)
 
-
-
+**Referensi**
+https://nekoto-kun.github.io/course-ppb/docs/intro
 
 
 
