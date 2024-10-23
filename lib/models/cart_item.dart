@@ -6,3 +6,4 @@ class CartItem {
 
   CartItem({required this.product, required this.quantity});
 }
+//~~~ Made by Riko Gunawan ~~~

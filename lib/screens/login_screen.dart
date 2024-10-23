@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/main_widget.dart';
 
+//~~~ Made by Riko Gunawan ~~~
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -23,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: SizedBox(
               width: double.infinity,
               child: Image.asset(
-                'assets/login_banner.jpg',
+                'login_banner.jpg',
                 fit: BoxFit.cover,
               ),
             ),

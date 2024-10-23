@@ -30,3 +30,4 @@ class Product {
     };
   }
 }
+//~~~ Made by Riko Gunawan ~~~

@@ -1,9 +1,10 @@
+//~~~ Made by Riko Gunawan ~~~
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myapp/main_widget.dart';
+// import 'package:myapp/main_widget.dart';
 import 'package:provider/provider.dart';
 import 'providers/product_provider.dart';
-import 'screens/home_screen.dart';
+// import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 
 void main() {

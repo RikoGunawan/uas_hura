@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//Made by Riko Gunawan
+//~~~ Made by Riko Gunawan ~~~
 import '../models/cart_item.dart';
 import '../models/product.dart';
 
@@ -9,9 +9,46 @@ class ProductProvider extends ChangeNotifier {
       id: 1,
       name: 'Minecraft Papercraft Biome',
       price: 999999,
-      image: 'assets/mc_papercraft.jpg',
+      image: 'mc_papercraft.jpg',
       description:
           'Minecraft Papercraft merupakan sebuah produk miniatur yang terbuat dari rangkaian kertas berwarna khusus dan magnet yang dapat kamu gabungkan menjadi sebuah bangunan atau biome yang kamu inginkan seperti lego! Kenapa tidak mencoba membelinya kalau kamu punya uang?',
+    ),
+    Product(
+      id: 2,
+      name: 'Minecraft Bedrock Edition',
+      price: 55000,
+      image: 'mc_game.jpg',
+      description:
+          'Minecraft game bisa kamu beli dengan harga spesial! Bedrock edition version',
+    ),
+    Product(
+      id: 3,
+      name: 'Headset Creeper Minecraft',
+      price: 77000,
+      image: 'mc_headset.jpg',
+      description: 'Melengkapi kebutuhan gamingmu!',
+    ),
+    Product(
+      id: 4,
+      name: 'Minecraft Chicken Egg Cup',
+      price: 49999,
+      image: 'mc_egg_cup.jpg',
+      description:
+          'Tempat menaruh 1 telur dengan style minecraft yang sangat lucu',
+    ),
+    Product(
+      id: 5,
+      name: 'Torch Light Minecraft',
+      price: 59999,
+      image: 'mc_torch_light.jpg',
+      description: 'Lampu yang bukan sembarang lampu..',
+    ),
+    Product(
+      id: 6,
+      name: 'Steven He',
+      price: 911,
+      image: 'stevenhe.jpg',
+      description: 'EMOTIONAL DAMAGE Asian Parent',
     ),
     // Tambahkan produk lain sesuai kebutuhan
   ];
@@ -32,7 +69,8 @@ class ProductProvider extends ChangeNotifier {
   }
 
   // List<Product> get products => _products;
-
+  // NOTE! CRUD untuk Product tidak diberikan aksesnya kepada user
+  // atau tidak dibuatkan screennya, tapi methodnya saya simpan disini
   void addProduct(Product product) {
     _products.add(product);
     notifyListeners();
