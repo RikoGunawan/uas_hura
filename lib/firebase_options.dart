@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     projectId: 'uas-hura',
     storageBucket: 'uas-hura.firebasestorage.app',
   );
+
 }
