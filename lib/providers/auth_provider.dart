@@ -33,7 +33,6 @@ class AuthProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  //prosedur logoutnya sederhana ngehapus data user di aplikasi
    Future<void> logout() async {
     _user = null;
 
