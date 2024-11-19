@@ -1,52 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'models/event.dart';
-import 'providers/event_provider.dart';
+import '../models/event.dart';
+import '../providers/event_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class MainEventWidget extends StatelessWidget {
-  const MainEventWidget({super.key});
+class EventScreen extends StatelessWidget {
+  const EventScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final eventProvider = Provider.of<EventProvider>(context);
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: eventProvider.events.map((event) {
-          return _buildCardItem(event);
-        }).toList(),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: eventProvider.events.map((event) {
+            return _buildCardItem(event);
+          }).toList(),
+        ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _openWhatsApp(context),
+        backgroundColor: const Color.fromARGB(255, 229, 66, 37),
+        label: const Text(
+          "Contact Us!",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
   Widget _buildCardItem(Event event) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 7.0),
+    return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 1.0),
+        padding: const EdgeInsets.symmetric(vertical: 2.0),
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: SizedBox(
-            width: 200,
+            width: 240,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Stack untuk menumpuk elemen
                 Stack(
                   children: [
-                    // Gambar sebagai latar belakang
                     ClipRRect(
                       borderRadius: BorderRadius.circular(15.0),
                       child: Image.asset(
-                        '${event.image}',
+                        event.image,
                         height: 120,
                         width: double.infinity,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          // Jika gambar gagal dimuat, gunakan gambar default
                           return Image.asset(
                             'stevenhe.jpg',
                             height: 120,
@@ -56,28 +66,25 @@ class MainEventWidget extends StatelessWidget {
                         },
                       ),
                     ),
-                    // Overlay untuk shading
                     Positioned.fill(
                       child: Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
                             colors: [
-                              Colors.black
-                                  .withOpacity(0.6), // Warna shading atas
-                              Colors.transparent, // Transparansi bawah
+                              Colors.black.withOpacity(0.6),
+                              Colors.transparent,
                             ],
                           ),
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                       ),
                     ),
-                    // Nama event di atas gambar
                     Positioned(
                       left: 8,
                       right: 8,
-                      bottom: 8,
+                      top: 8,
                       child: Text(
                         event.name,
                         style: const TextStyle(
@@ -97,5 +104,28 @@ class MainEventWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _openWhatsApp(BuildContext context) async {
+    const phoneNumber = '+6285156613178';
+    const message = 'Hello! I want to know more about your events.';
+    final whatsappUrl = Uri.parse(
+      'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
+    );
+
+    try {
+      if (await canLaunchUrl(whatsappUrl)) {
+        await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not open WhatsApp')),
+        );
+      }
+    } catch (e) {
+      print("Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error opening WhatsApp')),
+      );
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/profile_screen.dart';
 
+import 'screens/event_screen.dart';
 import 'screens/home_screen.dart';
 
 class MainWidget extends StatefulWidget {
@@ -15,7 +16,7 @@ class _MainWidgetState extends State<MainWidget> {
 
   final List<Widget> _pages = [
     const HomeScreen(),
-    const Center(child: Text('Ini halaman Event')),
+    const EventScreen(),
     // const FeedScreen(),
     const Center(child: Text('Ini halaman Hura')),
     const Center(child: Text('Ini halaman Hura Point')),

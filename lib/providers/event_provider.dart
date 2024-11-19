@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 //~~~ Made by Riko Gunawan ~~~
-import '../models/cart_item.dart';
+// import '../models/cart_item.dart';
 import '../models/event.dart';
 
 class EventProvider extends ChangeNotifier {
