@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import '../providers/product_provider.dart';
 
 class ProductScreen extends StatefulWidget {
-  final Product product;
+  final Event product;
 
   const ProductScreen({super.key, required this.product});
 

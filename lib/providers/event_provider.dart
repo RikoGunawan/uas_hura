@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 //~~~ Made by Riko Gunawan ~~~
 import '../models/cart_item.dart';
-import '../models/product.dart';
+import '../models/event.dart';
 
-class ProductProvider extends ChangeNotifier {
-  final List<Event> _products = [
+class EventProvider extends ChangeNotifier {
+  final List<Event> _events = [
     Event(
       id: 1,
       name: 'Minecraft Papercraft Biome',
@@ -52,66 +52,65 @@ class ProductProvider extends ChangeNotifier {
     ),
     // Tambahkan produk lain sesuai kebutuhan
   ];
-  List<Event> _filteredProducts = []; // Daftar produk yang difilter
-  List<Event> get products =>
-      _filteredProducts.isEmpty ? _products : _filteredProducts;
+  List<Event> _filteredEvents = []; // Daftar produk yang difilter
+  List<Event> get events => _filteredEvents.isEmpty ? _events : _filteredEvents;
 
-  void searchProduct(String query) {
+  void searchEvent(String query) {
     if (query.isEmpty) {
-      _filteredProducts = _products;
+      _filteredEvents = _events;
     } else {
-      _filteredProducts = _products
-          .where((product) =>
-              product.name.toLowerCase().contains(query.toLowerCase()))
+      _filteredEvents = _events
+          .where(
+              (event) => event.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
     notifyListeners();
   }
 
-  // List<Product> get products => _products;
-  // NOTE! CRUD untuk Product tidak diberikan aksesnya kepada user
+  // List<event> get events => _events;
+  // NOTE! CRUD untuk event tidak diberikan aksesnya kepada user
   // atau tidak dibuatkan screennya, tapi methodnya saya simpan disini
-  void addProduct(Event product) {
-    _products.add(product);
+  void addEvent(Event event) {
+    _events.add(event);
     notifyListeners();
   }
 
-  void editProduct(Event product) {
-    final index = _products.indexWhere((element) => element.id == product.id);
-    _products[index] = product;
+  void editEvent(Event event) {
+    final index = _events.indexWhere((element) => element.id == event.id);
+    _events[index] = event;
     notifyListeners();
   }
 
-  void removeProduct(Event product) {
-    _products.remove(product);
+  void removeEvent(Event event) {
+    _events.remove(event);
     notifyListeners();
   }
 
-  void clearProducts() {
-    _products.clear();
+  void clearEvents() {
+    _events.clear();
     notifyListeners();
   }
 
 //_________________________________________________________ Cart System
 
-  final List<CartItem> _cartItems = [];
+  // final List<CartItem> _cartItems = [];
 
-  List<CartItem> get cartItems => _cartItems;
+  // List<CartItem> get cartItems => _cartItems;
 
-  void addToCart(Event product, int quantity) {
-    _cartItems.add(CartItem(product: product, quantity: quantity));
-    notifyListeners();
-  }
+  // void addToCart(Event event, int quantity) {
+  //   _cartItems.add(CartItem(event: event, quantity: quantity));
+  //   notifyListeners();
+  // }
 
-  // Hitung Total Produk (Getter)
-  double get totalPrice {
-    return _cartItems.fold(
-        0, (sum, item) => sum + (item.product.price * item.quantity));
-  }
+  // // Hitung Total Produk (Getter)
+  // double get totalPrice {
+  //   return _cartItems.fold(
+  //       0, (sum, item) => sum + (item.event.price * item.quantity));
+  // }
 
-  // Checkout
-  void checkout() {
-    _cartItems.clear();
-    notifyListeners();
-  }
+  // // Checkout
+  // void checkout() {
+  //   _cartItems.clear();
+  //   notifyListeners();
+  // }
 }

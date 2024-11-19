@@ -17,7 +17,7 @@ class ManageProductScreen extends StatelessWidget {
     final descriptionController = TextEditingController();
 
     final existingProduct =
-        ModalRoute.of(context)?.settings.arguments as Product?;
+        ModalRoute.of(context)?.settings.arguments as Event?;
     final isEdit = existingProduct != null;
 
     if (isEdit) {
@@ -71,7 +71,7 @@ class ManageProductScreen extends StatelessWidget {
                   return;
                 }
 
-                final newProduct = Product(
+                final newProduct = Event(
                   id: isEdit
                       ? existingProduct.id
                       : DateTime.now()
