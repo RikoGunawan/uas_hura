@@ -94,7 +94,7 @@ class ProductProvider extends ChangeNotifier {
 
 //_________________________________________________________ Cart System
 
-  List<CartItem> _cartItems = [];
+  final List<CartItem> _cartItems = [];
 
   List<CartItem> get cartItems => _cartItems;
 

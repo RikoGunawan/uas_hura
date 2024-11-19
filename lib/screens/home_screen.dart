@@ -5,7 +5,7 @@ import '../providers/product_provider.dart';
 import 'product_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   static const String routeName = '/';
 

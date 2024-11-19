@@ -9,7 +9,7 @@ import '../providers/product_provider.dart';
 class ProductScreen extends StatefulWidget {
   final Product product;
 
-  const ProductScreen({Key? key, required this.product}) : super(key: key);
+  const ProductScreen({super.key, required this.product});
 
   @override
   _ProductScreenState createState() => _ProductScreenState();
