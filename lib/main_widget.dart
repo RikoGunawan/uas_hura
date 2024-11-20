@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/hura_point_screen.dart';
 import 'package:myapp/screens/profile_screen.dart';
 
 import 'screens/event_screen.dart';
@@ -18,7 +19,7 @@ class _MainWidgetState extends State<MainWidget> {
     const HomeScreen(),
     const EventScreen(),
     const Center(child: Text('Ini halaman Hura')),
-    const Center(child: Text('Ini halaman Hura Point')),
+    const HuraPointScreen(),
     const ProfileScreen(),
   ];
 

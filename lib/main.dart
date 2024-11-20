@@ -5,19 +5,25 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/event_provider.dart';
+import 'providers/hura_point_provider.dart';
 import 'providers/product_provider.dart';
 // import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'utils/app_colors.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final huraProvider = HuraPointProvider();
+  await huraProvider.loadLastLoginDate(); // Muat tanggal login sebelumnya
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (context) => EventProvider())
+        ChangeNotifierProvider(create: (context) => EventProvider()),
+        ChangeNotifierProvider(create: (_) => HuraPointProvider()),
       ],
-      child: const MyApp(),
+      child: MyApp(),
     ),
   );
 }

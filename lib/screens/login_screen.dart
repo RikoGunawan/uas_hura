@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../main_widget.dart';
 import '../providers/auth_provider.dart';
+import '../providers/hura_point_provider.dart';
 import '../utils/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -141,11 +142,38 @@ class _LoginScreenState extends State<LoginScreen> {
                                           "password",
                                         );
                                         if (isSuccess) {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const MainWidget(),
+                                          // Tambahkan poin login harian
+                                          HuraPointProvider huraPointProvider =
+                                              Provider.of<HuraPointProvider>(
+                                                  context,
+                                                  listen: false);
+                                          huraPointProvider
+                                              .updateDailyPointsOnLogin();
+
+                                          // Tampilkan dialog untuk notifikasi
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              title: const Text(
+                                                  "Login Successful"),
+                                              content: const Text(
+                                                  "You have earned 1 daily point! 🎉"),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pop(); // Tutup dialog
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const MainWidget(),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: const Text("OK"),
+                                                ),
+                                              ],
                                             ),
                                           );
                                         } else {
@@ -153,8 +181,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                               .showSnackBar(
                                             SnackBar(
                                               content: Text(
-                                                  authProvider.errorMessage ??
-                                                      "Login Failed"),
+                                                authProvider.errorMessage ??
+                                                    "Login Failed",
+                                              ),
                                             ),
                                           );
                                         }
