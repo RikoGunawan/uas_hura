@@ -17,10 +17,17 @@ class _MainWidgetState extends State<MainWidget> {
   final List<Widget> _pages = [
     const HomeScreen(),
     const EventScreen(),
-    // const FeedScreen(),
     const Center(child: Text('Ini halaman Hura')),
     const Center(child: Text('Ini halaman Hura Point')),
     const ProfileScreen(),
+  ];
+
+  final List<String> _titles = [
+    'Home',
+    'Events',
+    'Hura',
+    'Hura Point',
+    'Profile',
   ];
 
   void _onTabTapped(int index) {
@@ -35,6 +42,7 @@ class _MainWidgetState extends State<MainWidget> {
       body: _pages[_currentIndex],
       currentIndex: _currentIndex,
       onTabTapped: _onTabTapped,
+      title: _titles[_currentIndex], // Kirim judul sesuai halaman
     );
   }
 }
@@ -45,24 +53,36 @@ class MainWidgetTemplate extends StatelessWidget {
   final Widget body; // Konten layar
   final int currentIndex; // Indeks tab yang dipilih
   final Function(int) onTabTapped; // Callback untuk navigasi tab
+  final String title; // Judul AppBar
 
   const MainWidgetTemplate({
     super.key,
     required this.body,
     required this.currentIndex,
     required this.onTabTapped,
+    required this.title, // Parameter judul
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Home'),
+      appBar: _buildAppBar(), // Kondisional untuk AppBar
       body: body,
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: currentIndex,
         onTabTapped: onTabTapped,
       ),
     );
+  }
+
+  _buildAppBar() {
+    if (currentIndex == 2) {
+      // Halaman Hura
+      return null;
+    } else {
+      // AppBar default
+      return CustomAppBar(title: title);
+    }
   }
 }
 
@@ -75,7 +95,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.white,
       flexibleSpace: Stack(
         children: [
           Positioned(
@@ -84,9 +104,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Text(
               title,
               style: const TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontSize: 15,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w200,
               ),
             ),
           ),
@@ -103,7 +123,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: IconButton(
                 icon: const Icon(
                   Icons.notifications_none_rounded,
-                  color: Colors.white,
+                  color: Colors.black,
                   size: 20,
                 ),
                 onPressed: () {
@@ -117,8 +137,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
+  // @override
+  // Size get preferredSize => const Size.fromHeight(56.0);
   @override
-  Size get preferredSize => const Size.fromHeight(56.0);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 //-------------------------------- Bottom Navigation Bar
@@ -162,7 +184,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: isSelected
-              ? const Color.fromARGB(255, 64, 107, 65)
+              ? const Color.fromARGB(255, 42, 62, 35)
               : Colors.transparent,
         ),
         child: Icon(
@@ -174,141 +196,3 @@ class CustomBottomNavigationBar extends StatelessWidget {
     );
   }
 }
-
-// //~~~ Made by Riko Gunawan ~~~
-// import 'package:flutter/material.dart';
-// import 'package:myapp/screens/cart_screen.dart';
-// import 'package:provider/provider.dart';
-// import 'providers/product_provider.dart';
-// import 'providers/product_search_delegate.dart';
-// import 'screens/contact_us_screen.dart';
-// import 'screens/home_screen.dart';
-// import 'screens/profile_screen.dart';
-
-// class MainWidget extends StatefulWidget {
-//   const MainWidget({super.key});
-
-//   @override
-//   State<MainWidget> createState() => _MainWidgetState();
-// }
-
-// class _MainWidgetState extends State<MainWidget> {
-//   int _selectedIndex = 0;
-
-//   static const List<Widget> _widgetOptions = <Widget>[
-//     HomeScreen(),
-//     ProfileScreen(),
-//     ContactUsScreen(),
-//   ];
-
-//   void _onItemTap(int index) {
-//     setState(() {
-//       _selectedIndex = index;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final productProvider =
-//         Provider.of<ProductProvider>(context, listen: false);
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         toolbarHeight: 40.0,
-//         title: const Text(''),
-//         flexibleSpace: Container(
-//           decoration: const BoxDecoration(
-//             border: Border(bottom: BorderSide(color: Colors.black, width: 1)),
-//           ),
-//         ),
-//         actions: [
-//           IconButton(
-//             icon: const Icon(Icons.search),
-//             onPressed: () {
-//               // Menggunakan ProductSearchDelegate
-//               showSearch(
-//                 context: context,
-//                 delegate: ProductSearchDelegate(productProvider),
-//               );
-//             },
-//           ),
-//         ],
-//       ),
-//       drawer: Drawer(
-//         child: ListView(
-//           padding: EdgeInsets.zero,
-//           children: [
-//             const DrawerHeader(
-//               decoration: BoxDecoration(
-//                 color: Color.fromARGB(255, 69, 163, 240),
-//               ),
-//               child: Text(
-//                 'Nekoshop',
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 24,
-//                   fontWeight: FontWeight.w400,
-//                 ),
-//               ),
-//             ),
-//             ListTile(
-//               title: const Text('Home'),
-//               selected: _selectedIndex == 0,
-//               onTap: () {
-//                 _onItemTap(0);
-//                 Navigator.pop(context);
-//               },
-//             ),
-//             ListTile(
-//               title: const Text('Profile'),
-//               selected: _selectedIndex == 1,
-//               onTap: () {
-//                 _onItemTap(1);
-//                 Navigator.pop(context);
-//               },
-//             ),
-//             ListTile(
-//               title: const Text('Contact Us ^_^'),
-//               selected: _selectedIndex == 2,
-//               onTap: () {
-//                 _onItemTap(2);
-//                 Navigator.pop(context);
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-//         child: _widgetOptions[_selectedIndex],
-//       ),
-//       // (Note) FAB Cart hanya muncul untuk HomeScreen
-//       floatingActionButton: _selectedIndex == 0
-//           ? Padding(
-//               padding: const EdgeInsets.fromLTRB(0, 0, 10, 20),
-//               child: Container(
-//                 width: 50,
-//                 height: 50,
-//                 decoration: const BoxDecoration(
-//                   shape: BoxShape.circle,
-//                   color: Color.fromARGB(255, 69, 163, 240),
-//                 ),
-//                 child: FloatingActionButton(
-//                   onPressed: () {
-//                     Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) => const CartScreen(),
-//                       ),
-//                     );
-//                   },
-//                   backgroundColor: Colors.transparent,
-//                   foregroundColor: Colors.white,
-//                   child: const Icon(Icons.shopping_cart, size: 25),
-//                 ),
-//               ),
-//             )
-//           : null, // Tidak ada FAB untuk halaman selain HomeScreen
-//     );
-//   }
-// }

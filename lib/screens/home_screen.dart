@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -26,19 +26,19 @@ class HomeScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 2),
                   Text(
                     'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ?',
                     style: TextStyle(
                       color: Color.fromARGB(185, 0, 0, 0),
-                      fontSize: 11,
+                      fontSize: 9,
                     ),
                   ),
                 ],
               ),
             ),
             const MainEventWidget(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             Stack(
               children: [
                 Container(
@@ -53,6 +53,7 @@ class HomeScreen extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14,
+                          fontWeight: FontWeight.w200,
                         ),
                       ),
                       const SizedBox(height: 20),

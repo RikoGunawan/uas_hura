@@ -30,7 +30,7 @@ class MainEventWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: SizedBox(
-            width: 200,
+            width: 160,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -42,14 +42,14 @@ class MainEventWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15.0),
                       child: Image.asset(
                         '${event.image}',
-                        height: 120,
+                        height: 110,
                         width: double.infinity,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           // Jika gambar gagal dimuat, gunakan gambar default
                           return Image.asset(
                             'stevenhe.jpg',
-                            height: 120,
+                            height: 110,
                             width: double.infinity,
                             fit: BoxFit.cover,
                           );
@@ -83,7 +83,7 @@ class MainEventWidget extends StatelessWidget {
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 13,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
