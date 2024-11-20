@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/main_widget.dart';
 
-//~~~ Made by Riko Gunawan ~~~
+import '../utils/app_colors.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -11,135 +12,184 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool _rememberMe = false;
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      // Antisipasi Keyboard Menggeser Layout
       resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          Expanded(
-            flex: 1,
-            child: SizedBox(
-              width: double.infinity,
-              child: Image.asset(
-                'login_banner.jpg',
-                fit: BoxFit.cover,
-              ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: screenWidth * 0.85,
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Welcome Text (Judul)
+                  const Text(
+                    'Welcome to Tahura!',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Email Field
+                  TextFormField(
+                    decoration: InputDecoration(
+                      // Warna putih
+                      hintText: 'Email Address',
+                      hintStyle:
+                          const TextStyle(fontSize: 12), // Ukuran lebih kecil
+                      border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(15), // Bulatan lebih kecil
+                        borderSide: const BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12, // Menyesuaikan jarak vertikal
+                        horizontal: 12, // Menyesuaikan jarak horizontal
+                      ),
+                      isDense: true, // Memastikan input field lebih kompak
+                    ),
+                    style: const TextStyle(
+                        fontSize: 12), // Ukuran teks lebih kecil
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                  ),
+
+                  const SizedBox(
+                    height: 9,
+                  ),
+
+                  // Password Field
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      hintStyle: const TextStyle(
+                        fontSize: 12,
+                      ), // Ukuran lebih kecil
+                      border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(15), // Bulatan lebih kecil
+                        borderSide: const BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12, // Menyesuaikan jarak vertikal
+                        horizontal: 12, // Menyesuaikan jarak horizontal
+                      ),
+                      isDense: true, // Memastikan input field lebih kompak
+                    ),
+                    obscureText: true,
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                    textInputAction: TextInputAction.done,
+                  ),
+                  const SizedBox(height: 8), // Hanya memberi jarak setelah form
+
+                  // Remember Me
+                  Row(
                     children: [
-                      const Text(
-                        'Welcome to Nekoshop!',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Email',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Email',
-                          hintStyle: TextStyle(fontSize: 12),
-                          border: OutlineInputBorder(),
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 14, horizontal: 10),
-                        ),
-                        style: const TextStyle(fontSize: 12),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          return null;
+                      Checkbox(
+                        value: _rememberMe,
+                        onChanged: (value) {
+                          setState(() {
+                            _rememberMe = value!;
+                          });
                         },
+                        activeColor: Colors.blue,
                       ),
-                      const SizedBox(height: 10),
                       const Text(
-                        'Password',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Your Password',
-                          hintStyle: TextStyle(fontSize: 12),
-                          border: OutlineInputBorder(),
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 14, horizontal: 10),
-                        ),
-                        obscureText: true,
-                        style: const TextStyle(fontSize: 12),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      Center(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const MainWidget(),
-                                  ),
-                                );
-                                // Terkesan Jadul ...
-                                // ScaffoldMessenger.of(context).showSnackBar(
-                                //   const SnackBar(
-                                //       content: Text('Login Success')),
-                                // );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Login Failed')),
-                                );
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
+                        'Remember Me',
+                        style: TextStyle(fontSize: 10),
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 30),
+
+                  // Login Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MainWidget(),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Login Failed')),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.secondary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(15), // Bulatan lebih kecil
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                      ),
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Forgot Password
+                  TextButton(
+                    onPressed: () {
+                      // Add forgot password logic
+                    },
+                    child: const Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        color: AppColors.secondary,
+                        fontSize: 10, // Ukuran lebih kecil
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }

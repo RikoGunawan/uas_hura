@@ -7,6 +7,7 @@ import 'providers/event_provider.dart';
 import 'providers/product_provider.dart';
 // import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
+import 'utils/app_colors.dart';
 
 void main() {
   runApp(
@@ -25,11 +26,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Riko',
       theme: ThemeData(
-        primaryColor: const Color.fromARGB(255, 42, 62, 35),
-        primaryColorLight: Colors.white,
+        primaryColor: AppColors.primary,
+        primaryColorLight: AppColors.primaryLight,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromRGBO(33, 150, 243, 1),
+          seedColor: AppColors.accent,
+          primary: AppColors.primary,
+          secondary: AppColors.secondary,
+          surface: AppColors.background,
+          onPrimary: AppColors.textPrimary,
+          onSecondary: AppColors.textSecondary,
         ),
+        scaffoldBackgroundColor: AppColors.background,
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
