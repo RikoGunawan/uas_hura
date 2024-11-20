@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:myapp/main_widget.dart';
 import 'package:provider/provider.dart';
+import 'providers/auth_provider.dart';
 import 'providers/event_provider.dart';
 import 'providers/product_provider.dart';
 // import 'screens/home_screen.dart';
@@ -11,8 +12,11 @@ import 'utils/app_colors.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => EventProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => EventProvider())
+      ],
       child: const MyApp(),
     ),
   );
