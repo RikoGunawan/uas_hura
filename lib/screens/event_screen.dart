@@ -159,25 +159,30 @@ class EventScreen extends StatelessWidget {
   }
 
   void _openWhatsApp(BuildContext context) async {
-    const phoneNumber = '+6285156613178';
+    const phoneNumber = '6285156613178';
     const message = 'Hello! I want to know more about your events.';
+
+    // URL WhatsApp
     final whatsappUrl = Uri.parse(
-      'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
-    );
+        'https://api.whatsapp.com/send/?phone=$phoneNumber&text=${Uri.encodeComponent(message)}&type=phone_number&app_absent=0');
 
     try {
       if (await canLaunchUrl(whatsappUrl)) {
-        await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+        await launchUrl(
+          whatsappUrl,
+          mode: LaunchMode
+              .externalApplication, // Membuka aplikasi eksternal jika memungkinkan
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Could not open WhatsApp')),
         );
       }
     } catch (e) {
-      print("Error: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error opening WhatsApp')),
       );
+      debugPrint("Error: $e");
     }
   }
 }

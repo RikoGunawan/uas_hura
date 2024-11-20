@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'models/event.dart';
 import 'providers/event_provider.dart';
+import 'screens/event_detail_screen.dart';
 
 class MainEventWidget extends StatelessWidget {
   const MainEventWidget({super.key});
@@ -14,17 +15,25 @@ class MainEventWidget extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: eventProvider.events.map((event) {
-          return _buildCardItem(event);
+          return _buildCardItem(event, context);
         }).toList(),
       ),
     );
   }
 
-  Widget _buildCardItem(Event event) {
+  Widget _buildCardItem(Event event, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 7.0),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 1.0),
+      child: GestureDetector(
+        onTap: () {
+          // Navigasi ke DetailEventScreen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EventDetailScreen(event: event),
+            ),
+          );
+        },
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
@@ -41,12 +50,11 @@ class MainEventWidget extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(15.0),
                       child: Image.asset(
-                        '${event.image}',
+                        event.image,
                         height: 110,
                         width: double.infinity,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          // Jika gambar gagal dimuat, gunakan gambar default
                           return Image.asset(
                             'stevenhe.jpg',
                             height: 110,
@@ -64,9 +72,8 @@ class MainEventWidget extends StatelessWidget {
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [
-                              Colors.black
-                                  .withOpacity(0.6), // Warna shading atas
-                              Colors.transparent, // Transparansi bawah
+                              Colors.black.withOpacity(0.6),
+                              Colors.transparent,
                             ],
                           ),
                           borderRadius: BorderRadius.circular(15.0),
