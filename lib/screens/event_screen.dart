@@ -121,8 +121,8 @@ class EventScreen extends StatelessWidget {
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
                                     colors: [
-                                      Colors.black.withOpacity(0.6),
-                                      Colors.transparent,
+                                      Colors.black.withOpacity(0.3),
+                                      Colors.black.withOpacity(0.3),
                                     ],
                                   ),
                                   borderRadius: BorderRadius.circular(15.0),

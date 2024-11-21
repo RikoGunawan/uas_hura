@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     _rememberMe = value!;
                                   });
                                 },
-                                activeColor: Colors.blue,
+                                activeColor: AppColors.secondary,
                               ),
                               const Text(
                                 'Remember Me',
