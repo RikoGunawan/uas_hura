@@ -7,6 +7,7 @@
   packages = [
     pkgs.jdk17
     pkgs.unzip
+    pkgs.gradle_7
   ];
   # Sets environment variables in the workspace
   env = {};
