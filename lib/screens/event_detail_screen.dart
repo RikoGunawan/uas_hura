@@ -17,18 +17,35 @@ class EventDetailScreen extends StatefulWidget {
 
 class _EventDetailScreenState extends State<EventDetailScreen> {
   late String formattedPrice;
-  int quantity = 1;
   late TextEditingController _quantityController;
 
   @override
   void initState() {
     super.initState();
-    _quantityController = TextEditingController(text: '$quantity');
-    formattedPrice = NumberFormat.currency(
+    _initializeEventDetails();
+  }
+
+  void _initializeEventDetails() {
+    _quantityController = TextEditingController(text: '1');
+    formattedPrice = _formatPrice(widget.event.price);
+  }
+
+  String _formatPrice(double price) {
+    return NumberFormat.currency(
       locale: 'id_ID',
       symbol: 'Rp ',
       decimalDigits: 0,
-    ).format(widget.event.price);
+    ).format(price);
+  }
+
+  String _formatCountdownDuration(Duration duration) {
+    if (duration.isNegative) {
+      return "Event sudah berlangsung";
+    }
+    return '${duration.inDays} hari '
+        '${duration.inHours.remainder(24)}:'
+        '${duration.inMinutes.remainder(60)}:'
+        '${duration.inSeconds.remainder(60)}';
   }
 
   @override
@@ -41,6 +58,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
   Widget build(BuildContext context) {
     final eventProvider = Provider.of<EventProvider>(context);
     final countdownDuration = widget.event.eventDate.difference(DateTime.now());
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -67,19 +85,22 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                     children: [
                       Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.timer,
-                            size: 9, // Ubah ukuran sesuai kebutuhan Anda
+                            size: 9,
+                            color: countdownDuration.inDays <= 1
+                                ? Colors.red
+                                : AppColors.secondary,
                           ),
                           const SizedBox(width: 2),
                           Text(
-                            countdownDuration.isNegative
-                                ? "Event sudah berlangsung"
-                                : '${countdownDuration.inDays} hari ${countdownDuration.inHours.remainder(24)}:${countdownDuration.inMinutes.remainder(60)}:${countdownDuration.inSeconds.remainder(60)}',
-                            style: const TextStyle(
+                            _formatCountdownDuration(countdownDuration),
+                            style: TextStyle(
                               fontSize: 9,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.secondary,
+                              color: countdownDuration.inDays <= 1
+                                  ? Colors.red
+                                  : AppColors.secondary,
                             ),
                           ),
                         ],

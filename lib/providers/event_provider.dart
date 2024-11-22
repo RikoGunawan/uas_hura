@@ -176,16 +176,16 @@ class EventProvider extends ChangeNotifier {
         isDismissable: false,
         position: Alignment.topCenter,
         animation: AnimationType.fromTop,
-        title: const Text(
-          'Event Reminder',
-          style: TextStyle(
+        title: Text(
+          event.name,
+          style: const TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.bold,
           ),
         ),
         description: Text(
           _truncateDescription(
-            'Event "${event.name}" live dalam ${duration.inHours} jam!',
+            'Event live dalam ${duration.inHours} jam!',
           ),
           style: const TextStyle(
             fontSize: 9,
