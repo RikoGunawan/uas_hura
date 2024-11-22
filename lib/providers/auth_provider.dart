@@ -1,35 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AuthProvider extends ChangeNotifier {
-  bool _isLoading = false; // State untuk loading
-  String? _errorMessage; // State untuk error message
+class AuthProvider with ChangeNotifier {
+  bool _isLoading = false;
+  String? _errorMessage;
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  // Fungsi login (dummy)
   Future<bool> login(String email, String password) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      // Simulasi delay proses login
-      await Future.delayed(const Duration(seconds: 2));
+      final response = await Supabase.instance.client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
 
-      // Dummy login success
-      if (email == "user@example.com" && password == "password") {
-        _isLoading = false;
-        notifyListeners();
-        return true;
-      } else {
-        throw Exception("Invalid email or password");
-      }
+      _isLoading = false;
+      notifyListeners();
+      return response.session != null;
+    } on AuthException catch (e) {
+      _isLoading = false;
+      _errorMessage = e.message;
+      notifyListeners();
+      return false;
     } catch (e) {
       _isLoading = false;
-      _errorMessage = e.toString();
+      _errorMessage = 'An unexpected error occurred';
       notifyListeners();
       return false;
     }
+  }
+
+  Future<void> logout() async {
+    await Supabase.instance.client.auth.signOut();
   }
 }

@@ -17,6 +17,18 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _rememberMe = false;
 
+  // Tambahkan controller untuk email dan password
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Pastikan untuk membuang controller
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -50,8 +62,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 30),
 
-                          // Email Field
+                          // Email Field - Tambahkan controller
                           TextFormField(
+                            controller:
+                                _emailController, // Tambahkan controller
                             decoration: InputDecoration(
                               hintText: 'Email Address',
                               hintStyle: const TextStyle(fontSize: 12),
@@ -72,6 +86,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your email';
                               }
+                              // Tambahkan validasi email sederhana
+                              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                  .hasMatch(value)) {
+                                return 'Please enter a valid email';
+                              }
                               return null;
                             },
                             keyboardType: TextInputType.emailAddress,
@@ -79,8 +98,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 9),
 
-                          // Password Field
+                          // Password Field - Tambahkan controller
                           TextFormField(
+                            controller:
+                                _passwordController, // Tambahkan controller
                             decoration: InputDecoration(
                               hintText: 'Password',
                               hintStyle: const TextStyle(fontSize: 12),
@@ -101,6 +122,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your password';
+                              }
+                              // Tambahkan validasi panjang password jika diperlukan
+                              if (value.length < 6) {
+                                return 'Password must be at least 6 characters';
                               }
                               return null;
                             },
@@ -128,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 30),
 
-                          // Login Button
+                          // Login Button - Ubah parameter login
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
@@ -138,8 +163,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       if (_formKey.currentState!.validate()) {
                                         final isSuccess =
                                             await authProvider.login(
-                                          "user@example.com",
-                                          "password",
+                                          _emailController.text
+                                              .trim(), // Gunakan email dari controller
+                                          _passwordController.text
+                                              .trim(), // Gunakan password dari controller
                                         );
                                         if (isSuccess) {
                                           // Tambahkan poin login harian
