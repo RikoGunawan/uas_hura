@@ -1,14 +1,15 @@
 //~~~ Made by Riko Gunawan ~~~
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:myapp/main_widget.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/event_provider.dart';
 import 'providers/hura_point_provider.dart';
-// import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'utils/app_colors.dart';
+
+// Deklarasikan navigatorKey secara global
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => EventProvider()),
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
       ],
-      child: MyApp(),
+      child: MyApp(), // Hapus navigatorKey dari sini
     ),
   );
 }
@@ -34,6 +35,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Riko',
+      // Tambahkan navigatorKey di sini
+      navigatorKey: navigatorKey,
       theme: ThemeData(
         primaryColor: AppColors.primary,
         primaryColorLight: AppColors.primaryLight,

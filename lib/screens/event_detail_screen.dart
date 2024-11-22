@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../main_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:myapp/utils/app_colors.dart';
+import 'package:provider/provider.dart';
 
 import '../models/event.dart';
 import '../providers/event_provider.dart';
@@ -39,6 +39,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final eventProvider = Provider.of<EventProvider>(context);
+    final countdownDuration = widget.event.eventDate.difference(DateTime.now());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -56,13 +58,32 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           Expanded(
             flex: 2,
             child: Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.fromLTRB(24, 20.0, 24, 24),
               child: SingleChildScrollView(
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.timer,
+                            size: 9, // Ubah ukuran sesuai kebutuhan Anda
+                          ),
+                          const SizedBox(width: 2),
+                          Text(
+                            countdownDuration.isNegative
+                                ? "Event sudah berlangsung"
+                                : '${countdownDuration.inDays} hari ${countdownDuration.inHours.remainder(24)}:${countdownDuration.inMinutes.remainder(60)}:${countdownDuration.inSeconds.remainder(60)}',
+                            style: const TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.secondary,
+                            ),
+                          ),
+                        ],
+                      ),
                       Text(
                         widget.event.name,
                         style: const TextStyle(
@@ -92,106 +113,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        height: 56,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 21,
-                    width: 21,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          if (quantity > 1) {
-                            quantity--;
-                            _quantityController.text = '$quantity';
-                          }
-                        });
-                      },
-                      child: const Icon(Icons.remove, size: 9),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 60,
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(0)),
-                        ),
-                        isDense: true,
-                        contentPadding: EdgeInsets.symmetric(vertical: 8.0),
-                      ),
-                      controller: _quantityController,
-                      style: const TextStyle(fontSize: 9),
-                      onChanged: (value) {
-                        quantity = int.tryParse(value) ?? 1;
-                      },
-                    ),
-                  ),
-                  Container(
-                    height: 21,
-                    width: 21,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          quantity++;
-                          _quantityController.text = '$quantity';
-                        });
-                      },
-                      child: const Icon(Icons.add, size: 9),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final eventProvider =
-                    Provider.of<EventProvider>(context, listen: false);
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MainWidget()),
-                );
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content:
-                        Text('${widget.event.name} ditambahkan ke keranjang'),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              ),
-              child: const Text(
-                'Add to Cart',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
