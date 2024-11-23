@@ -9,58 +9,68 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import '../models/event.dart';
 import '../screens/event_detail_screen.dart';
-import '../services/event_service.dart';
 
 class EventProvider extends ChangeNotifier {
-  final EventService _eventService;
+//-------------------------------------------- List Event
+  final List<Event> _events = [
+    Event(
+      id: 1,
+      name: 'Minecraft Papercraft Biome',
+      price: 999999,
+      image: 'mc_papercraft.jpg',
+      description:
+          'Minecraft Papercraft merupakan sebuah produk miniatur yang terbuat dari rangkaian kertas berwarna khusus dan magnet yang dapat kamu gabungkan menjadi sebuah bangunan atau biome yang kamu inginkan seperti lego! Kenapa tidak mencoba membelinya kalau kamu punya uang?',
+      eventDate: DateTime(2024, 11, 23, 11, 52), // 2024 Nov 23 10:46
+    ),
+    Event(
+      id: 2,
+      name: 'Minecraft Bedrock Edition',
+      price: 55000,
+      image: 'mc_game.jpg',
+      description:
+          'Minecraft game bisa kamu beli dengan harga spesial! Bedrock edition version',
+      eventDate: DateTime(2024, 11, 23, 11, 52),
+    ),
+    Event(
+      id: 3,
+      name: 'Headset Creeper Minecraft',
+      price: 77000,
+      image: 'mc_headset.jpg',
+      description: 'Melengkapi kebutuhan gamingmu!',
+      eventDate: DateTime(2024, 11, 23, 11, 55),
+    ),
+    Event(
+      id: 4,
+      name: 'Minecraft Chicken Egg Cup',
+      price: 49999,
+      image: 'mc_egg_cup.jpg',
+      description:
+          'Tempat menaruh 1 telur dengan style minecraft yang sangat lucu',
+      eventDate: DateTime(2024, 11, 23, 11, 56),
+    ),
+    Event(
+      id: 5,
+      name: 'Torch Light Minecraft',
+      price: 59999,
+      image: 'mc_torch_light.jpg',
+      description: 'Lampu yang bukan sembarang lampu..',
+      eventDate: DateTime(2024, 11, 22, 10, 0),
+    ),
+    Event(
+      id: 6,
+      name: 'Steven He',
+      price: 911,
+      image: 'stevenhe.jpg',
+      description: 'EMOTIONAL DAMAGE Asian Parent',
+      eventDate: DateTime(2024, 11, 23, 10, 0), // Tanggal acara yang ditentukan
+    ),
+    // Tambahkan produk lain sesuai kebutuhan
+  ];
 
-  // List untuk menyimpan events
-  List<Event> _events = [];
+//------------------------------- Search Event (not used)
+
+  List<Event> _filteredEvents = []; // Daftar produk yang difilter
   List<Event> get events => _filteredEvents.isEmpty ? _events : _filteredEvents;
-
-  // Constructor
-  EventProvider(this._eventService) {
-    // Inisialisasi dengan memuat events dari database
-    fetchEvents();
-    startCountdown();
-  }
-
-  // Method untuk mengambil events dari database
-  Future<void> fetchEvents() async {
-    try {
-      _events = await _eventService.fetchEvents();
-      notifyListeners();
-    } catch (e) {
-      // Handle error, misalnya dengan menampilkan snackbar atau log
-      print('Error fetching events: $e');
-    }
-  }
-
-  // Method CRUD yang dimodifikasi untuk menggunakan EventService
-  Future<void> addEvent(Event event) async {
-    // Logika untuk menambahkan event ke database
-    // Misalnya, menggunakan Supabase
-    _events.add(event);
-    notifyListeners();
-  }
-
-  Future<void> editEvent(Event event) async {
-    // Logika untuk memperbarui event di database
-    final index = _events.indexWhere((e) => e.id == event.id);
-    if (index != -1) {
-      _events[index] = event;
-      notifyListeners();
-    }
-  }
-
-  Future<void> deleteEvent(int id) async {
-    // Logika untuk menghapus event dari database
-    _events.removeWhere((event) => event.id == id);
-    notifyListeners();
-  }
-
-  // Method pencarian event
-  List<Event> _filteredEvents = [];
   void searchEvent(String query) {
     if (query.isEmpty) {
       _filteredEvents = _events;
@@ -70,7 +80,6 @@ class EventProvider extends ChangeNotifier {
               (event) => event.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
-    notifyListeners();
   }
 
 // ------------------------------- Countdown + Notifikasi Event
@@ -89,6 +98,10 @@ class EventProvider extends ChangeNotifier {
 
   Duration? countdownDuration;
   Timer? countdownTimer;
+
+  EventProvider() {
+    startCountdown();
+  }
 
   void startCountdown() {
     countdownTimer?.cancel();
@@ -209,6 +222,28 @@ class EventProvider extends ChangeNotifier {
   // Tambahan method untuk mendapatkan durasi event
   Duration? getEventCountdownDuration(Event event) {
     return event.eventDate.difference(DateTime.now());
+  }
+
+  // Metode CRUD untuk event (tidak diakses user)
+  void addEvent(Event event) {
+    _events.add(event);
+    notifyListeners();
+  }
+
+  void editEvent(Event event) {
+    final index = _events.indexWhere((element) => element.id == event.id);
+    _events[index] = event;
+    notifyListeners();
+  }
+
+  void removeEvent(Event event) {
+    _events.remove(event);
+    notifyListeners();
+  }
+
+  void clearEvents() {
+    _events.clear();
+    notifyListeners();
   }
 
   // Pastikan membersihkan timer saat provider di dispose

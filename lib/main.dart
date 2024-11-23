@@ -3,13 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'providers/auth_provider.dart';
 import 'providers/event_provider.dart';
 import 'providers/hura_point_provider.dart';
 import 'screens/login_screen.dart';
+import 'screens/register_screen.dart';
+import 'main_widget.dart';
 import 'services/event_service.dart';
 import 'utils/app_colors.dart';
-import 'utils/auth_guard.dart'; // Tambahkan import ini
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -35,17 +35,18 @@ void main() async {
           update: (_, client, previousService) =>
               previousService ?? EventService(client),
         ),
-        ChangeNotifierProxyProvider<EventService, EventProvider>(
-          create: (context) => EventProvider(context.read<EventService>()),
-          update: (_, service, previousProvider) =>
-              previousProvider ?? EventProvider(service),
-        ),
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
       ],
       child: const MyApp(),
     ),
   );
+}
+
+class AppRoutes {
+  static const login = '/login';
+  static const register = '/register';
+  static const home = '/home';
 }
 
 class MyApp extends StatelessWidget {
@@ -54,7 +55,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Riko',
+      debugShowCheckedModeBanner: false,
+      title: 'Hura',
       navigatorKey: navigatorKey,
       theme: ThemeData(
         primaryColor: AppColors.primary,
@@ -71,7 +73,17 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      home: const AuthGuard(child: LoginScreen()), // Gunakan AuthGuard
+      initialRoute: AppRoutes.login,
+      routes: {
+        AppRoutes.login: (context) => const LoginScreen(),
+        AppRoutes.register: (context) => const RegisterScreen(),
+        AppRoutes.home: (context) => const MainWidget(),
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        );
+      },
     );
   }
 }
