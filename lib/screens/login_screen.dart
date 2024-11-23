@@ -16,7 +16,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _rememberMe = false;
-  bool _isPasswordVisible = false;
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -172,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 9),
 
-                      // Password Field
+// Password Field
                       TextFormField(
                         controller: _passwordController,
                         decoration: InputDecoration(
@@ -189,18 +188,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             horizontal: 12,
                           ),
                           isDense: true,
-                          suffixIcon: IconButton(
-                            icon: Icon(_isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                            onPressed: () {
-                              setState(() {
-                                _isPasswordVisible = !_isPasswordVisible;
-                              });
-                            },
-                          ),
                         ),
-                        obscureText: !_isPasswordVisible,
+                        obscureText: true,
                         style: const TextStyle(fontSize: 12),
                         validator: (value) {
                           if (value == null || value.isEmpty) {

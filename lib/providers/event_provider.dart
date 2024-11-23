@@ -94,7 +94,7 @@ class EventProvider extends ChangeNotifier {
 
   // Tambahkan variabel untuk mengatur jeda antar notifikasi
   Timer? _notificationDelayTimer;
-  static const Duration NOTIFICATION_DELAY = Duration(seconds: 5);
+  static const Duration notificationDelay = Duration(seconds: 5);
 
   Duration? countdownDuration;
   Timer? countdownTimer;
@@ -106,15 +106,15 @@ class EventProvider extends ChangeNotifier {
   void startCountdown() {
     countdownTimer?.cancel();
     countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      for (var event in _events) {
+      for (var event in _events.toList()) {
         final duration = event.eventDate.difference(DateTime.now());
 
-        // Update countdownDuration untuk event terdekat
-        if (duration.inDays <= 1) {
+        if (duration.isNegative) {
+          // Hapus event dari daftar notifikasi
+          _removeEventFromNotification(event);
+        } else if (duration.inDays <= 1) {
           countdownDuration = duration;
           _addEventToNotification(event);
-        } else if (duration.isNegative) {
-          _removeEventFromNotification(event);
         }
       }
       notifyListeners();
@@ -122,6 +122,12 @@ class EventProvider extends ChangeNotifier {
   }
 
   void _addEventToNotification(Event event) {
+    final duration = event.eventDate.difference(DateTime.now());
+    if (duration.isNegative) {
+      _removeEventFromNotification(event);
+      return;
+    }
+
     if (!_eventsWithNotification.contains(event)) {
       _eventsWithNotification.add(event);
       _queueNotification(event);
@@ -143,16 +149,23 @@ class EventProvider extends ChangeNotifier {
   }
 
   void _processNotificationQueue() {
-    // Jika tidak sedang menampilkan notifikasi dan queue tidak kosong
     if (!_isShowingNotification && _notificationQueue.isNotEmpty) {
+      Event event = _notificationQueue.first;
+
+      // Pastikan event belum lewat sebelum menampilkan notifikasi
+      if (event.eventDate.isBefore(DateTime.now())) {
+        _notificationQueue.removeFirst();
+        return; // Jangan proses event yang sudah lewat
+      }
+
       _isShowingNotification = true;
-      Event event = _notificationQueue.removeFirst();
+      _notificationQueue.removeFirst();
 
       // Tampilkan notifikasi
       _showEventNotification(event);
 
-      // Set timer untuk reset status notifikasi
-      _notificationDelayTimer = Timer(NOTIFICATION_DELAY, () {
+      // Set timer untuk jeda notifikasi
+      _notificationDelayTimer = Timer(notificationDelay, () {
         _isShowingNotification = false;
         _processNotificationQueue();
       });
