@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/admin_widget.dart';
+import 'package:myapp/screens/get_started_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -47,6 +48,7 @@ void main() async {
 }
 
 class AppRoutes {
+  static const first = '/';
   static const login = '/login';
   static const register = '/register';
   static const home = '/home';
@@ -79,6 +81,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: AppRoutes.login,
       routes: {
+        AppRoutes.first: (context) => const GetStartedScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.register: (context) => const RegisterScreen(),
         AppRoutes.home: (context) => const MainWidget(),
