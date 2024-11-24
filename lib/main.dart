@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/admin_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'providers/auth_provider.dart';
 import 'providers/event_provider.dart';
 import 'providers/hura_point_provider.dart';
 import 'screens/login_screen.dart';
@@ -35,6 +37,7 @@ void main() async {
           update: (_, client, previousService) =>
               previousService ?? EventService(client),
         ),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
       ],
@@ -47,6 +50,7 @@ class AppRoutes {
   static const login = '/login';
   static const register = '/register';
   static const home = '/home';
+  static const admin = '/admin';
 }
 
 class MyApp extends StatelessWidget {
@@ -78,6 +82,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.register: (context) => const RegisterScreen(),
         AppRoutes.home: (context) => const MainWidget(),
+        AppRoutes.admin: (context) => const AdminWidget(),
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
