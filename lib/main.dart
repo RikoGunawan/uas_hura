@@ -8,6 +8,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'providers/auth_provider.dart';
 import 'providers/event_provider.dart';
 import 'providers/hura_point_provider.dart';
+import 'screens/add_post_screen.dart';
+import 'screens/creative_hura_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'main_widget.dart';
@@ -53,6 +55,8 @@ class AppRoutes {
   static const register = '/register';
   static const home = '/home';
   static const admin = '/admin';
+  static const creativeHura = '/creative-hura';
+  static const addCreativeHura = '/add-creative-hura';
 }
 
 class MyApp extends StatelessWidget {
@@ -86,6 +90,8 @@ class MyApp extends StatelessWidget {
         AppRoutes.register: (context) => const RegisterScreen(),
         AppRoutes.home: (context) => const MainWidget(),
         AppRoutes.admin: (context) => const AdminWidget(),
+        AppRoutes.creativeHura: (context) => const CreativeHuraScreen(),
+        AppRoutes.addCreativeHura: (context) => const AddPostScreen(),
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
