@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/hura_point_screen.dart';
-import 'package:myapp/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/event_provider.dart';
@@ -23,7 +22,7 @@ class _MainWidgetState extends State<MainWidget> {
     const EventScreen(),
     const Center(child: Text('Ini halaman Hura')),
     const HuraPointScreen(),
-    const ProfileScreen(),
+    const Placeholder(),
   ];
 
   final List<String> _titles = [
