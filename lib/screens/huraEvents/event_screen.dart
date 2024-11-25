@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/event.dart';
-import '../providers/event_provider.dart';
+import '../../models/event.dart';
+import '../../providers/event_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'event_detail_screen.dart';

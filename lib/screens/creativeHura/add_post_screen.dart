@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/post.dart';
-import '../providers/profile_provider.dart';
+import '../../models/post.dart';
+import '../../providers/profile_provider.dart';
 
 class PostScreen extends StatefulWidget {
   final Post post;

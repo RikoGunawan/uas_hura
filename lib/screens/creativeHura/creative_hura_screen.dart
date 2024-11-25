@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../models/post.dart';
-import '../add_post_screen.dart';
-import '../post_screen.dart';
+import 'add_post_screen_not_used.dart';
+import 'add_post_screen.dart';
 
 class CreativeHuraScreen extends StatelessWidget {
   const CreativeHuraScreen({super.key});

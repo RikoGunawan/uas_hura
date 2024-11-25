@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:myapp/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
-import '../models/event.dart';
-import '../providers/event_provider.dart';
+import '../../models/event.dart';
+import '../../providers/event_provider.dart';
 
 class EventDetailScreen extends StatefulWidget {
   final Event event;

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../main.dart';
-import '../providers/hura_point_provider.dart';
-import '../utils/app_colors.dart';
+import '../../main.dart';
+import '../../providers/hura_point_provider.dart';
+import '../../utils/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

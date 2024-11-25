@@ -4,12 +4,12 @@ import 'package:myapp/screens/creativeHura/creative_hura_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/event_provider.dart';
-import 'screens/edit_profile_screen.dart';
-import 'screens/event_screen.dart';
-import 'screens/home_screen.dart';
-import 'screens/hura_point_screen.dart';
+import 'screens/profile/edit_profile_screen.dart';
+import 'screens/huraEvents/event_screen.dart';
+import 'screens/home/home_screen.dart';
+import 'screens/huraPoints/hura_point_screen.dart';
 import 'screens/notification_screen.dart';
-import 'screens/profile_screen.dart';
+import 'screens/profile/profile_screen.dart';
 
 class MainWidget extends StatefulWidget {
   const MainWidget({super.key});

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../models/post.dart';
-import '../providers/post_provider.dart';
+import '../../models/post.dart';
+import '../../providers/post_provider.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});

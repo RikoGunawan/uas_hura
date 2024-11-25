@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 // import '../models/cart_item.dart';
 import '../main.dart';
 import '../models/event.dart';
-import '../screens/event_detail_screen.dart';
+import '../screens/huraEvents/event_detail_screen.dart';
 
 class EventProvider extends ChangeNotifier {
 //-------------------------------------------- List Event
