@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/admin_widget.dart';
+import 'package:myapp/screens/edit_profile_screen.dart';
 import 'package:myapp/screens/get_started_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -57,6 +58,7 @@ class AppRoutes {
   static const admin = '/admin';
   static const creativeHura = '/creative-hura';
   static const addCreativeHura = '/add-creative-hura';
+  static const editProfileScreen = '/edit-profile-screen';
 }
 
 class MyApp extends StatelessWidget {
@@ -92,6 +94,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.admin: (context) => const AdminWidget(),
         AppRoutes.creativeHura: (context) => const CreativeHuraScreen(),
         AppRoutes.addCreativeHura: (context) => const AddPostScreen(),
+        AppRoutes.editProfileScreen: (context) => const EditProfileScreen(),
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(

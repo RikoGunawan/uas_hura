@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/creative_hura_screen.dart';
+import 'package:myapp/screens/edit_profile_screen.dart';
 import 'package:myapp/screens/hura_point_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,7 @@ class _MainWidgetState extends State<MainWidget> {
     const EventScreen(),
     const CreativeHuraScreen(),
     const HuraPointScreen(),
-    const Placeholder(),
+    const EditProfileScreen(),
   ];
 
   final List<String> _titles = [
