@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/creative_hura_screen.dart';
-import 'package:myapp/screens/edit_profile_screen.dart';
-import 'package:myapp/screens/hura_point_screen.dart';
+import 'package:myapp/screens/creativeHura/creative_hura_screen.dart';
+
 import 'package:provider/provider.dart';
 
 import 'providers/event_provider.dart';
+import 'screens/edit_profile_screen.dart';
 import 'screens/event_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/hura_point_screen.dart';
 import 'screens/notification_screen.dart';
+import 'screens/profile_screen.dart';
 
 class MainWidget extends StatefulWidget {
   const MainWidget({super.key});
@@ -24,7 +26,7 @@ class _MainWidgetState extends State<MainWidget> {
     const EventScreen(),
     const CreativeHuraScreen(),
     const HuraPointScreen(),
-    const EditProfileScreen(),
+    const ProfileScreen(),
   ];
 
   final List<String> _titles = [

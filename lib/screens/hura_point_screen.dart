@@ -27,19 +27,22 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
     final progress = progressProvider.progress;
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(),
-            const SizedBox(height: 16.0),
-            _buildProgressBar(context, progress),
-            const SizedBox(height: 16.0),
-            _buildCategoryButtons(),
-            const SizedBox(height: 16.0),
-            _buildCategoryContent(),
-          ],
+      body: SingleChildScrollView(
+        // Tambahkan SingleChildScrollView
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(),
+              const SizedBox(height: 16.0),
+              _buildProgressBar(context, progress),
+              const SizedBox(height: 16.0),
+              _buildCategoryButtons(),
+              const SizedBox(height: 16.0),
+              _buildCategoryContent(),
+            ],
+          ),
         ),
       ),
     );
@@ -180,21 +183,20 @@ class PointProvider {
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(10.0),
         ),
-        height: 370.0,
-        width: 460.0,
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min, // Mengatur ukuran minimum
           children: [
-            Text(
+            const Text(
               'Hura Point',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 color: Colors.black,
               ),
             ),
             const SizedBox(height: 16.0),
             Expanded(
+              // Menggunakan Expanded di sini
               child: ListView.builder(
                 itemCount: 5,
                 itemBuilder: (context, index) {
@@ -207,31 +209,7 @@ class PointProvider {
                             backgroundColor: Colors.white,
                           ),
                           const SizedBox(width: 8.0),
-                          Positioned(
-                            left: 10.0,
-                            top: 55.0,
-                            child: Container(
-                              height: 10.0, // Lebar garis putih lebih besar
-                              width: 350, // Lebar penuh
-                              decoration: BoxDecoration(
-                                color: Colors.white, // Garis putih
-                                borderRadius: BorderRadius.circular(7.0),
-                              ),
-                            ),
-                          ),
-                          // Linear progress bar
-                          Positioned(
-                            left: 10.0,
-                            top: 55.0,
-                            child: Container(
-                              height: 10.0, // Tinggi progress bar lebih kecil
-                              width: 0 * progress, // Sesuai progress
-                              decoration: BoxDecoration(
-                                color: Colors.grey, // Warna progress
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                          ),
+                          // Konten lainnya
                         ],
                       ),
                       const SizedBox(height: 8.0), // Gap between players

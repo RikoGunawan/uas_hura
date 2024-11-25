@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/admin_widget.dart';
+import 'package:myapp/providers/profile_provider.dart';
 import 'package:myapp/screens/edit_profile_screen.dart';
 import 'package:myapp/screens/get_started_screen.dart';
 import 'package:provider/provider.dart';
@@ -9,8 +10,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'providers/auth_provider.dart';
 import 'providers/event_provider.dart';
 import 'providers/hura_point_provider.dart';
+import 'providers/post_provider.dart';
+import 'providers/progress_provider.dart';
 import 'screens/add_post_screen.dart';
-import 'screens/creative_hura_screen.dart';
+import 'screens/creativeHura/creative_hura_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'main_widget.dart';
@@ -44,6 +47,9 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
+        ChangeNotifierProvider(create: (_) => PostProvider()),
+        ChangeNotifierProvider(create: (_) => ProgressProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
       child: const MyApp(),
     ),
@@ -54,7 +60,7 @@ class AppRoutes {
   static const first = '/get-started';
   static const login = '/login';
   static const register = '/register';
-  static const home = '/home';
+  static const main = '/main';
   static const admin = '/admin';
   static const creativeHura = '/creative-hura';
   static const addCreativeHura = '/add-creative-hura';
@@ -90,7 +96,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.first: (context) => const GetStartedScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.register: (context) => const RegisterScreen(),
-        AppRoutes.home: (context) => const MainWidget(),
+        AppRoutes.main: (context) => const MainWidget(),
         AppRoutes.admin: (context) => const AdminWidget(),
         AppRoutes.creativeHura: (context) => const CreativeHuraScreen(),
         AppRoutes.addCreativeHura: (context) => const AddPostScreen(),
