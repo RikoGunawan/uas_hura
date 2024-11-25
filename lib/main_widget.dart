@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/creative_hura_screen.dart';
 import 'package:myapp/screens/hura_point_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,7 @@ class _MainWidgetState extends State<MainWidget> {
   final List<Widget> _pages = [
     const HomeScreen(),
     const EventScreen(),
-    const Center(child: Text('Ini halaman Hura')),
+    const CreativeHuraScreen(),
     const HuraPointScreen(),
     const Placeholder(),
   ];

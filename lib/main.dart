@@ -24,9 +24,9 @@ void main() async {
   await huraProvider.loadLastLoginDate();
 
   await Supabase.initialize(
-    url: 'https://naybuanerhxbupsgafhv.supabase.co',
+    url: 'https://cqmadsjfyxpbewyouuvk.supabase.co',
     anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5heWJ1YW5lcmh4YnVwc2dhZmh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIyNzkzNDksImV4cCI6MjA0Nzg1NTM0OX0.1qGWdSbOh7JFSGJ6N_GJdn2zFFgx6rWE7Wb5ZKkYLHQ',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxbWFkc2pmeXhwYmV3eW91dXZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI1MTAwMDYsImV4cCI6MjA0ODA4NjAwNn0.qOhio_3HHn_JiFMKX-gh12Ycww8hzZsav5bZ8j9gZ74',
   );
 
   runApp(
@@ -50,7 +50,7 @@ void main() async {
 }
 
 class AppRoutes {
-  static const first = '/';
+  static const first = '/get-started';
   static const login = '/login';
   static const register = '/register';
   static const home = '/home';
