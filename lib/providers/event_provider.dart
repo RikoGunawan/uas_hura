@@ -20,7 +20,7 @@ class EventProvider extends ChangeNotifier {
       image: 'mc_papercraft.jpg',
       description:
           'Minecraft Papercraft merupakan sebuah produk miniatur yang terbuat dari rangkaian kertas berwarna khusus dan magnet yang dapat kamu gabungkan menjadi sebuah bangunan atau biome yang kamu inginkan seperti lego! Kenapa tidak mencoba membelinya kalau kamu punya uang?',
-      eventDate: DateTime(2024, 11, 24, 11, 52), // 2024 Nov 23 10:46
+      eventDate: DateTime(2024, 11, 27, 11, 52), // 2024 Nov 23 10:46
     ),
     Event(
       id: 2,
@@ -29,7 +29,7 @@ class EventProvider extends ChangeNotifier {
       image: 'mc_game.jpg',
       description:
           'Minecraft game bisa kamu beli dengan harga spesial! Bedrock edition version',
-      eventDate: DateTime(2024, 11, 25, 11, 52),
+      eventDate: DateTime(2024, 11, 26, 11, 52),
     ),
     Event(
       id: 3,
@@ -37,7 +37,7 @@ class EventProvider extends ChangeNotifier {
       price: 77000,
       image: 'mc_headset.jpg',
       description: 'Melengkapi kebutuhan gamingmu!',
-      eventDate: DateTime(2024, 11, 24, 11, 55),
+      eventDate: DateTime(2024, 11, 26, 11, 55),
     ),
     Event(
       id: 4,

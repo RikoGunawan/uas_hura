@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../header_widget.dart';
 import '../../models/post.dart';
 import 'add_post_screen_not_used.dart';
 import 'add_post_screen.dart';
@@ -10,28 +11,15 @@ class CreativeHuraScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Creative Hura'),
-        actions: const [
-          CircleAvatar(
-            radius: 20.0,
-            backgroundColor: Colors.grey,
-          ),
-          SizedBox(width: 16.0),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header Section (now in AppBar)
-            const SizedBox(height: 16.0),
-
-            // List of Content Containers
-            Expanded(
-              child: ListView(
+            const HeaderWidget(), // HeaderWidget tetap di atas
+            Padding(
+              padding: const EdgeInsets.all(16.0), // Padding untuk konten
+              child: Column(
                 children: [
+                  // List of Content Containers
                   _buildContainer(context, "Post 1"),
                   const SizedBox(height: 16.0),
                   _buildContainer(context, "Post 2"),
