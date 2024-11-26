@@ -4,14 +4,16 @@ class Post2 {
   final String description;
   final String imageUrl;
   final int likes;
+  final int shares;
   final String userId; // Tambahkan user_id
 
   Post2({
     required this.id,
     required this.name,
-    required this.description,
+    this.description = '',
     required this.imageUrl,
-    required this.likes,
+    this.likes = 0,
+    this.shares = 0,
     required this.userId, // Tambahkan user_id ke konstruktor
   });
 
@@ -23,6 +25,7 @@ class Post2 {
       description: json['description'],
       imageUrl: json['image_url'],
       likes: json['likes'],
+      shares: json['shares'],
       userId: json['user_id'], // Ambil user_id dari JSON
     );
   }
@@ -35,6 +38,7 @@ class Post2 {
       'description': description,
       'image_url': imageUrl,
       'likes': likes,
+      'shares': shares,
       'user_id': userId, // Sertakan user_id dalam JSON
     };
   }
