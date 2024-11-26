@@ -1,12 +1,12 @@
 import 'dart:io';
 
-class Post {
+class Post2 {
   final String name;
   final String description;
   final File? imageFile; // Optional local file for images
   final String like;
 
-  Post({
+  Post2({
     required this.name,
     required this.description,
     this.imageFile, // Optional parameter

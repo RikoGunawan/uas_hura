@@ -99,7 +99,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.main: (context) => const MainWidget(),
         AppRoutes.admin: (context) => const AdminWidget(),
         AppRoutes.creativeHura: (context) => const CreativeHuraScreen(),
-        AppRoutes.addCreativeHura: (context) => const AddPostScreen(),
+        AppRoutes.addCreativeHura: (context) => const AddPostScreenOnline(),
         AppRoutes.editProfileScreen: (context) => const EditProfileScreen(),
       },
       onUnknownRoute: (settings) {

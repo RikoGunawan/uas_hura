@@ -5,7 +5,7 @@ import '../../models/post.dart';
 import '../../providers/profile_provider.dart';
 
 class PostScreen extends StatefulWidget {
-  final Post post;
+  final Post2 post;
 
   const PostScreen({super.key, required this.post});
 
@@ -148,7 +148,7 @@ class _PostScreenState extends State<PostScreen> {
 }
 
 // Placeholder untuk Kontainer Kosong
-Widget _buildEmptyContainer(BuildContext context, Post post) {
+Widget _buildEmptyContainer(BuildContext context, Post2 post) {
   return GestureDetector(
     onTap: () {
       Navigator.push(

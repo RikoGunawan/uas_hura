@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'edit_profile_screen.dart'; // Pastikan untuk membuat file ini
 import 'about_us_screen.dart'; // Pastikan untuk membuat file ini

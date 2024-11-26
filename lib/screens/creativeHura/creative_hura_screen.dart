@@ -47,7 +47,8 @@ class CreativeHuraScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddPostScreen()),
+            MaterialPageRoute(
+                builder: (context) => const AddPostScreenOnline()),
           );
         },
         backgroundColor: Colors.red,
@@ -61,7 +62,7 @@ class CreativeHuraScreen extends StatelessWidget {
   Widget _buildContainer(BuildContext context, String type) {
     return GestureDetector(
       onTap: () {
-        final post = Post(
+        final post = Post2(
           name: "Placeholder $type",
           description: "Placeholder Description",
           imageFile: null, // Null for the image file in this example

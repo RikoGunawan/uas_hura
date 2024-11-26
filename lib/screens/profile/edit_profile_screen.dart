@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../home/login_screen.dart';
+
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
 
@@ -116,62 +118,78 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      children: [
-        TextFormField(
-          controller: _firstNameController,
-          decoration: const InputDecoration(
-            label: Text('First Name'),
+    return Scaffold(
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        children: [
+          TextFormField(
+            controller: _firstNameController,
+            decoration: const InputDecoration(
+              label: Text('First Name'),
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        TextFormField(
-          controller: _lastNameController,
-          decoration: const InputDecoration(
-            label: Text('Last Name'),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _lastNameController,
+            decoration: const InputDecoration(
+              label: Text('Last Name'),
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        TextFormField(
-          controller: _usernameController,
-          decoration: const InputDecoration(
-            label: Text('Username'),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _usernameController,
+            decoration: const InputDecoration(
+              label: Text('Username'),
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed:
-              _selectAndUploadPhoto, // Memanggil fungsi untuk memilih dan mengupload foto
-          child: const Text('Upload Photo'),
-        ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () async {
-            final userId = Supabase.instance.client.auth.currentUser!.id;
-            final firstName = _firstNameController.text;
-            final lastName = _lastNameController.text;
-            final username = _usernameController.text;
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed:
+                _selectAndUploadPhoto, // Memanggil fungsi untuk memilih dan mengupload foto
+            child: const Text('Upload Photo'),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () async {
+              final userId = Supabase.instance.client.auth.currentUser!.id;
+              final firstName = _firstNameController.text;
+              final lastName = _lastNameController.text;
+              final username = _usernameController.text;
 
-            await Supabase.instance.client.from('profiles').upsert({
-              'id': userId,
-              'first_name': firstName,
-              'last_name': lastName,
-              'username': username,
-            });
+              await Supabase.instance.client.from('profiles').upsert({
+                'id': userId,
+                'first_name': firstName,
+                'last_name': lastName,
+                'username': username,
+              });
 
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Saved profile'),
-            ));
-          },
-          child: const Text('Save'),
-        ),
-        const SizedBox(height: 16),
-        TextButton(
-          onPressed: () => Supabase.instance.client.auth.signOut(),
-          child: const Text('Sign Out'),
-        ),
-      ],
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Saved profile'),
+              ));
+            },
+            child: const Text('Save'),
+          ),
+          const SizedBox(height: 16),
+          TextButton(
+            onPressed: () async {
+              // Tunggu hingga pengguna berhasil sign out
+              await Supabase.instance.client.auth.signOut();
+
+              // Tampilkan SnackBar setelah berhasil sign out
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Berhasil Sign Out'),
+              ));
+
+              // Arahkan pengguna ke halaman login setelah sign out
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            },
+            child: const Text('Sign Out'),
+          ),
+        ],
+      ),
     );
   }
 }

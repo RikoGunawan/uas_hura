@@ -69,10 +69,10 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
           // Garis putih latar belakang
           Positioned(
             left: 10.0,
-            top: 55.0,
+            top: 58.0,
             child: Container(
               height: 10.0, // Tinggi garis putih
-              width: MediaQuery.of(context).size.width - 40.0, // Lebar penuh
+              width: MediaQuery.of(context).size.width * 0.78, // Lebar penuh
               decoration: BoxDecoration(
                 color: Colors.white, // Garis putih
                 borderRadius: BorderRadius.circular(7.0),
@@ -82,10 +82,10 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
           // Linear progress bar
           Positioned(
             left: 10.0,
-            top: 55.0,
+            top: 58.0,
             child: Container(
               height: 10.0, // Tinggi progress bar
-              width: (MediaQuery.of(context).size.width - 40.0) *
+              width: (MediaQuery.of(context).size.width * 0.78) *
                   progress, // Sesuai progress
               decoration: BoxDecoration(
                 color: Colors.grey, // Warna progress

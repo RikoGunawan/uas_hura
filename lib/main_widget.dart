@@ -4,7 +4,7 @@ import 'package:myapp/screens/creativeHura/creative_hura_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/event_provider.dart';
-import 'screens/profile/edit_profile_screen.dart';
+
 import 'screens/huraEvents/event_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/huraPoints/hura_point_screen.dart';
@@ -83,7 +83,7 @@ class MainWidgetTemplate extends StatelessWidget {
   }
 
   _buildAppBar() {
-    if (currentIndex == 2) {
+    if (currentIndex == 2 || currentIndex == 4) {
       // Halaman Hura
       return null;
     } else {

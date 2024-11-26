@@ -13,98 +13,64 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String selectedCategory = 'Post';
-
-  // Get widgets for the selected category (Post, Reels, Video)
-  List<Widget> getPostWidgets() {
-    switch (selectedCategory) {
-      case 'Post':
-        return [
-          _buildPostContainer(context),
-          const SizedBox(width: 16.0),
-          _buildPostContainer(context),
-          const SizedBox(width: 16.0),
-          _buildPostContainer(context),
-        ];
-      case 'Reels':
-        return [
-          _buildReelsContainer(context),
-          const SizedBox(width: 16.0),
-          _buildReelsContainer(context),
-        ];
-      case 'Video':
-        return [
-          _buildVideoContainer(context),
-          const SizedBox(width: 16.0),
-          _buildVideoContainer(context),
-        ];
-      default:
-        return [];
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          // Header Section
-          _buildHeader(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 12, 16),
+          child: Column(
+            children: [
+              // Header Section
+              _buildHeader(),
 
-          // Profile Picture
-          const CircleAvatar(
-            backgroundColor: Color.fromARGB(255, 220, 216, 216),
-            radius: 50.0,
+              // Profile Picture
+              const CircleAvatar(
+                backgroundColor: Color.fromARGB(255, 220, 216, 216),
+                radius: 50.0,
+              ),
+              const SizedBox(height: 16.0),
+
+              // Profile Name
+              _buildProfileName(),
+
+              const SizedBox(height: 16.0),
+
+              // Stats: Likes and Shares
+              _buildStats(),
+              const SizedBox(height: 16.0),
+
+              // Content Widgets for selected category
+              _buildCategoryContent(),
+            ],
           ),
-          const SizedBox(height: 16.0),
-
-          // Profile Name
-          _buildProfileName(),
-
-          const SizedBox(height: 16.0),
-
-          // Stats: Likes and Shares
-          _buildStats(),
-
-          const SizedBox(height: 16.0),
-
-          // Category Buttons (Post, Reels, Video)
-          _buildCategoryButtons(),
-
-          const SizedBox(height: 16.0),
-
-          // Content Widgets for selected category
-          _buildCategoryContent(),
-        ],
+        ),
       ),
     );
   }
 
   // App Bar-like Header
   Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            'Account',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text(
+          'Account',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.red),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SettingsScreen()),
-            ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.settings, color: Colors.red),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SettingsScreen()),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -115,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return Text(
           profileProvider.name,
           style: const TextStyle(
-            fontSize: 20,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -153,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return GestureDetector(
       child: Column(
         children: [
-          Icon(icon, size: 30.0, color: color),
+          Icon(icon, size: 20.0, color: color),
           const SizedBox(height: 8.0),
           Text(
             value,
@@ -168,37 +134,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Category Buttons (Post, Reels, Video)
-  Widget _buildCategoryButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildButton('Post', () {
-          setState(() {
-            selectedCategory = 'Post';
-          });
-        }),
-        const SizedBox(width: 10),
-        _buildButton('Reels', () {
-          setState(() {
-            selectedCategory = 'Reels';
-          });
-        }),
-        const SizedBox(width: 10),
-        _buildButton('Video', () {
-          setState(() {
-            selectedCategory = 'Video';
-          });
-        }),
-      ],
-    );
-  }
-
   // Category Content (Posts, Reels, Videos)
   Widget _buildCategoryContent() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: getPostWidgets(),
+    return GridView.builder(
+      physics:
+          const NeverScrollableScrollPhysics(), // Disable scroll for inner GridView
+      shrinkWrap: true, // Allow GridView to take up only the necessary space
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // 2 columns
+        crossAxisSpacing: 16.0, // Space between columns
+        mainAxisSpacing: 16.0, // Space between rows
+        childAspectRatio: 1, // Aspect ratio for the grid items
+      ),
+      itemCount: 4, // Replace with the actual count of your items
+      itemBuilder: (context, index) {
+        return _buildPostContainer(context);
+      },
     );
   }
 
@@ -207,21 +158,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return _buildContainer(context, "Post");
   }
 
-  Widget _buildReelsContainer(BuildContext context) {
-    return _buildContainer(context, "Reels");
-  }
-
-  Widget _buildVideoContainer(BuildContext context) {
-    return _buildContainer(context, "Video");
-  }
-
   Widget _buildContainer(BuildContext context, String type) {
     return GestureDetector(
       onTap: () {
-        final post = Post(
+        final post = Post2(
           name: "Placeholder $type",
           description: "Placeholder Description",
-          imageFile: null, // Null for the image file in this example
+          imageFile: null,
           like: "favorite",
         );
         Navigator.push(
@@ -236,26 +179,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(10.0),
         ),
-        height: 150.0,
-        width: 150.0,
+        height: MediaQuery.of(context).size.width * 0.4, // Responsive height
+        width: MediaQuery.of(context).size.width * 0.4, // Responsive width
       ),
     );
   }
 
   // Generic Button
-  Widget _buildButton(String text, VoidCallback onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(color: Colors.white),
-      ),
-    );
-  }
 }
