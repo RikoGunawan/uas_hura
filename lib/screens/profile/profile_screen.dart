@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/profile_header_widget.dart';
 import 'package:provider/provider.dart';
 import '../../providers/profile_provider.dart';
 import '/models/post.dart';
@@ -18,59 +19,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 12, 16),
-          child: Column(
-            children: [
-              // Header Section
-              _buildHeader(),
+        child: Column(
+          children: [
+            ProfileHeaderWidget(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 12, 16),
+              child: Column(
+                children: [
+                  // Profile Picture
+                  const CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 220, 216, 216),
+                    radius: 50.0,
+                  ),
+                  const SizedBox(height: 16.0),
 
-              // Profile Picture
-              const CircleAvatar(
-                backgroundColor: Color.fromARGB(255, 220, 216, 216),
-                radius: 50.0,
+                  // Profile Name
+                  _buildProfileName(),
+
+                  const SizedBox(height: 16.0),
+
+                  // Stats: Likes and Shares
+                  _buildStats(),
+                  const SizedBox(height: 16.0),
+
+                  // Content Widgets for selected category
+                  _buildCategoryContent(),
+                ],
               ),
-              const SizedBox(height: 16.0),
-
-              // Profile Name
-              _buildProfileName(),
-
-              const SizedBox(height: 16.0),
-
-              // Stats: Likes and Shares
-              _buildStats(),
-              const SizedBox(height: 16.0),
-
-              // Content Widgets for selected category
-              _buildCategoryContent(),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    );
-  }
-
-  // App Bar-like Header
-  Widget _buildHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text(
-          'Account',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.settings, color: Colors.red),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const SettingsScreen()),
-          ),
-        ),
-      ],
     );
   }
 

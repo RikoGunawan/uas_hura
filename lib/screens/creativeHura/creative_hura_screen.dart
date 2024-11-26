@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../header_widget.dart';
+import '../../creative_hura_header_widget.dart';
 import '../../models/post.dart';
 import 'add_post_screen_not_used.dart';
 import 'add_post_screen.dart';
@@ -14,7 +14,7 @@ class CreativeHuraScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const HeaderWidget(), // HeaderWidget tetap di atas
+            const CreativeHuraHeaderWidget(), // HeaderWidget tetap di atas
             Padding(
               padding: const EdgeInsets.all(16.0), // Padding untuk konten
               child: Column(

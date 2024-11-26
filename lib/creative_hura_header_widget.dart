@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'screens/notification_screen.dart';
 
-class HeaderWidget extends StatelessWidget {
-  const HeaderWidget({super.key});
+class CreativeHuraHeaderWidget extends StatelessWidget {
+  const CreativeHuraHeaderWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
