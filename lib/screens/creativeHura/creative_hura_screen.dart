@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../creative_hura_header_widget.dart';
 import '../../models/post.dart';
-import 'add_post_screen_not_used.dart';
-import 'add_post_screen.dart';
+import 'add_post_screen_online.dart';
+import 'post_screen.dart';
 
 class CreativeHuraScreen extends StatelessWidget {
   const CreativeHuraScreen({super.key});
@@ -50,7 +50,7 @@ class CreativeHuraScreen extends StatelessWidget {
   Widget _buildContainer(BuildContext context, String type) {
     return GestureDetector(
       onTap: () {
-        final post = Post2(
+        final post = Post(
           name: "Placeholder $type",
           description: "Placeholder Description",
           imageFile: null, // Null for the image file in this example

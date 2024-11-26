@@ -12,7 +12,7 @@ import 'providers/event_provider.dart';
 import 'providers/hura_point_provider.dart';
 import 'providers/post_provider.dart';
 import 'providers/progress_provider.dart';
-import 'screens/creativeHura/add_post_screen_not_used.dart';
+import 'screens/creativeHura/add_post_screen_online.dart';
 import 'screens/creativeHura/creative_hura_screen.dart';
 import 'screens/home/login_screen.dart';
 import 'screens/home/register_screen.dart';
@@ -76,6 +76,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Hura',
       navigatorKey: navigatorKey,
+      home: LoginScreen(),
       theme: ThemeData(
         primaryColor: AppColors.primary,
         primaryColorLight: AppColors.primaryLight,

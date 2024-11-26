@@ -11,7 +11,7 @@ import '../../models/post2.dart';
 import '../../providers/post_provider2.dart';
 
 class AddPostScreenOnline extends StatefulWidget {
-  const AddPostScreenOnline({Key? key}) : super(key: key);
+  const AddPostScreenOnline({super.key});
 
   @override
   State<AddPostScreenOnline> createState() => _AddPostScreenOnlineState();

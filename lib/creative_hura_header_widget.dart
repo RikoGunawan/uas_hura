@@ -19,7 +19,7 @@ class CreativeHuraHeaderWidget extends StatelessWidget {
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 15,
-                fontWeight: FontWeight.w200,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
