@@ -129,7 +129,7 @@ Future<void> uploadAndCreatePostWeb(Uint8List imageBytes, Post2 post) async {
 // ------------------- Post Utility Functions -------------------
 
 // Fetch all posts
-Future<List<Post2>> getPosts() async {
+Future<List<Post2>> getAllPosts() async {
   try {
     final response = await Supabase.instance.client.from('posts').select();
     return (response as List<dynamic>)
@@ -138,6 +138,23 @@ Future<List<Post2>> getPosts() async {
   } catch (e) {
     print('Error fetching posts: $e');
     return [];
+  }
+}
+
+Future<Post2?> getPostById(String postId) async {
+  try {
+    final data = await Supabase.instance.client.from('posts').select().match(
+        {'id': postId}).maybeSingle(); // Use maybeSingle to fetch one post
+
+    if (data != null) {
+      return Post2.fromJson(data); // Convert the fetched data to Post2
+    } else {
+      print('Post not found for ID: $postId');
+      return null; // Return null if no post is found
+    }
+  } catch (e) {
+    print('Error fetching post: $e');
+    return null; // Return null in case of an error
   }
 }
 

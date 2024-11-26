@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:myapp/profile_header_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
+import '../../models/post2.dart';
 import '../../models/profile.dart';
 import '../../providers/profile_provider.dart';
-import '/models/post.dart';
-import '../creativeHura/post_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -179,27 +179,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildContainer(BuildContext context, String type) {
     return GestureDetector(
       onTap: () {
-        final post = Post(
+        // Assuming you have access to the current user
+        final user = Supabase.instance.client.auth.currentUser;
+
+        // Create an instance of Post2
+        final post = Post2(
+          id: Uuid().v4(), // Generate a new UUID
           name: "Placeholder $type",
           description: "Placeholder Description",
-          imageFile: null,
-          like: "favorite",
+          imageUrl: '', // Placeholder for the image URL
+          likes: 0, // Default like value
+          shares: 0, // Default share value
+          userId:
+              user?.id ?? '', // Use the current user's ID or an empty string
         );
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PostScreen(post: post),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(10.0),
           ),
+          height: MediaQuery.of(context).size.width * 0.4, // Responsive height
+          width: MediaQuery.of(context).size.width * 0.4, // Responsive width
         );
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        height: MediaQuery.of(context).size.width * 0.4, // Responsive height
-        width: MediaQuery.of(context).size.width * 0.4, // Responsive width
-      ),
     );
   }
 

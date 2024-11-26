@@ -1,36 +1,59 @@
 import 'package:flutter/material.dart';
 
 import '../../creative_hura_header_widget.dart';
-import '../../models/post.dart';
+import '../../models/post2.dart';
+import '../../providers/post_provider2.dart';
 import 'add_post_screen_online.dart';
 import 'post_screen.dart';
 
-class CreativeHuraScreen extends StatelessWidget {
+class CreativeHuraScreen extends StatefulWidget {
   const CreativeHuraScreen({super.key});
+
+  @override
+  _CreativeHuraScreenState createState() => _CreativeHuraScreenState();
+}
+
+class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
+  List<Post2> posts = []; // List to hold fetched posts
+  bool isLoading = true; // Loading state
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchPosts(); // Fetch posts when the widget is initialized
+  }
+
+  Future<void> _fetchPosts() async {
+    List<Post2> fetchedPosts = await getAllPosts();
+    setState(() {
+      posts = fetchedPosts;
+      isLoading = false; // Update loading state
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const CreativeHuraHeaderWidget(), // HeaderWidget tetap di atas
-            Padding(
-              padding: const EdgeInsets.all(16.0), // Padding untuk konten
+      body: isLoading
+          ? Center(child: CircularProgressIndicator()) // Show loading indicator
+          : SingleChildScrollView(
               child: Column(
                 children: [
-                  // List of Content Containers
-                  _buildContainer(context, "Post 1"),
-                  const SizedBox(height: 16.0),
-                  _buildContainer(context, "Post 2"),
-                  const SizedBox(height: 16.0),
-                  _buildContainer(context, "Post 3"),
+                  const CreativeHuraHeaderWidget(), // HeaderWidget tetap di atas
+                  Padding(
+                    padding: const EdgeInsets.all(16.0), // Padding untuk konten
+                    child: Column(
+                      children: [
+                        // List of Content Containers
+                        ...posts
+                            .map((post) => _buildContainer(context, post))
+                            .toList(),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -47,19 +70,14 @@ class CreativeHuraScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContainer(BuildContext context, String type) {
+  Widget _buildContainer(BuildContext context, Post2 post) {
     return GestureDetector(
       onTap: () {
-        final post = Post(
-          name: "Placeholder $type",
-          description: "Placeholder Description",
-          imageFile: null, // Null for the image file in this example
-          like: "0", // Default like value
-        );
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PostScreen(post: post),
+            builder: (context) =>
+                PostScreen(post: post), // Pass the Post2 instance
           ),
         );
       },

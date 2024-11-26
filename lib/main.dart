@@ -10,7 +10,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'providers/auth_provider.dart';
 import 'providers/event_provider.dart';
 import 'providers/hura_point_provider.dart';
-import 'providers/post_provider.dart';
+// import 'providers/post_provider.dart';
 import 'providers/progress_provider.dart';
 import 'screens/creativeHura/add_post_screen_online.dart';
 import 'screens/creativeHura/creative_hura_screen.dart';
@@ -47,7 +47,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
-        ChangeNotifierProvider(create: (_) => PostProvider()),
+        // ChangeNotifierProvider(create: (_) => PostProvider()),
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],

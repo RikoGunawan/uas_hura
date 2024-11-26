@@ -90,6 +90,7 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
       description: _descriptionController.text,
       imageUrl: '', // Akan diisi setelah upload
       likes: 0,
+      shares: 0,
       userId: user.id, // Menggunakan user ID yang valid
     );
 
