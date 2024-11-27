@@ -17,7 +17,7 @@ class EventProvider extends ChangeNotifier {
       id: 1,
       name: 'TERRAQUEST',
       price: 350000,
-      image: 'mc_papercraft.jpg',
+      image: 'event_terraquest.jpg',
       description:
           'Lomba Lintas Alam Terraquest memanggil para petualang untuk kembali dengan keindahan alam Tahura, melakukan pembersihan sungai, menanam pohon',
       eventDate: DateTime(2024, 12, 14, 08, 00), // 2024 Nov 23 10:46
@@ -26,7 +26,7 @@ class EventProvider extends ChangeNotifier {
       id: 2,
       name: 'Briony Journey',
       price: 130000,
-      image: 'mc_game.jpg',
+      image: 'event_brionyjourney.jpg',
       description:
           'Flower Arrangement & Creative Journaling. Mari temukan harmoni antara alam, seni, dan kreativitas di tengah indahnya hutan Tahura!',
       eventDate: DateTime(2024, 12, 15, 10, 00),
@@ -35,25 +35,25 @@ class EventProvider extends ChangeNotifier {
       id: 3,
       name: 'Urban To Forest ECO RUN',
       price: 5000,
-      image: 'mc_headset.jpg',
+      image: 'event_urban.jpg',
       description:
           'Fun Run dari perkotaan menuju ke Tahura yang akan membantu kamu untuk menenangkan diri sejenak dari hiruk pikuk kerasnya kota.',
-      eventDate: DateTime(2024, 11, 10, 08, 00),
+      eventDate: DateTime(2024, 11, 29, 08, 00),
     ),
     Event(
       id: 4,
       name: 'Sejalan Bareng 2024',
       price: 149000,
-      image: 'mc_egg_cup.jpg',
+      image: 'event_sejalanbareng.jpg',
       description:
           'Mengajak peserta jalan santai 3 KM sekaligus berkontribusi untuk menyantuni Anak Yatim dan Saudara di Palestina. Setiap langkah kecil yang kamu tempuh, sangat bernilai besar bagi mereka. ',
-      eventDate: DateTime(2024, 10, 13, 09, 00),
+      eventDate: DateTime(2024, 11, 29, 07, 00),
     ),
     Event(
       id: 5,
       name: 'Bincang Forest #23',
       price: 0,
-      image: 'stevenhe.jpg',
+      image: 'event_bincangforest.jpg',
       description:
           'Dalam memperingati Hari Habitat Sedunia, FIOF mengajak sobat bumi untuk hadir dalam Bincang Forest Episode 23! “Eksplorasi Keanekaragaman Hayati dan Hewani di Tahura Djuanda untuk Masa Depan Bumi” Kami berkolaborasi dengan @tahuradjuanda.official untuk membahas Harmoni Manusia dan Alam di Tahura Ir. H. Djuanda bersama Bapak Diki, A.Md. (Pengendali Ekosistem Hutan Tahura Ir. H. Djuanda) sebagai pembicara!',
       eventDate:
@@ -63,10 +63,10 @@ class EventProvider extends ChangeNotifier {
       id: 6,
       name: 'Festival Bala-Bala & Kopi',
       price: 0,
-      image: 'mc_torch_light.jpg',
+      image: 'event_balabala.jpg',
       description:
           'Pasar pasisian leuweung Perhutanan Sosial akan dilaksanakan di Tahura Ir. H. Djuanda pada Minggu, 18 Agustus 2024 dalam rangka memeriahkan HUT Republik Indonesia dan HUT Jawa Barat. Kegiatan ini akan diramaikan oleh produk-produk hasil hutan yang berasal dari Jawa Barat serta hiburan yang seru loh. Sobat Tahura yang tertarik untuk berpartisipasi mengisi booth di acara tersebut dapat melakukan pendaftaran melalui link tersebut: https://bit.ly/KurasiPengisiStandPasleuwPS_Tahura atau bisa klik link yang ada di bio kami yah.',
-      eventDate: DateTime(2024, 08, 18, 08, 00),
+      eventDate: DateTime(2024, 11, 28, 11, 00),
     ),
     // Tambahkan produk lain sesuai kebutuhan
   ];
