@@ -95,8 +95,14 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
 
     // Proses upload dan simpan data
     if (kIsWeb && _selectedImageWeb != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Mengupload gambar...')),
+      );
       await uploadAndCreatePostWeb(_selectedImageWeb!, post);
     } else if (_selectedImageFile != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Mengupload gambar...')),
+      );
       await uploadAndCreatePost(_selectedImageFile!, post);
     }
 

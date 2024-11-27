@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart'; // To detect kIsWeb
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as img;
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/post2.dart';
@@ -89,6 +91,12 @@ Future<void> uploadAndCreatePost(dynamic file, Post2 post) async {
   final imageUrl = await uploadImage(bucketName, path, file);
   final user = Supabase.instance.client.auth.currentUser;
   if (imageUrl != null && user != null) {
+// Fetch image data to calculate dimensions
+    final imageData = await fetchImage(
+        imageUrl); // Assuming this function fetches the image data
+    final dimensions =
+        getImageDimensions(imageData); // Get dimensions from the image data
+
     final newPost = Post2(
       id: post.id,
       name: post.name,
@@ -96,6 +104,10 @@ Future<void> uploadAndCreatePost(dynamic file, Post2 post) async {
       imageUrl: imageUrl,
       likes: post.likes,
       userId: user.id, // Pastikan userId diisi
+      width:
+          dimensions['width'] != null ? dimensions['width']!.toDouble() : 0.0,
+      height:
+          dimensions['height'] != null ? dimensions['height']!.toDouble() : 0.0,
     );
 
     await createPost(newPost); // Panggil fungsi createPost
@@ -111,6 +123,10 @@ Future<void> uploadAndCreatePostWeb(Uint8List imageBytes, Post2 post) async {
   final imageUrl = await uploadImageWeb(bucketName, path, imageBytes);
   final user = Supabase.instance.client.auth.currentUser;
   if (imageUrl != null && user != null) {
+    // Fetch image data to calculate dimensions
+    final imageData = await fetchImage(
+        imageUrl); // Assuming this function fetches the image data
+    final dimensions = getImageDimensions(imageData); // Get dimensions
     final newPost = Post2(
       id: post.id,
       name: post.name,
@@ -118,6 +134,10 @@ Future<void> uploadAndCreatePostWeb(Uint8List imageBytes, Post2 post) async {
       imageUrl: imageUrl,
       likes: post.likes,
       userId: user.id, // Pastikan userId diisi
+      width:
+          dimensions['width'] != null ? dimensions['width']!.toDouble() : 0.0,
+      height:
+          dimensions['height'] != null ? dimensions['height']!.toDouble() : 0.0,
     );
 
     await createPost(newPost); // Panggil fungsi createPost
@@ -203,4 +223,41 @@ Future<Uint8List?> pickImageWeb() async {
   );
 
   return result?.files.single.bytes;
+}
+
+//----------------------- Image Mainpulation -------------------------
+Future<Uint8List> fetchImage(String imageUrl) async {
+  final response = await http.get(Uri.parse(imageUrl));
+  if (response.statusCode == 200) {
+    return response.bodyBytes;
+  } else {
+    throw Exception('Failed to load image');
+  }
+}
+
+Map<String, int> getImageDimensions(Uint8List imageData) {
+  img.Image? decodedImage = img.decodeImage(imageData);
+  if (decodedImage != null) {
+    return {
+      'width': decodedImage.width,
+      'height': decodedImage.height,
+    };
+  } else {
+    throw Exception('Failed to decode image');
+  }
+}
+
+void loadImage(String imageUrl) async {
+  try {
+    Uint8List imageData = await fetchImage(imageUrl);
+    Map<String, int> dimensions = getImageDimensions(imageData);
+    int width = dimensions['width']!;
+    int height = dimensions['height']!;
+
+    // Now you can use width and height to display the image
+    print('Image Width: $width, Height: $height');
+    // Display the image using Image.memory or any other widget
+  } catch (e) {
+    print('Error: $e');
+  }
 }
