@@ -63,7 +63,7 @@ class AppRoutes {
   static const register = '/register';
   static const main = '/main';
   static const admin = '/admin';
-  static const adminProfile = '/admin-profile'; 
+  static const adminProfile = '/admin-profile';
   static const creativeHura = '/creative-hura';
   static const addCreativeHura = '/add-creative-hura';
   static const editProfileScreen = '/edit-profile-screen';
@@ -78,7 +78,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Hura',
       navigatorKey: navigatorKey,
-      home: LoginScreen(),
       theme: ThemeData(
         primaryColor: AppColors.primary,
         primaryColorLight: AppColors.primaryLight,
@@ -104,9 +103,9 @@ class MyApp extends StatelessWidget {
         AppRoutes.creativeHura: (context) => const CreativeHuraScreen(),
         AppRoutes.addCreativeHura: (context) => const AddPostScreenOnline(),
         AppRoutes.editProfileScreen: (context) => const EditProfileScreen(),
-        AppRoutes.adminProfile: (context) => const AdminProfileScreen(), 
+        AppRoutes.adminProfile: (context) => const AdminProfileScreen(),
       },
-        onUnknownRoute: (settings) {
+      onUnknownRoute: (settings) {
         return MaterialPageRoute(
           builder: (context) => const LoginScreen(),
         );
@@ -114,4 +113,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

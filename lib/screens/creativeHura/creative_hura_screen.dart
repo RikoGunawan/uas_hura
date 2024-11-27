@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../creative_hura_header_widget.dart';
 import '../../models/post2.dart';
 import '../../providers/post_provider2.dart';
@@ -24,11 +23,27 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
   }
 
   Future<void> _fetchPosts() async {
-    List<Post2> fetchedPosts = await getAllPosts();
-    setState(() {
-      posts = fetchedPosts;
-      isLoading = false; // Update loading state
-    });
+    try {
+      List<Post2> fetchedPosts = await getAllPosts();
+
+      setState(() {
+        // Calculate aspect ratio directly from width and height
+        for (var post in fetchedPosts) {
+          if (post.width != null && post.height != null) {
+            post.aspectRatio = post.width! / post.height!;
+          } else {
+            post.aspectRatio = null; // Or set a default value if needed
+          }
+        }
+        posts = fetchedPosts;
+        isLoading = false; // Update loading state
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Update loading state
+      });
+      print('Error fetching posts: $e');
+    }
   }
 
   @override
@@ -45,9 +60,7 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
                     child: Column(
                       children: [
                         // List of Content Containers
-                        ...posts
-                            .map((post) => _buildContainer(context, post))
-                            ,
+                        ...posts.map((post) => _buildContainer(context, post)),
                       ],
                     ),
                   ),
@@ -71,59 +84,87 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
   }
 
   Widget _buildContainer(BuildContext context, Post2 post) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                PostScreen(post: post), // Pass the Post2 instance
+    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
+    final containerWidth =
+        screenWidth * 0.9; // Set container width to 90% of screen width
+
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    PostScreen(post: post), // Pass the Post2 instance
+              ),
+            );
+          },
+          child: Container(
+            width: containerWidth, // Use calculated width
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0), // Rounded corners
+            ),
+            child: Stack(
+              children: [
+                AspectRatio(
+                  aspectRatio:
+                      post.aspectRatio ?? 1.0, // Use aspect ratio from post
+                  child: ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(10.0), // Rounded corners
+                    child: Image.network(
+                      post.imageUrl,
+                      fit: BoxFit.scaleDown, // Change this to BoxFit.scaleDown
+                      width: double.infinity,
+                      height: double.infinity,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(child: CircularProgressIndicator());
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Center(child: Icon(Icons.error));
+                      },
+                    ),
+                  ),
+                ),
+                // Profile Avatar (left side)
+                const Positioned(
+                  left: 10,
+                  bottom: 10,
+                  child: CircleAvatar(
+                    radius: 20.0,
+                    backgroundColor: Colors.grey,
+                  ),
+                ),
+                // Like button (bottom-left)
+                Positioned(
+                  bottom: 10,
+                  right: 50,
+                  child: IconButton(
+                    icon: const Icon(Icons.favorite, color: Colors.red),
+                    onPressed: () {
+                      // Handle like button press
+                    },
+                  ),
+                ),
+                // Share button (bottom-right)
+                Positioned(
+                  bottom: 10,
+                  right: 10,
+                  child: IconButton(
+                    icon: const Icon(Icons.share, color: Colors.green),
+                    onPressed: () {
+                      // Handle share button press
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
-        );
-      },
-      child: Container(
-        height: 150.0,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10.0),
         ),
-        child: Stack(
-          children: [
-            // Profile Avatar (left side)
-            const Positioned(
-              left: 10,
-              bottom: 10,
-              child: CircleAvatar(
-                radius: 20.0,
-                backgroundColor: Colors.grey,
-              ),
-            ),
-            // Like Button (bottom-left)
-            Positioned(
-              bottom: 10,
-              right: 50,
-              child: IconButton(
-                icon: const Icon(Icons.favorite, color: Colors.red),
-                onPressed: () {
-                  // Handle like button press
-                },
-              ),
-            ),
-            // Share Button (bottom-right)
-            Positioned(
-              bottom: 10,
-              right: 10,
-              child: IconButton(
-                icon: const Icon(Icons.share, color: Colors.green),
-                onPressed: () {
-                  // Handle share button press
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+        const SizedBox(height: 10),
+      ],
     );
   }
 }
