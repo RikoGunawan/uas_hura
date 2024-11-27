@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/admin/admin_profile.dart';
+import 'package:myapp/admin/huraPoints/edit_hura_point_screen.dart';
 import 'package:myapp/admin_widget.dart';
 import 'package:myapp/providers/profile_provider.dart';
 import 'package:myapp/screens/creativeHura/add_post_screen_online.dart';
@@ -13,7 +14,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'providers/auth_provider.dart';
 import 'providers/event_provider.dart';
 import 'providers/hura_point_provider.dart';
-// import 'providers/post_provider.dart';
 import 'providers/progress_provider.dart';
 import 'screens/home/login_screen.dart';
 import 'screens/home/register_screen.dart';
@@ -25,9 +25,12 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize HuraPointProvider
   final huraProvider = HuraPointProvider();
   await huraProvider.loadLastLoginDate();
 
+  // Initialize Supabase
   await Supabase.initialize(
     url: 'https://cqmadsjfyxpbewyouuvk.supabase.co',
     anonKey:
@@ -48,7 +51,6 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
-        // ChangeNotifierProvider(create: (_) => PostProvider()),
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
@@ -63,10 +65,12 @@ class AppRoutes {
   static const register = '/register';
   static const main = '/main';
   static const admin = '/admin';
-  static const adminProfile = '/admin-profile'; 
+  static const adminProfile = '/admin-profile';
   static const creativeHura = '/creative-hura';
   static const addCreativeHura = '/add-creative-hura';
   static const editProfileScreen = '/edit-profile-screen';
+  static const editHuraPoint =
+      '/edit-hura-point-screen'; // Route untuk EditHuraEvent
 }
 
 class MyApp extends StatelessWidget {
@@ -78,7 +82,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Hura',
       navigatorKey: navigatorKey,
-      home: LoginScreen(),
+      home: const EditHuraPointScreen(),
       theme: ThemeData(
         primaryColor: AppColors.primary,
         primaryColorLight: AppColors.primaryLight,
@@ -94,7 +98,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.editHuraPoint,
       routes: {
         AppRoutes.first: (context) => const GetStartedScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
@@ -104,14 +108,10 @@ class MyApp extends StatelessWidget {
         AppRoutes.creativeHura: (context) => const CreativeHuraScreen(),
         AppRoutes.addCreativeHura: (context) => const AddPostScreenOnline(),
         AppRoutes.editProfileScreen: (context) => const EditProfileScreen(),
-        AppRoutes.adminProfile: (context) => const AdminProfileScreen(), 
-      },
-        onUnknownRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (context) => const LoginScreen(),
-        );
+        AppRoutes.adminProfile: (context) => const AdminProfileScreen(),
+        AppRoutes.editHuraPoint: (context) =>
+            const EditHuraPointScreen(), // Tambahkan ke routes
       },
     );
   }
 }
-
