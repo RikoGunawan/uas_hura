@@ -1,14 +1,15 @@
 class Post2 {
   final String id;
-  final String name;
-  final String description;
+  String name;
+  String description;
   final String imageUrl;
-  final int likes;
-  final int shares;
+  int likes;
+  int shares;
   final String userId; // Tambahkan user_id
   double? width; // Tambahkan properti width
   double? height; // Tambahkan properti height
   double? aspectRatio; // Tambahkan properti aspectRatio
+  bool isLiked; // Tambahkan properti untuk status like
 
   Post2({
     required this.id,
@@ -17,13 +18,20 @@ class Post2 {
     required this.imageUrl,
     this.likes = 0,
     this.shares = 0,
-    required this.userId, // Tambahkan user_id ke konstruktor
-    this.width, // Tambahkan parameter width
-    this.height, // Tambahkan parameter height
-    this.aspectRatio, // Tambahkan parameter aspectRatio
-  });
+    required this.userId,
+    this.width,
+    this.height,
+    this.aspectRatio,
+    this.isLiked = false,
+  }) {
+    if (width != null && height != null) {
+      aspectRatio = width! / height!;
+    } else {
+      aspectRatio = 1.0; // Default aspect ratio
+    }
+  }
 
-  // Convert JSON to Post object
+  // Konversi JSON ke objek Post
   factory Post2.fromJson(Map<String, dynamic> json) {
     return Post2(
       id: json['id'],
@@ -32,13 +40,14 @@ class Post2 {
       imageUrl: json['image_url'],
       likes: json['likes'],
       shares: json['shares'],
-      userId: json['user_id'], // Ambil user_id dari JSON
-      width: json['width']?.toDouble(), // Handle null
-      height: json['height']?.toDouble(), // Handle null
+      userId: json['user_id'],
+      width: json['width']?.toDouble(),
+      height: json['height']?.toDouble(),
+      isLiked: json['is_liked'] ?? false, // Ambil status liked dari JSON
     );
   }
 
-  // Convert Post object to JSON
+  // Konversi objek Post ke JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -47,9 +56,10 @@ class Post2 {
       'image_url': imageUrl,
       'likes': likes,
       'shares': shares,
-      'user_id': userId, // Sertakan user_id dalam JSON
+      'user_id': userId,
       'width': width,
       'height': height,
+      'is_liked': isLiked, // Sertakan isLiked dalam JSON
     };
   }
 }

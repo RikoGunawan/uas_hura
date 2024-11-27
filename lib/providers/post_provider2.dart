@@ -60,24 +60,23 @@ Future<String?> uploadImageWeb(
 // ------------------- Post Management Functions -------------------
 
 // Create a new post
-// Create a new post
 Future<void> createPost(Post2 post) async {
   try {
     // Siapkan data postingan
     final postData = post.toJson();
-    print('Post data being sent: $postData'); // Debug: print post data
+    print('Post data being sent: $postData');
 
     // Kirim data ke Supabase
     final response =
         await Supabase.instance.client.from('posts').insert(postData);
 
-    // Cek apakah response berhasil
-    if (response.error == null) {
-      print('Post created successfully!');
-    } else {
-      // Tangani kesalahan jika ada
-      print('Error creating post: ${response.error!.message}');
+    // Cek status respons
+    if (response == null || response.error != null) {
+      throw Exception(
+          'Failed to create post: ${response.error?.message ?? 'Unknown error'}');
     }
+
+    print('Post created successfully!');
   } catch (e) {
     print('Error creating post: $e');
   }
@@ -225,7 +224,7 @@ Future<Uint8List?> pickImageWeb() async {
   return result?.files.single.bytes;
 }
 
-//----------------------- Image Mainpulation -------------------------
+//----------------------- Image Manipulation -------------------------
 Future<Uint8List> fetchImage(String imageUrl) async {
   final response = await http.get(Uri.parse(imageUrl));
   if (response.statusCode == 200) {
