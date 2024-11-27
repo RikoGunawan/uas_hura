@@ -9,7 +9,7 @@ import '../../providers/event_provider.dart';
 class EventDetailScreen extends StatefulWidget {
   final Event event;
 
-  const EventDetailScreen({Key? key, required this.event}) : super(key: key);
+  const EventDetailScreen({super.key, required this.event});
 
   @override
   _EventDetailScreenState createState() => _EventDetailScreenState();

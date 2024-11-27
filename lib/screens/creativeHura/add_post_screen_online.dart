@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart'; // Untuk kIsWeb
 import 'package:file_picker/file_picker.dart'; // Untuk Web
 import 'package:image_picker/image_picker.dart'; // Untuk Mobile
@@ -125,7 +124,7 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
 
   @override
   Widget build(BuildContext context) {
-    Widget _buildImagePreview() {
+    Widget buildImagePreview() {
       if (_selectedImageWeb != null) {
         // Untuk platform Web
         return Image.memory(
@@ -164,7 +163,7 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
             // Gambar
             AspectRatio(
               aspectRatio: 16 / 9, // Default rasio jika gambar belum ada
-              child: _buildImagePreview(),
+              child: buildImagePreview(),
             ),
             const SizedBox(height: 16),
             // TextField untuk Nama

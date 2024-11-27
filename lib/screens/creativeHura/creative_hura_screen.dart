@@ -47,7 +47,7 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
                         // List of Content Containers
                         ...posts
                             .map((post) => _buildContainer(context, post))
-                            .toList(),
+                            ,
                       ],
                     ),
                   ),

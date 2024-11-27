@@ -83,11 +83,11 @@ class EventProvider extends ChangeNotifier {
   }
 
 // ------------------------------- Countdown + Notifikasi Event
-  List<Event> _eventsWithNotification = [];
+  final List<Event> _eventsWithNotification = [];
   List<Event> get eventsWithNotification => _eventsWithNotification;
 
   // Queue untuk menyimpan event yang belum ditampilkan notifikasinya
-  Queue<Event> _notificationQueue = Queue();
+  final Queue<Event> _notificationQueue = Queue();
 
   // Flag untuk mengecek apakah sedang menampilkan notifikasi
   bool _isShowingNotification = false;

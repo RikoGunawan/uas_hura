@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/admin/admin_profile.dart';
 import 'package:myapp/admin_widget.dart';
 import 'package:myapp/providers/profile_provider.dart';
-import 'package:myapp/screens/profile/edit_profile_screen.dart';
+import 'package:myapp/screens/creativeHura/add_post_screen_online.dart';
+import 'package:myapp/screens/creativeHura/creative_hura_screen.dart';
 import 'package:myapp/screens/home/get_started_screen.dart';
+import 'package:myapp/screens/profile/edit_profile.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -12,8 +15,6 @@ import 'providers/event_provider.dart';
 import 'providers/hura_point_provider.dart';
 // import 'providers/post_provider.dart';
 import 'providers/progress_provider.dart';
-import 'screens/creativeHura/add_post_screen_online.dart';
-import 'screens/creativeHura/creative_hura_screen.dart';
 import 'screens/home/login_screen.dart';
 import 'screens/home/register_screen.dart';
 import 'main_widget.dart';
@@ -62,6 +63,7 @@ class AppRoutes {
   static const register = '/register';
   static const main = '/main';
   static const admin = '/admin';
+  static const adminProfile = '/admin-profile'; 
   static const creativeHura = '/creative-hura';
   static const addCreativeHura = '/add-creative-hura';
   static const editProfileScreen = '/edit-profile-screen';
@@ -102,8 +104,9 @@ class MyApp extends StatelessWidget {
         AppRoutes.creativeHura: (context) => const CreativeHuraScreen(),
         AppRoutes.addCreativeHura: (context) => const AddPostScreenOnline(),
         AppRoutes.editProfileScreen: (context) => const EditProfileScreen(),
+        AppRoutes.adminProfile: (context) => const AdminProfileScreen(), 
       },
-      onUnknownRoute: (settings) {
+        onUnknownRoute: (settings) {
         return MaterialPageRoute(
           builder: (context) => const LoginScreen(),
         );
@@ -111,3 +114,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

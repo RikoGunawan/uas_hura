@@ -26,14 +26,12 @@ class _EditHuraEventState extends State<EditHuraEvent> {
         .select()
         .order('event_date', ascending: true);
 
-    if (response != null) {
-      setState(() {
-        events = (response as List<dynamic>)
-            .map((json) => Event.fromJson(json))
-            .toList();
-      });
+    setState(() {
+      events = (response as List<dynamic>)
+          .map((json) => Event.fromJson(json))
+          .toList();
+    });
     }
-  }
 
   Future<void> _addEvent(Event event) async {
     await supabase.from('events').insert(event.toJson());

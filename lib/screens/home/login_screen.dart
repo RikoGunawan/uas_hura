@@ -3,7 +3,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
-import '../../main_widget.dart';
 import '../../providers/hura_point_provider.dart';
 import '../../utils/app_colors.dart';
 

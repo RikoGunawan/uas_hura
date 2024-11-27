@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data'; // For web support
+// For web support
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart'; // To detect kIsWeb
 import 'package:image_picker/image_picker.dart';
