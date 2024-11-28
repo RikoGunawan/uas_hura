@@ -4,11 +4,9 @@ import 'package:myapp/admin/admin_profile.dart';
 import 'package:myapp/admin/huraEvents/admin_hura_event_screen.dart';
 import 'package:myapp/admin/huraEvents/edit_hura_event.dart';
 import 'package:myapp/admin_widget.dart';
-import 'package:myapp/providers/profile_provider.dart';
 import 'package:myapp/screens/creativeHura/add_post_screen_online.dart';
 import 'package:myapp/screens/creativeHura/creative_hura_screen.dart';
 import 'package:myapp/screens/home/get_started_screen.dart';
-import 'package:myapp/screens/profile/edit_profile.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -20,6 +18,7 @@ import 'providers/progress_provider.dart';
 import 'screens/home/login_screen.dart';
 import 'screens/home/register_screen.dart';
 import 'main_widget.dart';
+import 'screens/profile/edit_profile_screen.dart';
 import 'services/event_service.dart';
 import 'utils/app_colors.dart';
 
@@ -52,7 +51,6 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
         // ChangeNotifierProvider(create: (_) => PostProvider()),
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
-        ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
       child: const MyApp(),
     ),
