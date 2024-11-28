@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:myapp/profile_header_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uuid/uuid.dart';
 import '../../models/post2.dart';
 import '../../models/profile.dart';
 import '../../providers/profile_provider.dart';
+import '../../providers/post_provider2.dart';
+import '../creativeHura/post_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -16,12 +17,15 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   Profile? profile;
-  bool isLoading = true;
+  List<Post2> posts = [];
+  bool isLoadingProfile = true;
+  bool isLoadingPosts = true;
 
   @override
   void initState() {
     super.initState();
     _loadProfile();
+    _fetchPosts();
   }
 
   Future<void> _loadProfile() async {
@@ -31,8 +35,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       try {
         final data = await Supabase.instance.client
             .from('profiles')
-            .select()
-            .match({'id': userId}).maybeSingle();
+            .select(
+                'id, first_name, last_name, username, bio, imageurl, total_likes, total_shares')
+            .eq('id', userId)
+            .maybeSingle();
 
         if (data != null) {
           setState(() {
@@ -40,18 +46,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
         }
       } catch (e) {
-        // Handle error if needed
         print('Error loading profile: $e');
       } finally {
-        // Ensure loading state is updated regardless of success or failure
         setState(() {
-          isLoading = false;
+          isLoadingProfile = false;
         });
       }
     } else {
-      // Handle case when user is null
       setState(() {
-        isLoading = false;
+        isLoadingProfile = false;
+      });
+    }
+  }
+
+  Future<void> _fetchPosts() async {
+    setState(() {
+      isLoadingPosts = true;
+    });
+
+    try {
+      List<Post2> fetchedPosts = await getAllPosts();
+      setState(() {
+        posts = fetchedPosts;
+      });
+    } catch (e) {
+      print('Error fetching posts: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to load posts')),
+      );
+    } finally {
+      setState(() {
+        isLoadingPosts = false;
       });
     }
   }
@@ -60,8 +85,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: isLoading // Check if loading
-          ? Center(child: CircularProgressIndicator()) // Show loading indicator
+      body: isLoadingProfile
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Column(
                 children: [
@@ -70,24 +95,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     padding: const EdgeInsets.fromLTRB(16, 8, 12, 16),
                     child: Column(
                       children: [
-                        // Profile Picture
                         const CircleAvatar(
                           backgroundColor: Color.fromARGB(255, 220, 216, 216),
                           radius: 50.0,
                         ),
                         const SizedBox(height: 16.0),
-
-                        // Profile Name
                         _buildProfileName(),
-
                         const SizedBox(height: 16.0),
-
-                        // Stats: Likes and Shares
                         _buildStats(),
                         const SizedBox(height: 16.0),
-
-                        // Content Widgets for selected category
-                        _buildCategoryContent(),
+                        isLoadingPosts
+                            ? const CircularProgressIndicator()
+                            : _buildPostGrid(),
                       ],
                     ),
                   ),
@@ -99,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildProfileName() {
     return Text(
-      profile!.username,
+      profile?.username ?? 'Unknown User',
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
@@ -108,7 +127,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Stats: Likes and Shares
   Widget _buildStats() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -116,19 +134,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _buildStatBox(
           icon: Icons.favorite,
           color: Colors.red,
-          value: context.watch<ProfileProvider>().likes.toString(),
+          value: profile?.totalLikes.toString() ?? '0',
         ),
         const SizedBox(width: 30.0),
         _buildStatBox(
           icon: Icons.share,
           color: Colors.green,
-          value: context.watch<ProfileProvider>().shares.toString(),
+          value: profile?.totalShares.toString() ?? '0',
         ),
       ],
     );
   }
 
-  // Stat Box Widget (Likes/Shares)
   Widget _buildStatBox({
     required IconData icon,
     required Color color,
@@ -152,58 +169,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Category Content (Posts, Reels, Videos)
-  Widget _buildCategoryContent() {
-    return GridView.builder(
-      physics:
-          const NeverScrollableScrollPhysics(), // Disable scroll for inner GridView
-      shrinkWrap: true, // Allow GridView to take up only the necessary space
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // 2 columns
-        crossAxisSpacing: 16.0, // Space between columns
-        mainAxisSpacing: 16.0, // Space between rows
-        childAspectRatio: 1, // Aspect ratio for the grid items
+  Widget _buildPostContainer(BuildContext context, String type) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(10.0),
       ),
-      itemCount: 4, // Replace with the actual count of your items
+      height: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.4,
+    );
+  }
+
+  Widget _buildPostGrid() {
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16.0,
+        mainAxisSpacing: 16.0,
+        childAspectRatio: 1,
+      ),
+      itemCount: posts.length,
       itemBuilder: (context, index) {
-        return _buildPostContainer(context);
-      },
-    );
-  }
-
-  // Content Container for Posts, Reels, and Videos
-  Widget _buildPostContainer(BuildContext context) {
-    return _buildContainer(context, "Post");
-  }
-
-  Widget _buildContainer(BuildContext context, String type) {
-    return GestureDetector(
-      onTap: () {
-        // Assuming you have access to the current user
-        final user = Supabase.instance.client.auth.currentUser;
-
-        // Create an instance of Post2
-        final post = Post2(
-          id: Uuid().v4(), // Generate a new UUID
-          name: "Placeholder $type",
-          description: "Placeholder Description",
-          imageUrl: '', // Placeholder for the image URL
-          likes: 0, // Default like value
-          shares: 0, // Default share value
-          userId:
-              user?.id ?? '', // Use the current user's ID or an empty string
-        );
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[300],
-            borderRadius: BorderRadius.circular(10.0),
+        final post = posts[index];
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PostScreen(post: post),
+              ),
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(10.0),
+              image: post.imageUrl.isNotEmpty
+                  ? DecorationImage(
+                      image: NetworkImage(post.imageUrl),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+            ),
+            child: post.imageUrl.isEmpty
+                ? const Center(
+                    child:
+                        Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                  )
+                : null,
           ),
-          height: MediaQuery.of(context).size.width * 0.4, // Responsive height
-          width: MediaQuery.of(context).size.width * 0.4, // Responsive width
         );
       },
     );
   }
-
-  // Generic Button
 }

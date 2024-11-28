@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../creative_hura_header_widget.dart';
 import '../../models/post2.dart';
+import '../../providers/like_provider.dart';
 import '../../providers/post_provider2.dart';
 import 'add_post_screen_online.dart';
 import 'post_screen.dart';
@@ -13,36 +14,46 @@ class CreativeHuraScreen extends StatefulWidget {
 }
 
 class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
-  List<Post2> posts = []; // List to hold fetched posts
-  bool isLoading = true; // Loading state
+  List<Post2> posts = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _fetchPosts(); // Fetch posts when the widget is initialized
+    _fetchPosts();
   }
 
   Future<void> _fetchPosts() async {
+    // Mulai loading global
+    setState(() {
+      isLoading = true;
+    });
+
     try {
+      // Ambil data semua post
       List<Post2> fetchedPosts = await getAllPosts();
 
+      // Set data post dengan penyesuaian
       setState(() {
-        // Calculate aspect ratio directly from width and height
-        for (var post in fetchedPosts) {
-          if (post.width != null && post.height != null) {
-            post.aspectRatio = post.width! / post.height!;
-          } else {
-            post.aspectRatio = null; // Or set a default value if needed
-          }
-        }
-        posts = fetchedPosts;
-        isLoading = false; // Update loading state
+        posts = fetchedPosts.map((post) {
+          post.aspectRatio = (post.width != null && post.height != null)
+              ? post.width! / post.height!
+              : 1.0; // Default aspect ratio jika data width/height kosong
+          return post;
+        }).toList();
       });
     } catch (e) {
-      setState(() {
-        isLoading = false; // Update loading state
-      });
       print('Error fetching posts: $e');
+
+      // Tampilkan pesan error ke user
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to load posts')),
+      );
+    } finally {
+      // Pastikan loading dihentikan meskipun ada error
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -50,18 +61,17 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-          ? Center(child: CircularProgressIndicator()) // Show loading indicator
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Column(
                 children: [
-                  const CreativeHuraHeaderWidget(), // HeaderWidget tetap di atas
+                  const CreativeHuraHeaderWidget(),
                   Padding(
-                    padding: const EdgeInsets.all(16.0), // Padding untuk konten
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
-                      children: [
-                        // List of Content Containers
-                        ...posts.map((post) => _buildContainer(context, post)),
-                      ],
+                      children: posts
+                          .map((post) => _buildContainer(context, post))
+                          .toList(),
                     ),
                   ),
                 ],
@@ -78,15 +88,13 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
         backgroundColor: Colors.red,
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation
-          .startFloat, // Moves button to the bottom left
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 
   Widget _buildContainer(BuildContext context, Post2 post) {
-    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
-    final containerWidth =
-        screenWidth * 0.9; // Set container width to 90% of screen width
+    final screenWidth = MediaQuery.of(context).size.width;
+    final containerWidth = screenWidth * 0.9;
 
     return Column(
       children: [
@@ -95,40 +103,37 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    PostScreen(post: post), // Pass the Post2 instance
+                builder: (context) => PostScreen(post: post),
               ),
             );
           },
           child: Container(
-            width: containerWidth, // Use calculated width
+            width: containerWidth,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0), // Rounded corners
+              borderRadius: BorderRadius.circular(10.0),
             ),
             child: Stack(
               children: [
                 AspectRatio(
-                  aspectRatio:
-                      post.aspectRatio ?? 1.0, // Use aspect ratio from post
+                  aspectRatio: post.aspectRatio ?? 1.0,
                   child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(10.0), // Rounded corners
+                    borderRadius: BorderRadius.circular(10.0),
                     child: Image.network(
                       post.imageUrl,
-                      fit: BoxFit.scaleDown, // Change this to BoxFit.scaleDown
-                      width: double.infinity,
-                      height: double.infinity,
+                      fit: BoxFit.scaleDown,
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       },
                       errorBuilder: (context, error, stackTrace) {
-                        return Center(child: Icon(Icons.error));
+                        return const Center(
+                          child: Icon(Icons.broken_image,
+                              color: Colors.grey, size: 50),
+                        );
                       },
                     ),
                   ),
                 ),
-                // Profile Avatar (left side)
                 const Positioned(
                   left: 10,
                   bottom: 10,
@@ -137,25 +142,56 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
                     backgroundColor: Colors.grey,
                   ),
                 ),
-                // Like button (bottom-left)
                 Positioned(
                   bottom: 10,
                   right: 50,
                   child: IconButton(
-                    icon: const Icon(Icons.favorite, color: Colors.red),
-                    onPressed: () {
-                      // Handle like button press
+                    icon: Icon(
+                      post.isLiked ? Icons.favorite : Icons.favorite_border,
+                      color: post.isLiked ? Colors.red : Colors.grey,
+                    ),
+                    onPressed: () async {
+                      // Optimistic update
+                      bool previousLikeStatus = post.isLiked;
+                      setState(() {
+                        post.isLiked = !post.isLiked;
+                        // post.likes += post.isLiked ? 1 : -1;
+                      });
+
+                      try {
+                        // Panggil fungsi async untuk toggle like
+                        await likePost(post);
+                      } catch (e) {
+                        // Rollback ke status awal jika gagal
+                        setState(() {
+                          post.isLiked = previousLikeStatus;
+                          post.likes += post.isLiked ? 1 : -1;
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Failed to toggle like')),
+                        );
+                      }
                     },
                   ),
                 ),
-                // Share button (bottom-right)
                 Positioned(
                   bottom: 10,
                   right: 10,
                   child: IconButton(
                     icon: const Icon(Icons.share, color: Colors.green),
-                    onPressed: () {
-                      // Handle share button press
+                    onPressed: () async {
+                      try {
+                        await sharePost(post);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Post shared successfully!')),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Failed to share post')),
+                        );
+                      }
                     },
                   ),
                 ),
