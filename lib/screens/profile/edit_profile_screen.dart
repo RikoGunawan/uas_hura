@@ -17,6 +17,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _lastNameController = TextEditingController();
   final _usernameController = TextEditingController();
   Uint8List? _imageBytes; // Menyimpan data gambar dalam bentuk byte
+  String? _profileImageUrl; // Menyimpan URL gambar profil
 
   @override
   void initState() {
@@ -46,6 +47,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           _firstNameController.text = data['first_name'] ?? '';
           _lastNameController.text = data['last_name'] ?? '';
           _usernameController.text = data['username'] ?? '';
+          _profileImageUrl =
+              data['imageurl']; // Ambil URL gambar profil dari database
         });
       }
     }
@@ -97,16 +100,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       });
 
       final userId = Supabase.instance.client.auth.currentUser!.id;
-      final path = 'profiles/$userId/profile_photo.png';
+      final path =
+          'profiles/${DateTime.now().millisecondsSinceEpoch}_image.jpg';
 
       // Mengupload gambar
-      final imageUrl =
-          await uploadImageWeb('user_profile_photos', path, imageBytes);
+      final imageUrl = await uploadImageWeb('profile_photos', path, imageBytes);
       if (imageUrl != null) {
         // Update profil dengan URL gambar
         await Supabase.instance.client.from('profiles').upsert({
           'id': userId,
-          'profile_photo_url': imageUrl,
+          'imageurl': imageUrl,
+        });
+
+        setState(() {
+          _profileImageUrl = imageUrl; // Simpan URL gambar yang diupload
         });
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -122,6 +129,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         children: [
+          // Menampilkan gambar profil jika ada
+          if (_profileImageUrl != null)
+            Image.network(
+              _profileImageUrl!,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
+          const SizedBox(height: 16),
           TextFormField(
             controller: _firstNameController,
             decoration: const InputDecoration(
@@ -156,16 +172,35 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               final lastName = _lastNameController.text;
               final username = _usernameController.text;
 
-              await Supabase.instance.client.from('profiles').upsert({
+              // Log data yang akan diupsert
+              print('Upserting data: ${{
                 'id': userId,
                 'first_name': firstName,
                 'last_name': lastName,
                 'username': username,
-              });
+                'imageurl': _profileImageUrl,
+              }}');
 
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Saved profile'),
-              ));
+              try {
+                await Supabase.instance.client.from('profiles').upsert({
+                  'id': userId,
+                  'first_name': firstName,
+                  'last_name': lastName,
+                  'username': username,
+                  'imageurl': _profileImageUrl,
+                });
+
+                // Jika response tidak null, berarti upsert berhasil
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Saved profile'),
+                ));
+              } catch (e) {
+                // Tangkap kesalahan dan tampilkan pesan kesalahan
+                print('Error upserting profile: $e');
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Error saving profile: $e'),
+                ));
+              }
             },
             child: const Text('Save'),
           ),

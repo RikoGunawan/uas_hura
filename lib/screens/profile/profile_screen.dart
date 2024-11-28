@@ -93,9 +93,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     padding: const EdgeInsets.fromLTRB(16, 8, 12, 16),
                     child: Column(
                       children: [
-                        const CircleAvatar(
-                          backgroundColor: Color.fromARGB(255, 220, 216, 216),
+                        CircleAvatar(
+                          backgroundColor:
+                              const Color.fromARGB(255, 220, 216, 216),
                           radius: 50.0,
+                          backgroundImage: profile?.imageurl != null &&
+                                  profile!.imageurl.isNotEmpty
+                              ? NetworkImage(profile!.imageurl)
+                              : null, // Jika URL ada, gunakan gambar dari URL
                         ),
                         const SizedBox(height: 16.0),
                         _buildProfileName(),
