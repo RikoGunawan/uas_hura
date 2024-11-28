@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/profile_header_widget.dart';
-import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/post2.dart';
 import '../../models/profile.dart';
-import '../../providers/profile_provider.dart';
 import '../../providers/post_provider2.dart';
 import '../creativeHura/post_screen.dart';
 
