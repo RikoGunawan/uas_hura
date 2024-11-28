@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/profile/edit_profile_screen.dart';
 
-import 'edit_profile_screen.dart'; // Pastikan untuk membuat file ini
 import 'about_us_screen.dart'; // Pastikan untuk membuat file ini
 
 class SettingsScreen extends StatelessWidget {
