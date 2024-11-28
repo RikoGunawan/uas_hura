@@ -3,14 +3,14 @@ import 'package:myapp/profile_header_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/profile.dart';
 
-class AdminProfileScreen extends StatefulWidget {
-  const AdminProfileScreen({super.key});
+class DataPengunjung extends StatefulWidget {
+  const DataPengunjung({super.key});
 
   @override
-  State<AdminProfileScreen> createState() => _AdminProfileScreenState();
+  State<DataPengunjung> createState() => _DataPengunjungState();
 }
 
-class _AdminProfileScreenState extends State<AdminProfileScreen> {
+class _DataPengunjungState extends State<DataPengunjung> {
   Profile? profile;
   bool isLoading = true;
 
@@ -35,7 +35,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
           });
         }
       } catch (e) {
-        print('Error loading profile: $e'); // Handle error if needed
+        'Error loading profile: $e'; // Handle error if needed
       } finally {
         setState(() {
           isLoading = false;
@@ -106,14 +106,6 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
 
   Widget _buildContainerVisitor(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DataPengunjung(),
-                ),
-              );
-      },
       child: Container(
         height: 70, // Responsive height
         width: 200, // Responsive width
