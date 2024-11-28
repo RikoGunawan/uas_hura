@@ -74,9 +74,12 @@ class _DataPengunjungState extends State<DataPengunjung> {
                   ),
                   _buildContainerVisitor(context),
                   const SizedBox(height: 16.0),
-                  _buildContainerEditPoint(context),
+                  _buildContainerData(context),
                   const SizedBox(height: 16.0),
-                  _buildContainerEditEvent(context)
+                  _buildContainerData(context),
+                  const SizedBox(height: 16.0),
+                  _buildContainerData(context),
+                  const SizedBox(height: 16.0),
                 ],
               ),
             ),
@@ -107,8 +110,8 @@ class _DataPengunjungState extends State<DataPengunjung> {
   Widget _buildContainerVisitor(BuildContext context) {
     return GestureDetector(
       child: Container(
-        height: 70, // Responsive height
-        width: 200, // Responsive width
+        height: 55, // Responsive height
+        width: 250, // Responsive width
         decoration: BoxDecoration(
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(10.0),
@@ -116,48 +119,28 @@ class _DataPengunjungState extends State<DataPengunjung> {
         alignment: Alignment.center,
         child: const Text(
           'Data Pengunjung',
-          style: TextStyle(color: Colors.black, fontSize: 20),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildContainerEditPoint(BuildContext context) {
+  Widget _buildContainerData(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/edit-point');
-      },
       child: Container(
-        height: 70,
-        width: 200,
+        height: 65, // Responsive height
+        width: 250, // Responsive width
         decoration: BoxDecoration(
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(10.0),
         ),
         alignment: Alignment.center,
         child: const Text(
-          'Edit Hura Point',
-          style: TextStyle(color: Colors.black, fontSize: 20),
-        ),
-      ),
-    );
-  }
-
-   Widget _buildContainerEditEvent(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/edit-event');
-      },
-      child: Container(
-        height: 70,
-        width: 200,
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        alignment: Alignment.center,
-        child: const Text(
-          'Edit Hura Evemt',
+          'Data Pengunjung',
           style: TextStyle(color: Colors.black, fontSize: 20),
         ),
       ),

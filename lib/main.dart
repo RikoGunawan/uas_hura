@@ -93,7 +93,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.adminProfile,
       routes: {
         AppRoutes.first: (context) => const GetStartedScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
@@ -105,11 +105,11 @@ class MyApp extends StatelessWidget {
         AppRoutes.editProfileScreen: (context) => const EditProfileScreen(),
         AppRoutes.adminProfile: (context) => const AdminProfileScreen(),
       },
-      onUnknownRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (context) => const LoginScreen(),
-        );
-      },
+      // onUnknownRoute: (settings) {
+      //   return MaterialPageRoute(
+      //     builder: (context) => const LoginScreen(),
+      //   );
+      // },
     );
   }
 }

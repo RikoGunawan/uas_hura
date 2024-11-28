@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/admin/data_pengunjung.dart';
 import 'package:myapp/profile_header_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/profile.dart';
@@ -35,7 +36,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
           });
         }
       } catch (e) {
-        print('Error loading profile: $e'); // Handle error if needed
+        'Error loading profile: $e'; // Handle error if needed
       } finally {
         setState(() {
           isLoading = false;
