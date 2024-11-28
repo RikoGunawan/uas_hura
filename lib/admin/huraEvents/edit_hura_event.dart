@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../models/event.dart';
+import '../../models/event.dart';
 
 class EditHuraEvent extends StatefulWidget {
   const EditHuraEvent({super.key});

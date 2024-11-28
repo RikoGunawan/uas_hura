@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/admin/admin_profile.dart';
+import 'package:myapp/admin/huraEvents/admin_hura_event_screen.dart';
+import 'package:myapp/admin/huraEvents/edit_hura_event.dart';
 import 'package:myapp/admin_widget.dart';
 import 'package:myapp/providers/profile_provider.dart';
 import 'package:myapp/screens/creativeHura/add_post_screen_online.dart';
