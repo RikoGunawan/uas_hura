@@ -66,7 +66,14 @@ class _EditPointScreenState extends State<EditPointScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Quests'),
+        title: const Text(
+          'Edit Quests',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
       ),
       body: Column(
         children: [

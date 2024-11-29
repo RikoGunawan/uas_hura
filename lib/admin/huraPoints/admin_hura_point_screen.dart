@@ -61,7 +61,7 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.edit_note_outlined, color: Colors.green),
+          icon: const Icon(Icons.edit_square, color: Colors.green),
           onPressed: () => _navigateTo(context, const EditPointScreen()),
         ),
         IconButton(

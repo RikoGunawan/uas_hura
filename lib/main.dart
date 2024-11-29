@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.adminProfile,
       routes: {
         '/': (context) => const LoginScreen(), // Default route
         AppRoutes.first: (context) => const GetStartedScreen(),

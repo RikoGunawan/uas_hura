@@ -25,7 +25,6 @@ class AdminHuraEventScreen extends StatelessWidget {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
         actions: [
-
           // Tombol untuk menambahkan item baru
           IconButton(
             icon: const Icon(
@@ -84,14 +83,6 @@ class AdminHuraEventScreen extends StatelessWidget {
                 setState(() {
                   scale = 1.0;
                 });
-
-                // Navigasi ke detail event (jika diimplementasikan)
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EventDetailScreen(event: event),
-                //   ),
-                // );
               },
               onTapCancel: () {
                 setState(() {
@@ -146,8 +137,8 @@ class AdminHuraEventScreen extends StatelessWidget {
                             ),
                             Positioned(
                               left: 8,
-                              right: 8,
                               top: 8,
+                              right: 8,
                               child: Text(
                                 event.name,
                                 style: const TextStyle(
@@ -159,8 +150,36 @@ class AdminHuraEventScreen extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
+                             Positioned(
+                                  left: 8,
+                                  right: 8,
+                                  top: 4,
+                              child: IconButton(
+                                    icon: const Icon(
+                                      Icons.edit_square,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      // Tambahkan logika untuk menghapus event
+                                    },
+                                  ),
+                                ),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              // Tambahkan logika untuk menghapus event
+                            },
+                          ),
+                        ),
                           ],
                         ),
+                       
                       ],
                     ),
                   ),

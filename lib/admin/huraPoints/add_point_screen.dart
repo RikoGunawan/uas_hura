@@ -159,9 +159,11 @@ class _AddPointScreenState extends State<AddPointScreen> {
           // Tombol untuk menambah quest baru
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
+            child: FloatingActionButton.small(
+              backgroundColor: const Color.fromRGBO(82, 170, 94, 1.0),
+              tooltip: 'Increment',
               onPressed: () => _showQuestDialog(),
-              child: const Text('Add Quest'),
+              child: const Icon(Icons.add, color: Colors.white, size: 28),
             ),
           ),
         ],
