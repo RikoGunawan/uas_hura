@@ -135,6 +135,7 @@ class _PostCardState extends State<PostCard> {
                         onPressed: () async {
                           try {
                             await sharePost(widget.post);
+
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text('Post shared successfully!')),

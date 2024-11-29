@@ -56,6 +56,10 @@ Future<Post2> sharePost(Post2 post) async {
         .from('posts')
         .update({'shares': post.shares}).eq('id', post.id);
 
+    // Update total shares di tabel profiles
+    await supabase.from('profiles').update({'total_shares': post.shares}).eq(
+        'id', supabase.auth.currentUser!.id);
+
     return post;
   } catch (e) {
     print('Error sharing post: $e');

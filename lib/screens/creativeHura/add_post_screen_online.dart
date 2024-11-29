@@ -83,8 +83,14 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
     );
 
     if (kIsWeb && _selectedImageWeb != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Uploading...')),
+      );
       await uploadAndCreatePostWeb(_selectedImageWeb!, post);
     } else if (_selectedImageFile != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Uploading...')),
+      );
       await uploadAndCreatePost(_selectedImageFile!, post);
     }
 
