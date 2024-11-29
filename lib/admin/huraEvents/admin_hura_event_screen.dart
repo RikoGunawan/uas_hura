@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/admin/huraEvents/add_hura_event.dart';
+import 'package:myapp/admin/huraEvents/edit_hura_event.dart';
 import 'package:provider/provider.dart';
 import '../../providers/event_provider.dart';
 
@@ -150,36 +151,71 @@ class AdminHuraEventScreen extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                             Positioned(
-                                  left: 8,
-                                  right: 8,
-                                  top: 4,
+                            Positioned(
+                              left: 8,
+                              right: 8,
+                              top: 4,
                               child: IconButton(
-                                    icon: const Icon(
-                                      Icons.edit_square,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      // Tambahkan logika untuk menghapus event
-                                    },
-                                  ),
+                                icon: const Icon(
+                                  Icons.edit_square,
+                                  color: Colors.white,
                                 ),
-                        Positioned(
-                          top: 8,
-                          right: 8,
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.white,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const EditHuraEvent()),
+                                  );
+                                },
+                              ),
                             ),
-                            onPressed: () {
-                              // Tambahkan logika untuk menghapus event
-                            },
-                          ),
-                        ),
+                            Positioned(
+                              top: 8,
+                              right: 8,
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  // Tampilkan dialog konfirmasi sebelum menghapus
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text("Konfirmasi Hapus"),
+                                        content: const Text(
+                                            "Apakah Anda yakin ingin menghapus event ini?"),
+                                        actions: [
+                                          TextButton(
+                                            child: const Text("Batal"),
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Tutup dialog
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: const Text("Hapus"),
+                                            onPressed: () {
+                                              // Panggil metode untuk menghapus event dari provider
+                                              Provider.of<EventProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .removeEvent(event.id);
+                                              Navigator.of(context)
+                                                  .pop(); // Tutup dialog
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
                           ],
                         ),
-                       
                       ],
                     ),
                   ),

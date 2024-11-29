@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../models/event.dart';
 
 class EditHuraEvent extends StatefulWidget {
@@ -31,7 +30,7 @@ class _EditHuraEventState extends State<EditHuraEvent> {
           .map((json) => Event.fromJson(json))
           .toList();
     });
-    }
+  }
 
   Future<void> _addEvent(Event event) async {
     await supabase.from('events').insert(event.toJson());
@@ -141,7 +140,7 @@ class _EditHuraEventState extends State<EditHuraEvent> {
                     height: 50,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.image_not_supported),
+                        const Icon(Icons.image_not_supported),
                   ),
                   title: Text(event.name),
                   subtitle: Text(
@@ -163,14 +162,13 @@ class _EditHuraEventState extends State<EditHuraEvent> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () => _showEventDialog(),
-              child: const Text('Add Event'),
-            ),
-          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromRGBO(82, 170, 94, 1.0),
+        tooltip: 'Add Event',
+        onPressed: () => _showEventDialog(),
+        child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
     );
   }
