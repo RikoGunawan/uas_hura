@@ -8,14 +8,14 @@ import 'leaderboard_widget.dart';
 import 'quest_widget.dart';
 import 'reward_widget.dart';
 
-class EditHuraPointScreen extends StatefulWidget {
-  const EditHuraPointScreen({super.key});
+class AdminHuraPointScreen extends StatefulWidget {
+  const AdminHuraPointScreen({super.key});
 
   @override
-  State<EditHuraPointScreen> createState() => _EditHuraPointScreenState();
+  State<AdminHuraPointScreen> createState() => _AdminHuraPointScreenState();
 }
 
-class _EditHuraPointScreenState extends State<EditHuraPointScreen> {
+class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
   int _currentIndex = 0;
   final PointProvider pointProvider = PointProvider();
 
@@ -32,49 +32,7 @@ class _EditHuraPointScreenState extends State<EditHuraPointScreen> {
     final progress = progressProvider.progress;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          "Hura Point",
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        actions: [
-          // Tombol untuk melakukan aksi edit
-          IconButton(
-            icon: const Icon(
-              Icons.edit_note_outlined,
-              color: Colors.green,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const EditPointScreen(),
-                ),
-              );
-            },
-          ),
-
-          // Tombol untuk menambahkan item baru
-          IconButton(
-            icon: const Icon(
-              Icons.add_circle,
-              color: Colors.red,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddPointScreen(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(context),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -90,6 +48,27 @@ class _EditHuraPointScreenState extends State<EditHuraPointScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      title: const Text(
+        "Hura Point",
+        style: TextStyle(color: Colors.black, fontSize: 14),
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.edit_note_outlined, color: Colors.green),
+          onPressed: () => _navigateTo(context, const EditPointScreen()),
+        ),
+        IconButton(
+          icon: const Icon(Icons.add_circle, color: Colors.red),
+          onPressed: () => _navigateTo(context, const AddPointScreen()),
+        ),
+      ],
     );
   }
 
@@ -111,29 +90,26 @@ class _EditHuraPointScreenState extends State<EditHuraPointScreen> {
               backgroundColor: Colors.white,
             ),
           ),
-          // Garis putih latar belakang
           Positioned(
             left: 10.0,
             top: 58.0,
             child: Container(
-              height: 10.0, // Tinggi garis putih
-              width: MediaQuery.of(context).size.width * 0.78, // Lebar penuh
+              height: 10.0,
+              width: MediaQuery.of(context).size.width * 0.78,
               decoration: BoxDecoration(
-                color: Colors.white, // Garis putih
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(7.0),
               ),
             ),
           ),
-          // Linear progress bar
           Positioned(
             left: 10.0,
             top: 58.0,
             child: Container(
-              height: 10.0, // Tinggi progress bar
-              width: (MediaQuery.of(context).size.width * 0.78) *
-                  progress, // Sesuai progress
+              height: 10.0,
+              width: (MediaQuery.of(context).size.width * 0.78) * progress,
               decoration: BoxDecoration(
-                color: Colors.grey, // Warna progress
+                color: Colors.grey,
                 borderRadius: BorderRadius.circular(5.0),
               ),
             ),
@@ -176,12 +152,15 @@ class _EditHuraPointScreenState extends State<EditHuraPointScreen> {
     );
   }
 
-  // Widget untuk menyimpan isi dari setiap category content
   Widget _buildCategoryContent() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: pointProvider.getPostWidgets(context),
     );
+  }
+
+  void _navigateTo(BuildContext context, Widget screen) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
   }
 }
 

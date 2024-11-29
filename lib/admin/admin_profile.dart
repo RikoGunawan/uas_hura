@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/admin/data_pengunjung.dart';
+import 'package:myapp/admin/huraEvents/admin_hura_event_screen.dart';
+import 'package:myapp/admin/huraPoints/admin_hura_point_screen.dart';
 import 'package:myapp/profile_header_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../models/profile.dart';
 
 class AdminProfileScreen extends StatefulWidget {
@@ -36,7 +39,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
           });
         }
       } catch (e) {
-        'Error loading profile: $e'; // Handle error if needed
+        debugPrint('Error loading profile: $e'); // Log error jika diperlukan
       } finally {
         setState(() {
           isLoading = false;
@@ -44,7 +47,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
       }
     } else {
       setState(() {
-        isLoading = false; // Handle case when user is null
+        isLoading = false; // Handle jika user == null
       });
     }
   }
@@ -77,7 +80,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                   const SizedBox(height: 16.0),
                   _buildContainerEditPoint(context),
                   const SizedBox(height: 16.0),
-                  _buildContainerEditEvent(context)
+                  _buildContainerEditEvent(context),
                 ],
               ),
             ),
@@ -85,18 +88,8 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
   }
 
   Widget _buildProfileName() {
-    if (profile == null) {
-      return const Text(
-        'Profile not available',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      );
-    }
     return Text(
-      profile!.username,
+      profile?.username ?? 'Profile not available',
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
@@ -106,68 +99,57 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
   }
 
   Widget _buildContainerVisitor(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DataPengunjung(),
-                ),
-              );
-      },
-      child: Container(
-        height: 70, // Responsive height
-        width: 200, // Responsive width
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        alignment: Alignment.center,
-        child: const Text(
-          'Data Pengunjung',
-          style: TextStyle(color: Colors.black, fontSize: 20),
-        ),
+    return _buildActionContainer(
+      context,
+      label: 'Data Pengunjung',
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const DataPengunjung()),
       ),
     );
   }
 
   Widget _buildContainerEditPoint(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/edit-point');
-      },
-      child: Container(
-        height: 70,
-        width: 200,
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        alignment: Alignment.center,
-        child: const Text(
-          'Edit Hura Point',
-          style: TextStyle(color: Colors.black, fontSize: 20),
-        ),
+    return _buildActionContainer(
+      context,
+      label: 'Edit Hura Point',
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const AdminHuraPointScreen()),
       ),
     );
   }
 
-   Widget _buildContainerEditEvent(BuildContext context) {
+  Widget _buildContainerEditEvent(BuildContext context) {
+    return _buildActionContainer(
+      context,
+      label: 'Edit Hura Event',
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const AdminHuraEventScreen()),
+      ),
+    );
+  }
+
+  Widget _buildActionContainer(BuildContext context,
+      {required String label, required VoidCallback onTap}) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/edit-event');
-      },
+      onTap: onTap,
       child: Container(
-        height: 70,
-        width: 200,
+        height: 40.0,
+        width: 150.0,
         decoration: BoxDecoration(
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(10.0),
         ),
         alignment: Alignment.center,
-        child: const Text(
-          'Edit Hura Evemt',
-          style: TextStyle(color: Colors.black, fontSize: 20),
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

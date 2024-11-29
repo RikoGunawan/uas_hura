@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:myapp/admin/huraEvents/add_hura_event.dart';
 import 'package:provider/provider.dart';
 import '../../providers/event_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class EventScreen extends StatelessWidget {
-  const EventScreen({super.key});
+class AdminHuraEventScreen extends StatelessWidget {
+  const AdminHuraEventScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -110,8 +110,8 @@ class _DataPengunjungState extends State<DataPengunjung> {
   Widget _buildContainerVisitor(BuildContext context) {
     return GestureDetector(
       child: Container(
-        height: 55, // Responsive height
-        width: 250, // Responsive width
+        height: 40, // Responsive height
+        width: 150,
         decoration: BoxDecoration(
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(10.0),
@@ -121,7 +121,7 @@ class _DataPengunjungState extends State<DataPengunjung> {
           'Data Pengunjung',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -132,8 +132,8 @@ class _DataPengunjungState extends State<DataPengunjung> {
   Widget _buildContainerData(BuildContext context) {
     return GestureDetector(
       child: Container(
-        height: 65, // Responsive height
-        width: 250, // Responsive width
+        height: 40, // Responsive height
+        width: 150,
         decoration: BoxDecoration(
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(10.0),
@@ -141,7 +141,7 @@ class _DataPengunjungState extends State<DataPengunjung> {
         alignment: Alignment.center,
         child: const Text(
           'Data Pengunjung',
-          style: TextStyle(color: Colors.black, fontSize: 20),
+          style: TextStyle(color: Colors.black, fontSize: 14),
         ),
       ),
     );
