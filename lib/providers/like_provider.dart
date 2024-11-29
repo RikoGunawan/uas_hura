@@ -1,8 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../models/post2.dart';
+import '../models/post.dart';
 
-Future<Post2> likePost(Post2 post) async {
+Future<Post> likePost(Post post) async {
   try {
     final supabase = Supabase.instance.client;
 
@@ -39,7 +39,7 @@ Future<Post2> likePost(Post2 post) async {
   }
 }
 
-Future<Post2> sharePost(Post2 post) async {
+Future<Post> sharePost(Post post) async {
   try {
     final supabase = Supabase.instance.client;
 
@@ -56,6 +56,10 @@ Future<Post2> sharePost(Post2 post) async {
         .from('posts')
         .update({'shares': post.shares}).eq('id', post.id);
 
+    // Update total shares di tabel profiles
+    await supabase.from('profiles').update({'total_shares': post.shares}).eq(
+        'id', supabase.auth.currentUser!.id);
+
     return post;
   } catch (e) {
     print('Error sharing post: $e');
@@ -63,7 +67,7 @@ Future<Post2> sharePost(Post2 post) async {
   }
 }
 
-Future<Post2> fetchPostStats(String postId) async {
+Future<Post> fetchPostStats(String postId) async {
   try {
     // Ambil data post berdasarkan ID
     final response = await Supabase.instance.client
@@ -73,7 +77,7 @@ Future<Post2> fetchPostStats(String postId) async {
         .maybeSingle();
 
     if (response != null) {
-      return Post2.fromJson(response);
+      return Post.fromJson(response);
     } else {
       throw Exception('Post not found');
     }

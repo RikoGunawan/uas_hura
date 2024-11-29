@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/profile_header_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../models/post2.dart';
+import '../../profile_header_widget.dart';
+
+import '../../models/post.dart';
 import '../../models/profile.dart';
-import '../../providers/post_provider2.dart';
+import '../../services/supabase_service.dart';
 import '../creativeHura/post_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   Profile? profile;
-  List<Post2> posts = [];
+  List<Post> posts = [];
   bool isLoadingProfile = true;
   bool isLoadingPosts = true;
 
@@ -29,15 +30,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _loadProfile() async {
     final user = Supabase.instance.client.auth.currentUser;
     if (user != null) {
-      final userId = user.id;
       try {
-        final data = await Supabase.instance.client
-            .from('profiles')
-            .select(
-                'id, first_name, last_name, username, bio, imageurl, total_likes, total_shares')
-            .eq('id', userId)
-            .maybeSingle();
-
+        final data = await SupabaseService.loadProfile(user.id);
         if (data != null) {
           setState(() {
             profile = Profile.fromJson(data);
@@ -63,15 +57,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
 
     try {
-      List<Post2> fetchedPosts = await getAllPosts();
+      List<Post> fetchedPosts = await SupabaseService.getAllPosts();
       setState(() {
         posts = fetchedPosts;
       });
     } catch (e) {
       print('Error fetching posts: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to load posts')),
-      );
     } finally {
       setState(() {
         isLoadingPosts = false;
@@ -88,14 +79,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           : SingleChildScrollView(
               child: Column(
                 children: [
-                  ProfileHeaderWidget(),
+                  const ProfileHeaderWidget(),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 8, 12, 16),
                     child: Column(
                       children: [
-                        const CircleAvatar(
-                          backgroundColor: Color.fromARGB(255, 220, 216, 216),
+                        CircleAvatar(
+                          backgroundColor:
+                              const Color.fromARGB(255, 220, 216, 216),
                           radius: 50.0,
+                          backgroundImage: profile?.imageurl != null &&
+                                  profile!.imageurl.isNotEmpty
+                              ? NetworkImage(profile!.imageurl)
+                              : null,
                         ),
                         const SizedBox(height: 16.0),
                         _buildProfileName(),
@@ -164,17 +160,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildPostContainer(BuildContext context, String type) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      height: MediaQuery.of(context).size.width * 0.4,
-      width: MediaQuery.of(context).size.width * 0.4,
     );
   }
 

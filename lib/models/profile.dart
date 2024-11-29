@@ -1,9 +1,9 @@
 class Profile {
   final String id;
-  final String firstName;
-  final String lastName;
-  final String username;
-  final String bio;
+  String firstName;
+  String lastName;
+  String username;
+  String bio;
   final String imageurl;
   final int totalLikes;
   final int totalShares;
@@ -12,7 +12,7 @@ class Profile {
     required this.id,
     required this.firstName,
     required this.lastName,
-    required this.username,
+    this.username = 'Unknown User',
     this.bio = '',
     required this.imageurl,
     required this.totalLikes,
