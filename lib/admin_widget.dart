@@ -15,7 +15,8 @@ class AdminWidget extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const EditHuraEvent()),
+              MaterialPageRoute(
+                  builder: (context) => const EditHuraEventAdmin()),
             );
           },
           child: const Text('Manage Hura Events'),

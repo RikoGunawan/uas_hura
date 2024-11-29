@@ -19,7 +19,7 @@ class AdminHuraEventScreen extends StatelessWidget {
           "Events",
           style: TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -145,7 +145,7 @@ class AdminHuraEventScreen extends StatelessWidget {
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                  fontSize: 12,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -153,8 +153,9 @@ class AdminHuraEventScreen extends StatelessWidget {
                             ),
                             Positioned(
                               left: 8,
-                              right: 8,
-                              top: 4,
+                              //right: 8,
+                              top: 12,
+                              bottom: 2,
                               child: IconButton(
                                 icon: const Icon(
                                   Icons.edit_square,
@@ -165,7 +166,7 @@ class AdminHuraEventScreen extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const EditHuraEvent()),
+                                            const EditHuraEventAdmin()),
                                   );
                                 },
                               ),

@@ -1,175 +1,183 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../models/event.dart';
 
-class EditHuraEvent extends StatefulWidget {
-  const EditHuraEvent({super.key});
+class EditHuraEventAdmin extends StatefulWidget {
+  const EditHuraEventAdmin({super.key});
 
   @override
-  State<EditHuraEvent> createState() => _EditHuraEventState();
+  State<EditHuraEventAdmin> createState() => _EditHuraEventAdminState();
 }
 
-class _EditHuraEventState extends State<EditHuraEvent> {
-  final SupabaseClient supabase = Supabase.instance.client;
-  List<Event> events = [];
+class _EditHuraEventAdminState extends State<EditHuraEventAdmin> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _imageController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchEvents();
+  DateTime? _selectedDate;
+
+  void _submit() {
+    if (_formKey.currentState!.validate()) {
+      // Simulasi pendaftaran berhasil
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Event Has Successfully Added!'),
+        ),
+      );
+
+      // Anda dapat menambahkan logika untuk menyimpan event di sini
+    }
   }
 
-  Future<void> _fetchEvents() async {
-    final response = await supabase
-        .from('events')
-        .select()
-        .order('event_date', ascending: true);
-
-    setState(() {
-      events = (response as List<dynamic>)
-          .map((json) => Event.fromJson(json))
-          .toList();
-    });
+  String? validatePrice(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter the price.';
+    }
+    if (double.tryParse(value) == null) {
+      return 'Please enter a valid price.';
+    }
+    return null;
   }
 
-  Future<void> _addEvent(Event event) async {
-    await supabase.from('events').insert(event.toJson());
-    _fetchEvents();
+  String? validateImage(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter an image URL.';
+    }
+    return null;
   }
 
-  Future<void> _editEvent(Event event) async {
-    await supabase.from('events').update(event.toJson()).eq('id', event.id);
-    _fetchEvents();
-  }
-
-  Future<void> _deleteEvent(int id) async {
-    await supabase.from('events').delete().eq('id', id);
-    _fetchEvents();
-  }
-
-  void _showEventDialog({Event? event}) {
-    final nameController = TextEditingController(text: event?.name);
-    final priceController =
-        TextEditingController(text: event?.price.toString() ?? '');
-    final imageController = TextEditingController(text: event?.image);
-    final descriptionController =
-        TextEditingController(text: event?.description);
-    final dateController =
-        TextEditingController(text: event?.eventDate.toIso8601String() ?? '');
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(event == null ? 'Add Event' : 'Edit Event'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Name'),
-                ),
-                TextField(
-                  controller: priceController,
-                  decoration: const InputDecoration(labelText: 'Price'),
-                  keyboardType: TextInputType.number,
-                ),
-                TextField(
-                  controller: imageController,
-                  decoration: const InputDecoration(labelText: 'Image URL'),
-                ),
-                TextField(
-                  controller: descriptionController,
-                  decoration: const InputDecoration(labelText: 'Description'),
-                ),
-                TextField(
-                  controller: dateController,
-                  decoration: const InputDecoration(labelText: 'Event Date'),
-                  keyboardType: TextInputType.datetime,
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                final newEvent = Event(
-                  id: event?.id ?? 0, // ID hanya diperlukan saat update
-                  name: nameController.text,
-                  price: double.tryParse(priceController.text) ?? 0.0,
-                  image: imageController.text,
-                  description: descriptionController.text,
-                  eventDate: DateTime.parse(dateController.text),
-                );
-                if (event == null) {
-                  _addEvent(newEvent);
-                } else {
-                  _editEvent(newEvent);
-                }
-                Navigator.pop(context);
-              },
-              child: const Text('Save'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
+  String? validateDescription(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a description.';
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage Events'),
+        title: const Text('Edit Event'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: events.length,
-              itemBuilder: (context, index) {
-                final event = events[index];
-                return ListTile(
-                  leading: Image.network(
-                    event.image,
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.image_not_supported),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Create New Event',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.start,
+              ),
+              const SizedBox(height: 32),
+              _buildTextField(
+                controller: _nameController,
+                label: 'Event Name',
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Please enter event name.'
+                    : null,
+              ),
+              const SizedBox(height: 16),
+              _buildTextField(
+                controller: _priceController,
+                label: 'Price',
+                validator: validatePrice,
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 16),
+              _buildDateField(),
+              const SizedBox(height: 16),
+              _buildTextField(
+                controller: _descriptionController,
+                label: 'Description',
+                validator: validateDescription,
+              ),
+              const SizedBox(height: 16),
+              _buildTextField(
+                controller: _imageController,
+                label: 'Image URL',
+                validator: validateImage,
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: _submit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  minimumSize: const Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                  title: Text(event.name),
-                  subtitle: Text(
-                      'Price: \$${event.price.toStringAsFixed(2)}\nDate: ${event.eventDate.toLocal()}'),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () => _showEventDialog(event: event),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _deleteEvent(event.id),
-                      ),
-                    ],
+                ),
+                child: const Text(
+                  'Register',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
                   ),
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromRGBO(82, 170, 94, 1.0),
-        tooltip: 'Add Event',
-        onPressed: () => _showEventDialog(),
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    String? Function(String?)? validator,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
       ),
+      validator: validator,
+      keyboardType: keyboardType,
+    );
+  }
+
+  Widget _buildDateField() {
+    return TextFormField(
+      controller: _dateController,
+      decoration: InputDecoration(
+        labelText: 'Event Date',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.calendar_today),
+          onPressed: () async {
+            DateTime? selectedDate = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(1900),
+              lastDate: DateTime.now(),
+            );
+            if (selectedDate != null) {
+              setState(() {
+                _selectedDate = selectedDate;
+                _dateController.text =
+                    '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
+              });
+            }
+          },
+        ),
+      ),
+      validator: (value) =>
+          value == null || value.isEmpty ? 'Please enter event date.' : null,
     );
   }
 }
