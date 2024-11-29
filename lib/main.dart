@@ -8,10 +8,9 @@ import 'package:myapp/screens/home/get_started_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'providers/auth_provider.dart';
 import 'providers/event_provider.dart';
 import 'providers/hura_point_provider.dart';
-// import 'providers/post_provider.dart';
+
 import 'providers/progress_provider.dart';
 import 'screens/home/login_screen.dart';
 import 'screens/home/register_screen.dart';
@@ -44,10 +43,8 @@ void main() async {
           update: (_, client, previousService) =>
               previousService ?? EventService(client),
         ),
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
-        // ChangeNotifierProvider(create: (_) => PostProvider()),
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
       ],
       child: const MyApp(),
@@ -91,7 +88,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      initialRoute: AppRoutes.adminProfile,
+      initialRoute: AppRoutes.login,
       routes: {
         '/': (context) => const LoginScreen(), // Default route
         AppRoutes.first: (context) => const GetStartedScreen(),

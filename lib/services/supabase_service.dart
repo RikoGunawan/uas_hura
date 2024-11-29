@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/post.dart';
+import '../models/profile.dart';
 
 class SupabaseService {
   static Future<Map<String, dynamic>?> loadProfile(String userId) async {
@@ -63,6 +64,43 @@ class SupabaseService {
     } catch (e) {
       print('Error fetching posts: $e');
       return [];
+    }
+  }
+
+  static Future<Post?> getPostById(String postId) async {
+    try {
+      final data = await Supabase.instance.client.from('posts').select().match(
+          {'id': postId}).maybeSingle(); // Use maybeSingle to fetch one post
+
+      if (data != null) {
+        return Post.fromJson(data); // Convert the fetched data to Post2
+      } else {
+        print('Post not found for ID: $postId');
+        return null; // Return null if no post is found
+      }
+    } catch (e) {
+      print('Error fetching post: $e');
+      return null; // Return null in case of an error
+    }
+  }
+
+  static Future<Profile?> getProfileById(String userId) async {
+    try {
+      final data = await Supabase.instance.client
+          .from('profiles')
+          .select()
+          .eq('id', userId)
+          .maybeSingle();
+
+      if (data != null) {
+        return Profile.fromJson(data); // Pastikan ada metode ini di Profile
+      } else {
+        print('Profile not found for userId: $userId');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching profile: $e');
+      return null;
     }
   }
 }

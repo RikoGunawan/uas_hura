@@ -91,8 +91,7 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
                       children: posts
                           .map((post) => PostCard(
                                 post: post,
-                                profile:
-                                    profile!, // Gunakan profile yang sudah diisi
+                                // Gunakan profile yang sudah diisi
                               ))
                           .toList(),
                     ),

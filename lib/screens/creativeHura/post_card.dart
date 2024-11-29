@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/services/supabase_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/post.dart';
 import '../../models/profile.dart';
@@ -8,9 +9,8 @@ import 'post_screen.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
-  final Profile profile; // Tambahkan parameter profile
 
-  const PostCard({super.key, required this.post, required this.profile});
+  const PostCard({super.key, required this.post});
 
   @override
   _PostCardState createState() => _PostCardState();
@@ -18,11 +18,25 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   late Future<bool> _isLikedFuture;
+  Profile? postAuthorProfile;
 
   @override
   void initState() {
     super.initState();
     _isLikedFuture = loadLikeStatus(widget.post.id);
+    fetchAuthorProfile();
+  }
+
+  Future<void> fetchAuthorProfile() async {
+    try {
+      Profile? profile =
+          await SupabaseService.getProfileById(widget.post.userId);
+      setState(() {
+        postAuthorProfile = profile;
+      });
+    } catch (e) {
+      print('Error fetching author profile: $e');
+    }
   }
 
   Future<void> saveLikeStatus(String postId, bool isLiked) async {
@@ -45,8 +59,7 @@ class _PostCardState extends State<PostCard> {
           } else if (snapshot.hasError) {
             return const Center(child: Text('Error loading like status'));
           } else {
-            bool isLiked =
-                snapshot.data ?? false; // Ambil status like dari snapshot
+            bool isLiked = snapshot.data ?? false;
 
             return GestureDetector(
               onTap: () {
@@ -72,17 +85,6 @@ class _PostCardState extends State<PostCard> {
                         child: Image.network(
                           widget.post.imageUrl,
                           fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Center(
-                              child: Icon(Icons.broken_image,
-                                  color: Colors.grey, size: 50),
-                            );
-                          },
                         ),
                       ),
                     ),
@@ -91,23 +93,26 @@ class _PostCardState extends State<PostCard> {
                       bottom: 10,
                       child: InkWell(
                         onTap: () {
-                          // Navigasi ke halaman ProfileScreen
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProfileScreen(
-                                  userId: widget.post
-                                      .userId), // Pass userId or any necessary data
+                              builder: (context) =>
+                                  ProfileScreen(userId: widget.post.userId),
                             ),
                           );
                         },
                         child: CircleAvatar(
                           radius: 20.0,
                           backgroundColor: Colors.grey,
-                          backgroundImage: widget.profile.imageurl.isNotEmpty
-                              ? NetworkImage(widget.profile
-                                  .imageurl) // Ganti dengan URL gambar profil
-                              : null, // Jika tidak ada URL, backgroundImage akan null
+                          backgroundImage:
+                              postAuthorProfile?.imageurl != null &&
+                                      postAuthorProfile!.imageurl.isNotEmpty
+                                  ? NetworkImage(postAuthorProfile!.imageurl)
+                                  : null,
+                          child: postAuthorProfile == null ||
+                                  postAuthorProfile!.imageurl.isEmpty
+                              ? const Icon(Icons.person, color: Colors.white)
+                              : null,
                         ),
                       ),
                     ),
@@ -122,27 +127,19 @@ class _PostCardState extends State<PostCard> {
                         onPressed: () async {
                           bool previousLikeStatus = isLiked;
                           setState(() {
-                            isLiked = !isLiked; // Perbarui status lokal
-                            widget.post.isLiked =
-                                isLiked; // Perbarui status di model
+                            isLiked = !isLiked;
+                            widget.post.isLiked = isLiked;
                           });
 
-                          await saveLikeStatus(
-                              widget.post.id, isLiked); // Simpan status baru
+                          await saveLikeStatus(widget.post.id, isLiked);
 
                           try {
                             await likePost(widget.post);
                           } catch (e) {
                             setState(() {
-                              isLiked =
-                                  previousLikeStatus; // Kembalikan status jika gagal
-                              widget.post.isLiked =
-                                  previousLikeStatus; // Kembalikan status di model
+                              isLiked = previousLikeStatus;
+                              widget.post.isLiked = previousLikeStatus;
                             });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Failed to toggle like')),
-                            );
                           }
                         },
                       ),
@@ -155,16 +152,8 @@ class _PostCardState extends State<PostCard> {
                         onPressed: () async {
                           try {
                             await sharePost(widget.post);
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Post shared successfully!')),
-                            );
                           } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Failed to share post')),
-                            );
+                            print('Failed to share post');
                           }
                         },
                       ),
