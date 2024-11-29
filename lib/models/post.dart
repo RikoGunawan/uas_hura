@@ -3,6 +3,7 @@ class Post {
   String name;
   String description;
   final String imageUrl;
+  final String userImageUrl;
   int likes;
   int shares;
   final String userId; // Tambahkan user_id
@@ -16,6 +17,7 @@ class Post {
     required this.name,
     this.description = '',
     required this.imageUrl,
+    required this.userImageUrl,
     this.likes = 0,
     this.shares = 0,
     required this.userId,
@@ -38,6 +40,7 @@ class Post {
       name: json['name'],
       description: json['description'],
       imageUrl: json['image_url'],
+      userImageUrl: json['user_image_url'],
       likes: json['likes'],
       shares: json['shares'],
       userId: json['user_id'],
@@ -54,6 +57,7 @@ class Post {
       'name': name,
       'description': description,
       'image_url': imageUrl,
+      'user_image_url': userImageUrl,
       'likes': likes,
       'shares': shares,
       'user_id': userId,

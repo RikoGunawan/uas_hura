@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/post.dart';
+import '../../models/profile.dart';
 import '../../providers/post_provider.dart';
 
 class AddPostScreenOnline extends StatefulWidget {
@@ -72,14 +73,25 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
       return;
     }
 
+    // Fetch user profile to get user_image_url
+    final profileResponse = await Supabase.instance.client
+        .from('profiles')
+        .select()
+        .eq('id', user.id)
+        .single();
+
+    final userProfile = Profile.fromJson(profileResponse);
+
+    // Create a new post
     final post = Post(
       id: Uuid().v4(),
       name: _nameController.text,
       description: _descriptionController.text,
-      imageUrl: '',
+      imageUrl: '', // This will be filled after upload
       likes: 0,
       shares: 0,
       userId: user.id,
+      userImageUrl: userProfile.imageurl, // Set user_image_url from profile
     );
 
     if (kIsWeb && _selectedImageWeb != null) {

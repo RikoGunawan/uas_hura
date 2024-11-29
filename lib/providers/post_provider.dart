@@ -8,6 +8,7 @@ import 'package:image/image.dart' as img;
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/post.dart';
+import '../models/profile.dart';
 
 // ------------------- Image Upload Functions -------------------
 
@@ -89,29 +90,38 @@ Future<void> uploadAndCreatePost(dynamic file, Post post) async {
 
   final imageUrl = await uploadImage(bucketName, path, file);
   final user = Supabase.instance.client.auth.currentUser;
+
   if (imageUrl != null && user != null) {
-// Fetch image data to calculate dimensions
-    final imageData = await fetchImage(
-        imageUrl); // Assuming this function fetches the image data
-    final dimensions =
-        getImageDimensions(imageData); // Get dimensions from the image data
+    // Fetch user profile based on user id
+    final profileResponse = await Supabase.instance.client
+        .from('profiles')
+        .select()
+        .eq('id', user.id)
+        .single();
+
+    final userProfile = Profile.fromJson(profileResponse);
+
+    // Fetch image data to calculate dimensions
+    final imageData = await fetchImage(imageUrl);
+    final dimensions = getImageDimensions(imageData);
 
     final newPost = Post(
       id: post.id,
       name: post.name,
       description: post.description,
       imageUrl: imageUrl,
-      likes: post.likes,
-      userId: user.id, // Pastikan userId diisi
+      userId: user.id,
+      userImageUrl:
+          userProfile.imageurl ?? '', // Assign user_image_url from profile
       width:
           dimensions['width'] != null ? dimensions['width']!.toDouble() : 0.0,
       height:
           dimensions['height'] != null ? dimensions['height']!.toDouble() : 0.0,
     );
 
-    await createPost(newPost); // Panggil fungsi createPost
+    await createPost(newPost); // Call createPost
   } else {
-    print('User   not authenticated. Cannot create post.');
+    print('User  not authenticated. Cannot create post.');
   }
 }
 
@@ -121,25 +131,46 @@ Future<void> uploadAndCreatePostWeb(Uint8List imageBytes, Post post) async {
 
   final imageUrl = await uploadImageWeb(bucketName, path, imageBytes);
   final user = Supabase.instance.client.auth.currentUser;
-  if (imageUrl != null && user != null) {
-    // Fetch image data to calculate dimensions
-    final imageData = await fetchImage(
-        imageUrl); // Assuming this function fetches the image data
-    final dimensions = getImageDimensions(imageData); // Get dimensions
-    final newPost = Post(
-      id: post.id,
-      name: post.name,
-      description: post.description,
-      imageUrl: imageUrl,
-      likes: post.likes,
-      userId: user.id, // Pastikan userId diisi
-      width:
-          dimensions['width'] != null ? dimensions['width']!.toDouble() : 0.0,
-      height:
-          dimensions['height'] != null ? dimensions['height']!.toDouble() : 0.0,
-    );
 
-    await createPost(newPost); // Panggil fungsi createPost
+  if (imageUrl != null && user != null) {
+// Fetch user profile based on user id
+    final profileResponse = await Supabase.instance.client
+        .from('profiles')
+        .select()
+        .eq('id', user.id)
+        .single();
+
+    if (profileResponse != null) {
+      final userProfile = Profile.fromJson(profileResponse);
+      // Pastikan imageurl ada sebelum digunakan
+      if (userProfile.imageurl != null) {
+        final imageData = await fetchImage(imageUrl);
+        final dimensions = getImageDimensions(imageData);
+
+        final newPost = Post(
+          id: post.id,
+          name: post.name,
+          description: post.description,
+          imageUrl: imageUrl,
+          userId: user.id,
+          userImageUrl:
+              userProfile.imageurl ?? '', // Assign user_image_url from profile
+          width: dimensions['width'] != null
+              ? dimensions['width']!.toDouble()
+              : 0.0,
+          height: dimensions['height'] != null
+              ? dimensions['height']!.toDouble()
+              : 0.0,
+        );
+
+        await createPost(newPost); // Call createPost
+      } else {
+        print('User  profile image URL is null');
+      }
+    } else {
+      print('Profile response is null');
+    }
+    // Fetch image data to calculate dimensions
   } else {
     print('Failed to upload image, post creation aborted.');
   }
@@ -151,12 +182,15 @@ Future<void> uploadAndCreatePostWeb(Uint8List imageBytes, Post post) async {
 Future<List<Post>> getAllPosts() async {
   try {
     final response = await Supabase.instance.client.from('posts').select();
+    if (response == null) {
+      throw Exception('No posts found');
+    }
     return (response as List<dynamic>)
         .map((data) => Post.fromJson(data as Map<String, dynamic>))
         .toList();
   } catch (e) {
     print('Error fetching posts: $e');
-    return [];
+    return []; // Kembalikan list kosong jika ada kesalahan
   }
 }
 

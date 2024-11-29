@@ -8,7 +8,9 @@ import '../../services/supabase_service.dart';
 import '../creativeHura/post_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final String? userId; // Tambahkan parameter userId
+
+  const ProfileScreen({super.key, this.userId});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -28,23 +30,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadProfile() async {
-    final user = Supabase.instance.client.auth.currentUser;
-    if (user != null) {
-      try {
-        final data = await SupabaseService.loadProfile(user.id);
-        if (data != null) {
-          setState(() {
-            profile = Profile.fromJson(data);
-          });
-        }
-      } catch (e) {
-        print('Error loading profile: $e');
-      } finally {
+    try {
+      final data = await SupabaseService.loadProfile(
+          widget.userId ?? Supabase.instance.client.auth.currentUser!.id);
+      if (data != null) {
         setState(() {
-          isLoadingProfile = false;
+          profile = Profile.fromJson(data);
         });
       }
-    } else {
+    } catch (e) {
+      print('Error loading profile: $e');
+    } finally {
       setState(() {
         isLoadingProfile = false;
       });
