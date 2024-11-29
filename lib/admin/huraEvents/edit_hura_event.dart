@@ -1,7 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/providers/event_provider.dart';
+import 'package:provider/provider.dart';
 
+// Model Event
+class Event {
+  final int id;
+  final String name;
+  final double price;
+  final String image;
+  final String description;
+  final DateTime eventDate;
+
+  Event({
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.image,
+    required this.description,
+    required this.eventDate,
+  });
+
+  Event.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        name = json['name'],
+        price = json['price']?.toDouble() ?? 0.0,
+        image = json['image'],
+        description = json['description'],
+        eventDate = DateTime.parse(json['eventDate']);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'image': image,
+      'description': description,
+      'eventDate': eventDate.toIso8601String(),
+    };
+  }
+}
+
+// Halaman untuk mengedit event
 class EditHuraEventAdmin extends StatefulWidget {
-  const EditHuraEventAdmin({super.key});
+  final Event? event;
+
+  const EditHuraEventAdmin({Key? key, this.event}) : super(key: key);
 
   @override
   State<EditHuraEventAdmin> createState() => _EditHuraEventAdminState();
@@ -17,117 +60,53 @@ class _EditHuraEventAdminState extends State<EditHuraEventAdmin> {
 
   DateTime? _selectedDate;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.event != null) {
+      _nameController.text = widget.event!.name;
+      _priceController.text = widget.event!.price.toString();
+      _imageController.text = widget.event!.image;
+      _descriptionController.text = widget.event!.description;
+      _dateController.text =
+          '${widget.event!.eventDate.day}/${widget.event!.eventDate.month}/${widget.event!.eventDate.year}';
+      _selectedDate = widget.event!.eventDate;
+    }
+  }
+
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      // Simulasi pendaftaran berhasil
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Event Has Successfully Added!'),
-        ),
+      Event editEvent = Event(
+        id: widget.event?.id ?? 0,
+        name: _nameController.text,
+        price: double.tryParse(_priceController.text) ?? 0.0,
+        image: _imageController.text,
+        description: _descriptionController.text,
+        eventDate: _selectedDate ?? DateTime.now(),
       );
 
-      // Anda dapat menambahkan logika untuk menyimpan event di sini
+      Provider.of<EventProvider>(context, listen: false).editEvent;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Event has been successfully updated!')),
+      );
     }
   }
 
-  String? validatePrice(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter the price.';
-    }
-    if (double.tryParse(value) == null) {
-      return 'Please enter a valid price.';
-    }
+  String? _validatePrice(String? value) {
+    if (value == null || value.isEmpty) return 'Please enter the price.';
+    if (double.tryParse(value) == null) return 'Please enter a valid price.';
     return null;
   }
 
-  String? validateImage(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter an image URL.';
-    }
+  String? _validateImage(String? value) {
+    if (value == null || value.isEmpty) return 'Please enter an image URL.';
     return null;
   }
 
-  String? validateDescription(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter a description.';
-    }
+  String? _validateDescription(String? value) {
+    if (value == null || value.isEmpty) return 'Please enter a description.';
     return null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Event'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Create New Event',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(height: 32),
-              _buildTextField(
-                controller: _nameController,
-                label: 'Event Name',
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter event name.'
-                    : null,
-              ),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _priceController,
-                label: 'Price',
-                validator: validatePrice,
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 16),
-              _buildDateField(),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _descriptionController,
-                label: 'Description',
-                validator: validateDescription,
-              ),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _imageController,
-                label: 'Image URL',
-                validator: validateImage,
-              ),
-              const SizedBox(height: 32),
-              ElevatedButton(
-                onPressed: _submit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  minimumSize: const Size(double.infinity, 48),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                child: const Text(
-                  'Register',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _buildTextField({
@@ -162,9 +141,9 @@ class _EditHuraEventAdminState extends State<EditHuraEventAdmin> {
           onPressed: () async {
             DateTime? selectedDate = await showDatePicker(
               context: context,
-              initialDate: DateTime.now(),
+              initialDate: _selectedDate ?? DateTime.now(),
               firstDate: DateTime(1900),
-              lastDate: DateTime.now(),
+              lastDate: DateTime(2100),
             );
             if (selectedDate != null) {
               setState(() {
@@ -178,6 +157,74 @@ class _EditHuraEventAdminState extends State<EditHuraEventAdmin> {
       ),
       validator: (value) =>
           value == null || value.isEmpty ? 'Please enter event date.' : null,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(''),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Edit Event',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 32),
+              _buildTextField(
+                controller: _nameController,
+                label: 'Event Name',
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Please enter event name.'
+                    : null,
+              ),
+              const SizedBox(height: 16),
+              _buildTextField(
+                controller: _priceController,
+                label: 'Price',
+                validator: _validatePrice,
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 16),
+              _buildDateField(),
+              const SizedBox(height: 16),
+              _buildTextField(
+                controller: _descriptionController,
+                label: 'Description',
+                validator: _validateDescription,
+              ),
+              const SizedBox(height: 16),
+              _buildTextField(
+                controller: _imageController,
+                label: 'Image URL',
+                validator: _validateImage,
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: _submit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  minimumSize: const Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: const Text(
+                  'Update',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
