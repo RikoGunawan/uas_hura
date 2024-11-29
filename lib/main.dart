@@ -95,6 +95,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: AppRoutes.login,
       routes: {
+        '/': (context) => const LoginScreen(), // Default route
         AppRoutes.first: (context) => const GetStartedScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.register: (context) => const RegisterScreen(),
