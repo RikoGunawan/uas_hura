@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/post.dart';
+import '../../models/profile.dart';
 import '../../providers/like_provider.dart';
+import '../profile/profile_screen.dart';
 import 'post_screen.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
+  final Profile profile; // Tambahkan parameter profile
 
-  const PostCard({super.key, required this.post});
+  const PostCard({super.key, required this.post, required this.profile});
 
   @override
   _PostCardState createState() => _PostCardState();
@@ -83,12 +86,29 @@ class _PostCardState extends State<PostCard> {
                         ),
                       ),
                     ),
-                    const Positioned(
+                    Positioned(
                       left: 10,
                       bottom: 10,
-                      child: CircleAvatar(
-                        radius: 20.0,
-                        backgroundColor: Colors.grey,
+                      child: InkWell(
+                        onTap: () {
+                          // Navigasi ke halaman ProfileScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProfileScreen(
+                                  userId: widget.post
+                                      .userId), // Pass userId or any necessary data
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 20.0,
+                          backgroundColor: Colors.grey,
+                          backgroundImage: widget.profile.imageurl.isNotEmpty
+                              ? NetworkImage(widget.profile
+                                  .imageurl) // Ganti dengan URL gambar profil
+                              : null, // Jika tidak ada URL, backgroundImage akan null
+                        ),
                       ),
                     ),
                     Positioned(
