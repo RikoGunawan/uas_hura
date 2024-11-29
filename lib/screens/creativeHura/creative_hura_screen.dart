@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../creative_hura_header_widget.dart';
-import '../../models/post2.dart';
+import '../../models/post.dart';
 
-import '../../providers/post_provider2.dart';
+import '../../providers/post_provider.dart';
 import 'add_post_screen_online.dart';
 import 'post_card.dart';
 
@@ -14,7 +14,7 @@ class CreativeHuraScreen extends StatefulWidget {
 }
 
 class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
-  List<Post2> posts = [];
+  List<Post> posts = [];
   bool isLoading = true;
 
   @override
@@ -29,7 +29,7 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
     });
 
     try {
-      List<Post2> fetchedPosts = await getAllPosts();
+      List<Post> fetchedPosts = await getAllPosts();
       setState(() {
         posts = fetchedPosts;
       });

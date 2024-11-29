@@ -6,8 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../models/post2.dart';
-import '../../providers/post_provider2.dart';
+import '../../models/post.dart';
+import '../../providers/post_provider.dart';
 
 class AddPostScreenOnline extends StatefulWidget {
   const AddPostScreenOnline({super.key});
@@ -72,7 +72,7 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
       return;
     }
 
-    final post = Post2(
+    final post = Post(
       id: Uuid().v4(),
       name: _nameController.text,
       description: _descriptionController.text,

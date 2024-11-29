@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../profile_header_widget.dart';
 
-import '../../models/post2.dart';
+import '../../models/post.dart';
 import '../../models/profile.dart';
 import '../../services/supabase_service.dart';
 import '../creativeHura/post_screen.dart';
@@ -16,7 +16,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   Profile? profile;
-  List<Post2> posts = [];
+  List<Post> posts = [];
   bool isLoadingProfile = true;
   bool isLoadingPosts = true;
 
@@ -57,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
 
     try {
-      List<Post2> fetchedPosts = await SupabaseService.getAllPosts();
+      List<Post> fetchedPosts = await SupabaseService.getAllPosts();
       setState(() {
         posts = fetchedPosts;
       });

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../models/post2.dart';
-import '../../providers/post_provider2.dart';
+import '../../models/post.dart';
+import '../../providers/post_provider.dart';
 
 class PostScreen extends StatefulWidget {
-  final Post2 post;
+  final Post post;
 
   const PostScreen({super.key, required this.post});
 
@@ -13,7 +13,7 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
-  late Future<Post2?> postFuture;
+  late Future<Post?> postFuture;
 
   @override
   void initState() {
@@ -24,7 +24,7 @@ class _PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<Post2?>(
+      body: FutureBuilder<Post?>(
         future: postFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

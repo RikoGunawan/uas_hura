@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../models/post2.dart';
+import '../models/post.dart';
 
 class SupabaseService {
   static Future<Map<String, dynamic>?> loadProfile(String userId) async {
@@ -54,11 +54,11 @@ class SupabaseService {
     });
   }
 
-  static Future<List<Post2>> getAllPosts() async {
+  static Future<List<Post>> getAllPosts() async {
     try {
       final response = await Supabase.instance.client.from('posts').select();
       return (response as List<dynamic>)
-          .map((data) => Post2.fromJson(data as Map<String, dynamic>))
+          .map((data) => Post.fromJson(data as Map<String, dynamic>))
           .toList();
     } catch (e) {
       print('Error fetching posts: $e');

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../models/post2.dart';
+import '../../models/post.dart';
 import '../../providers/like_provider.dart';
 import 'post_screen.dart';
 
 class PostCard extends StatefulWidget {
-  final Post2 post;
+  final Post post;
 
   const PostCard({super.key, required this.post});
 
