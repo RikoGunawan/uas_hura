@@ -4,7 +4,7 @@ import '../../models/post2.dart';
 import '../../providers/post_provider2.dart';
 
 class PostScreen extends StatefulWidget {
-  final Post2 post; // Change to Post2
+  final Post2 post;
 
   const PostScreen({super.key, required this.post});
 
@@ -18,7 +18,7 @@ class _PostScreenState extends State<PostScreen> {
   @override
   void initState() {
     super.initState();
-    postFuture = getPostById(widget.post.id); // Fetch post by ID
+    postFuture = getPostById(widget.post.id);
   }
 
   @override
@@ -35,7 +35,7 @@ class _PostScreenState extends State<PostScreen> {
             return Center(child: Text('Post not found'));
           }
 
-          final post = snapshot.data!; // Get the fetched post
+          final post = snapshot.data!;
 
           return SingleChildScrollView(
             child: Padding(
@@ -43,7 +43,6 @@ class _PostScreenState extends State<PostScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Use the post data as needed
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: Image.network(
@@ -57,10 +56,7 @@ class _PostScreenState extends State<PostScreen> {
                           width: double.infinity,
                           color: Colors.grey[300],
                           child: const Center(
-                            child: Text(
-                              'Image not available',
-                              style: TextStyle(color: Colors.black54),
-                            ),
+                            child: Text('Image not available'),
                           ),
                         );
                       },
@@ -94,6 +90,7 @@ class _PostScreenState extends State<PostScreen> {
                   const SizedBox(height: 16.0),
 
                   // Post Title
+
                   Text(
                     post.name,
                     style: const TextStyle(
@@ -103,8 +100,6 @@ class _PostScreenState extends State<PostScreen> {
                     ),
                   ),
                   const SizedBox(height: 8.0),
-
-                  // Post Content
                   Text(
                     post.description,
                     style: const TextStyle(
@@ -112,9 +107,6 @@ class _PostScreenState extends State<PostScreen> {
                       fontSize: 16.0,
                     ),
                   ),
-                  const SizedBox(height: 16.0),
-
-                  // Additional post details or actions can go here
                 ],
               ),
             ),
@@ -123,80 +115,55 @@ class _PostScreenState extends State<PostScreen> {
       ),
     );
   }
-}
 
 // Widget Statistik Like dengan Ikon
-Widget _buildStatLike({
-  required IconData icon,
-  required Color color,
-  required String value,
-  required VoidCallback onTap,
-}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Column(
-      children: [
-        Icon(icon, size: 20.0, color: color),
-        const SizedBox(height: 8.0),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-// Widget Statistik Share dengan Ikon
-Widget _buildStatShare(
-    {required IconData icon,
+  Widget _buildStatLike({
+    required IconData icon,
     required Color color,
     required String value,
-    required VoidCallback onTap}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Column(
-      children: [
-        Icon(icon, size: 20.0, color: color),
-        const SizedBox(height: 8.0),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Icon(icon, size: 20.0, color: color),
+          const SizedBox(height: 8.0),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
-// Placeholder untuk Kontainer Kosong
-Widget _buildEmptyContainer(BuildContext context, Post2 post) {
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PostScreen(post: post),
-        ),
-      );
-    },
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(10.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        height: 100.0, // Tambahkan tinggi default jika diperlukan
-        width: 100.0, // Tambahkan lebar default jika diperlukan
+        ],
       ),
-    ),
-  );
+    );
+  }
+
+// Widget Statistik Share dengan Ikon
+  Widget _buildStatShare(
+      {required IconData icon,
+      required Color color,
+      required String value,
+      required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Icon(icon, size: 20.0, color: color),
+          const SizedBox(height: 8.0),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

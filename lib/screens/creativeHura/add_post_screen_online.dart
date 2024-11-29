@@ -1,8 +1,8 @@
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart'; // Untuk kIsWeb
-import 'package:file_picker/file_picker.dart'; // Untuk Web
-import 'package:image_picker/image_picker.dart'; // Untuk Mobile
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,13 +17,10 @@ class AddPostScreenOnline extends StatefulWidget {
 }
 
 class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
-  // Controllers untuk input teks
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-
-  // Variabel untuk menyimpan file gambar yang dipilih
-  File? _selectedImageFile; // Untuk Android/iOS
-  Uint8List? _selectedImageWeb; // Untuk Web
+  File? _selectedImageFile;
+  Uint8List? _selectedImageWeb;
 
   @override
   void dispose() {
@@ -32,7 +29,6 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
     super.dispose();
   }
 
-  //------------------- Fungsi Pilih Gambar (Web dan Mobile)
   Future<void> _pickImage() async {
     if (kIsWeb) {
       // Logika untuk Web
@@ -60,10 +56,7 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
     }
   }
 
-  //------------------------------------ Fungsi Membuat Post
-
   Future<void> _createPost() async {
-    // Validasi input
     if (_selectedImageFile == null && _selectedImageWeb == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select an image.')),
@@ -71,51 +64,36 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
       return;
     }
 
-    // Ambil user yang sedang terautentikasi
     final user = Supabase.instance.client.auth.currentUser;
-
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('User  not authenticated. Cannot create post.')),
+        const SnackBar(content: Text('User  not authenticated.')),
       );
       return;
     }
 
-    // Membuat instance Post
     final post = Post2(
-      id: Uuid().v4(), // Menggunakan UUID
+      id: Uuid().v4(),
       name: _nameController.text,
       description: _descriptionController.text,
-      imageUrl: '', // Akan diisi setelah upload
+      imageUrl: '',
       likes: 0,
       shares: 0,
-      userId: user.id, // Menggunakan user ID yang valid
+      userId: user.id,
     );
 
-    // Proses upload dan simpan data
     if (kIsWeb && _selectedImageWeb != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Mengupload gambar...')),
-      );
       await uploadAndCreatePostWeb(_selectedImageWeb!, post);
     } else if (_selectedImageFile != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Mengupload gambar...')),
-      );
       await uploadAndCreatePost(_selectedImageFile!, post);
     }
 
-    // Tampilkan not ifikasi sukses
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Post created successfully!')),
     );
 
-    // Reset form
     _resetForm();
   }
-
-  //------------------------------- Fungsi Reset Form
 
   void _resetForm() {
     _nameController.clear();
@@ -126,37 +104,35 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
     });
   }
 
-  //---------------------- Widget build untuk menampilkan UI
+  Widget buildImagePreview() {
+    if (_selectedImageWeb != null) {
+      // Untuk platform Web
+      return Image.memory(
+        _selectedImageWeb!,
+        fit: BoxFit.contain,
+      );
+    } else if (_selectedImageFile != null) {
+      // Untuk platform Android/iOS
+      return Image.file(
+        _selectedImageFile!,
+        fit: BoxFit.contain,
+      );
+    } else {
+      // Jika belum ada gambar dipilih
+      return Container(
+        height: 200,
+        alignment: Alignment.center,
+        color: Colors.grey[300],
+        child: const Text(
+          'No image selected',
+          style: TextStyle(fontSize: 14, color: Colors.black54),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget buildImagePreview() {
-      if (_selectedImageWeb != null) {
-        // Untuk platform Web
-        return Image.memory(
-          _selectedImageWeb!,
-          fit: BoxFit.contain,
-        );
-      } else if (_selectedImageFile != null) {
-        // Untuk platform Android/iOS
-        return Image.file(
-          _selectedImageFile!,
-          fit: BoxFit.contain,
-        );
-      } else {
-        // Jika belum ada gambar dipilih
-        return Container(
-          height: 200,
-          alignment: Alignment.center,
-          color: Colors.grey[300],
-          child: const Text(
-            'No image selected',
-            style: TextStyle(fontSize: 14, color: Colors.black54),
-          ),
-        );
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Post'),
@@ -192,12 +168,11 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
             ),
             const SizedBox(height: 16),
             // Tombol untuk memilih gambar
+
             ElevatedButton(
               onPressed: _pickImage,
               child: const Text('Pick Image'),
             ),
-            const SizedBox(height: 16),
-            // Tombol untuk membuat post
             ElevatedButton(
               onPressed: _createPost,
               child: const Text('Create Post'),
