@@ -44,7 +44,7 @@ class Event {
 class EditHuraEventAdmin extends StatefulWidget {
   final Event? event;
 
-  const EditHuraEventAdmin({Key? key, this.event}) : super(key: key);
+  const EditHuraEventAdmin({super.key, this.event});
 
   @override
   State<EditHuraEventAdmin> createState() => _EditHuraEventAdminState();

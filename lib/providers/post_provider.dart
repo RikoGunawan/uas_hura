@@ -140,37 +140,29 @@ Future<void> uploadAndCreatePostWeb(Uint8List imageBytes, Post post) async {
         .eq('id', user.id)
         .single();
 
-    if (profileResponse != null) {
-      final userProfile = Profile.fromJson(profileResponse);
-      // Pastikan imageurl ada sebelum digunakan
-      if (userProfile.imageurl != null) {
-        final imageData = await fetchImage(imageUrl);
-        final dimensions = getImageDimensions(imageData);
+    final userProfile = Profile.fromJson(profileResponse);
+    // Pastikan imageurl ada sebelum digunakan
+    final imageData = await fetchImage(imageUrl);
+    final dimensions = getImageDimensions(imageData);
 
-        final newPost = Post(
-          id: post.id,
-          name: post.name,
-          description: post.description,
-          imageUrl: imageUrl,
-          userId: user.id,
-          userImageUrl:
-              userProfile.imageurl ?? '', // Assign user_image_url from profile
-          width: dimensions['width'] != null
-              ? dimensions['width']!.toDouble()
-              : 0.0,
-          height: dimensions['height'] != null
-              ? dimensions['height']!.toDouble()
-              : 0.0,
-        );
+    final newPost = Post(
+      id: post.id,
+      name: post.name,
+      description: post.description,
+      imageUrl: imageUrl,
+      userId: user.id,
+      userImageUrl:
+          userProfile.imageurl ?? '', // Assign user_image_url from profile
+      width: dimensions['width'] != null
+          ? dimensions['width']!.toDouble()
+          : 0.0,
+      height: dimensions['height'] != null
+          ? dimensions['height']!.toDouble()
+          : 0.0,
+    );
 
-        await createPost(newPost); // Call createPost
-      } else {
-        print('User  profile image URL is null');
-      }
-    } else {
-      print('Profile response is null');
-    }
-    // Fetch image data to calculate dimensions
+    await createPost(newPost); // Call createPost
+        // Fetch image data to calculate dimensions
   } else {
     print('Failed to upload image, post creation aborted.');
   }
@@ -182,9 +174,6 @@ Future<void> uploadAndCreatePostWeb(Uint8List imageBytes, Post post) async {
 Future<List<Post>> getAllPosts() async {
   try {
     final response = await Supabase.instance.client.from('posts').select();
-    if (response == null) {
-      throw Exception('No posts found');
-    }
     return (response as List<dynamic>)
         .map((data) => Post.fromJson(data as Map<String, dynamic>))
         .toList();

@@ -35,7 +35,8 @@ class _DataPengunjungState extends State<DataPengunjung> {
           });
         }
       } catch (e) {
-        'Error loading profile: $e'; // Handle error if needed
+        // Handle error if needed
+        print('Error loading profile: $e');
       } finally {
         setState(() {
           isLoading = false;
@@ -55,6 +56,7 @@ class _DataPengunjungState extends State<DataPengunjung> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
+              // Wrap the body with SingleChildScrollView
               child: Column(
                 children: [
                   const ProfileHeaderWidget(),
@@ -72,14 +74,14 @@ class _DataPengunjungState extends State<DataPengunjung> {
                       ],
                     ),
                   ),
-                  _buildContainerVisitor(context),
+                  _buildContainerVisitor(),
                   const SizedBox(height: 16.0),
-                  _buildContainerData(context),
-                  const SizedBox(height: 16.0),
-                  _buildContainerData(context),
-                  const SizedBox(height: 16.0),
-                  _buildContainerData(context),
-                  const SizedBox(height: 16.0),
+                  _buildContainerData(),
+                  const SizedBox(height: 18.0),
+                  _buildContainerData(),
+                  const SizedBox(height: 18.0),
+                  _buildContainerData(),
+                  const SizedBox(height: 18.0),
                 ],
               ),
             ),
@@ -107,10 +109,13 @@ class _DataPengunjungState extends State<DataPengunjung> {
     );
   }
 
-  Widget _buildContainerVisitor(BuildContext context) {
+  Widget _buildContainerVisitor() {
     return GestureDetector(
+      onTap: () {
+        // Add your onTap logic if needed
+      },
       child: Container(
-        height: 40, // Responsive height
+        height: 50, // Responsive height
         width: 150,
         decoration: BoxDecoration(
           color: Colors.grey[300],
@@ -129,19 +134,51 @@ class _DataPengunjungState extends State<DataPengunjung> {
     );
   }
 
-  Widget _buildContainerData(BuildContext context) {
+  Widget _buildContainerData() {
+    // Collect all the profile data
+    List<Map<String, String>> profileData = [
+      {'label': 'First Name', 'value': profile?.firstName ?? 'No First Name'},
+      {'label': 'Last Name', 'value': profile?.lastName ?? 'No Last Name'},
+      {'label': 'Username', 'value': profile?.username ?? 'No Username'},
+      {'label': 'Bio', 'value': profile?.bio ?? 'No Bio'},
+      {'label': 'Image URL', 'value': profile?.imageurl ?? 'No Image URL'},
+    ];
+
     return GestureDetector(
+      onTap: () {
+        // Add your onTap logic if needed
+      },
       child: Container(
-        height: 40, // Responsive height
-        width: 150,
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(0),
         ),
-        alignment: Alignment.center,
-        child: const Text(
-          'Data Pengunjung',
-          style: TextStyle(color: Colors.black, fontSize: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: profileData.map((data) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Row(
+                children: [
+                  Text(
+                    '${data['label']}:',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(width: 8.0),
+                  Expanded(
+                    child: Text(
+                      data['value']!,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
         ),
       ),
     );
