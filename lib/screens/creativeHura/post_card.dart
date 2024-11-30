@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/profile/referred_profile_screen.dart';
 import 'package:myapp/services/supabase_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/post.dart';
 import '../../models/profile.dart';
 import '../../providers/like_provider.dart';
-import '../profile/profile_screen.dart';
 import 'post_screen.dart';
 
 class PostCard extends StatefulWidget {
@@ -96,8 +96,8 @@ class _PostCardState extends State<PostCard> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  ProfileScreen(userId: widget.post.userId),
+                              builder: (context) => ReferredProfileScreen(
+                                  userId: widget.post.userId),
                             ),
                           );
                         },
