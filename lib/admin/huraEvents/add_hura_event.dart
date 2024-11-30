@@ -1,174 +1,176 @@
 import 'package:flutter/material.dart';
-
-// Model untuk event
-class Event {
-  int id;
-  String name;
-  double price;
-  String image;
-  String description;
-  DateTime eventDate;
-
-  Event({
-    required this.id,
-    required this.name,
-    required this.price,
-    required this.image,
-    required this.description,
-    required this.eventDate,
-  });
-}
+import 'package:myapp/models/event.dart';
 
 class AddHuraEvent extends StatefulWidget {
-  const AddHuraEvent({super.key});
+  final List<Event> events; // Referensi list event
+
+  const AddHuraEvent({
+    Key? key,
+    required this.events,
+  }) : super(key: key);
 
   @override
   State<AddHuraEvent> createState() => _AddHuraEventState();
 }
 
 class _AddHuraEventState extends State<AddHuraEvent> {
-  // List untuk menyimpan data event
-  final List<Event> events = [];
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _imageController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
-  // Controller untuk input teks
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController priceController = TextEditingController();
+  DateTime? _selectedDate;
 
-  @override
-  void dispose() {
-    nameController.dispose();
-    priceController.dispose();
-    super.dispose();
-  }
+  void _submit() {
+    if (_formKey.currentState!.validate()) {
+      final newEvent = Event(
+        id: widget.events.length + 1, // ID baru berdasarkan panjang list
+        name: _nameController.text,
+        price: double.parse(_priceController.text),
+        image: _imageController.text,
+        description: _descriptionController.text,
+        eventDate: _selectedDate!,
+      );
 
-  // Menampilkan dialog untuk menambah atau mengedit event
-  void _showEventDialog({Event? event}) {
-    if (event != null) {
-      // Jika mengedit, isi controller dengan data event yang ada
-      nameController.text = event.name;
-      priceController.text = event.price.toString();
-    } else {
-      // Jika menambah, kosongkan controller
-      nameController.clear();
-      priceController.clear();
+      setState(() {
+        widget.events.add(newEvent);
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Event has been added successfully!'),
+        ),
+      );
+
+      Navigator.pop(context);
     }
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(event == null ? 'Add Event' : 'Edit Event'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Event Name'),
-                ),
-                TextField(
-                  controller: priceController,
-                  decoration: const InputDecoration(labelText: 'Price'),
-                  keyboardType: TextInputType.number,
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                final newEvent = Event(
-                  id: event?.id ?? events.length + 1,
-                  name: nameController.text,
-                  price: double.tryParse(priceController.text) ?? 0.0,
-                  image: '', // Placeholder for now
-                  description: '', // Placeholder for now
-                  eventDate: DateTime.now(), // Default value
-                );
-
-                if (event == null) {
-                  _addEvent(newEvent);
-                } else {
-                  _editEvent(event, newEvent);
-                }
-
-                Navigator.pop(context);
-              },
-              child: const Text('Save'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _addEvent(Event event) {
-    setState(() {
-      events.add(event);
-    });
-  }
-
-  void _editEvent(Event oldEvent, Event newEvent) {
-    setState(() {
-      final index = events.indexOf(oldEvent);
-      if (index != -1) {
-        events[index] = newEvent;
-      }
-    });
-  }
-
-  void _deleteEvent(Event event) {
-    setState(() {
-      events.remove(event);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage Events'),
+        title: const Text('Add Event'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: events.length,
-              itemBuilder: (context, index) {
-                final event = events[index];
-                return ListTile(
-                  title: Text(event.name),
-                  subtitle: Text('Price: \$${event.price.toStringAsFixed(2)}'),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () => _showEventDialog(event: event),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _deleteEvent(event),
-                      ),
-                    ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              const SizedBox(height: 16),
+              _buildTextField(
+                controller: _nameController,
+                label: 'Event Name',
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Please enter event name.'
+                    : null,
+              ),
+              const SizedBox(height: 16),
+              _buildTextField(
+                controller: _priceController,
+                label: 'Price',
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the price.';
+                  }
+                  if (double.tryParse(value) == null) {
+                    return 'Please enter a valid price.';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              _buildDateField(),
+              const SizedBox(height: 16),
+              _buildTextField(
+                controller: _descriptionController,
+                label: 'Description',
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Please enter a description.'
+                    : null,
+              ),
+              const SizedBox(height: 16),
+              _buildTextField(
+                controller: _imageController,
+                label: 'Image URL',
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Please enter an image URL.'
+                    : null,
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: _submit,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                );
-              },
-            ),
+                ),
+                child: const Text(
+                  'Add Event',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () => _showEventDialog(),
-              child: const Text('Add Event'),
-            ),
-          ),
-        ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    String? Function(String?)? validator,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+      ),
+      validator: validator,
+      keyboardType: keyboardType,
+    );
+  }
+
+  Widget _buildDateField() {
+    return TextFormField(
+      controller: _dateController,
+      readOnly: true,
+      decoration: InputDecoration(
+        labelText: 'Event Date',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.calendar_today),
+          onPressed: () async {
+            DateTime? pickedDate = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
+            );
+            if (pickedDate != null) {
+              setState(() {
+                _selectedDate = pickedDate;
+                _dateController.text =
+                    '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
+              });
+            }
+          },
+        ),
+      ),
+      validator: (value) =>
+          value == null || value.isEmpty ? 'Please pick a date.' : null,
     );
   }
 }

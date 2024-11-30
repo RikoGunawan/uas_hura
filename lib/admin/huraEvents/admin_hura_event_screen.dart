@@ -37,7 +37,10 @@ class AdminHuraEventScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddHuraEvent(),
+                  builder: (context) => AddHuraEvent(
+                    events: Provider.of<EventProvider>(context, listen: false)
+                        .events,
+                  ),
                 ),
               );
             },
@@ -152,29 +155,32 @@ class AdminHuraEventScreen extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                          Positioned(
-                                    left: 8,
-                                    top: 12,
-                                    bottom: 2,
-                                    child: IconButton(
-                                      icon: const Icon(
-                                        Icons.edit_square,
-                                        color: Colors.white,
+                            Positioned(
+                              left: 8,
+                              top: 12,
+                              bottom: 2,
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.edit_square,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditHuraEvent(
+                                        event:
+                                            event, // Pastikan event dioper ke halaman edit
+                                        events: Provider.of<EventProvider>(
+                                                context,
+                                                listen: false)
+                                            .events,
                                       ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => EditHuraEvent(
-                                              event: event, // Pastikan event dioper ke halaman edit
-                                              events: Provider.of<EventProvider>(context, listen: false).events,
-                                            ),
-                                          ),
-                                        );
-                                      },
                                     ),
-                                  ),
-
+                                  );
+                                },
+                              ),
+                            ),
                             Positioned(
                               top: 8,
                               right: 8,
