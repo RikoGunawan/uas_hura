@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -21,7 +22,7 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
   int _currentIndex = 0;
   Profile? profile;
 
-  final HuraPointCategory pointProvider = HuraPointCategory();
+  final HuraPointCategory huraPointCategory = HuraPointCategory();
   @override
   void initState() {
     super.initState();
@@ -45,7 +46,7 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
-      pointProvider.selectedCategory = pointProvider.categories[index];
+      huraPointCategory.selectedCategory = huraPointCategory.categories[index];
     });
   }
 
@@ -79,99 +80,83 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
     );
   }
 
-<<<<<<< HEAD
-  Widget _buildProgressBar(BuildContext context, double progress) {
-    double maxProgress = 1000.0; // Maximum progress value
-
-    // Calculate the current progress in terms of the maximum (0-1000 range)
-    int currentProgress = (progress * maxProgress).toInt();
-
-=======
   Widget _buildProgressBar(BuildContext context, int currentPoints,
       int dailyLimit, double progress) {
->>>>>>> 973f1ac581c1c9494bf399565fa16c44d1b64be5
-    return Container(
-      height: 100.0,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            left: 10.0,
-            top: 15.0,
-            child: CircleAvatar(
-              radius: 17.0,
-              backgroundColor: Colors.grey,
-              backgroundImage:
-                  profile?.imageurl != null && profile!.imageurl.isNotEmpty
-                      ? NetworkImage(profile!.imageurl)
-                      : null,
-            ),
-          ),
-          Positioned(
-            left: 48.0,
-            top: 25.0,
-            child: Text(
-              'Daily Points: $currentPoints / $dailyLimit',
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            ),
-          ),
-          // Garis putih latar belakang
-          Positioned(
-            left: 10.0,
-            top: 58.0,
-            child: Container(
-              height: 10.0, // Tinggi garis putih
-              width: MediaQuery.of(context).size.width * 0.78, // Lebar penuh
-              decoration: BoxDecoration(
-                color: Colors.white, // Garis putih
-                borderRadius: BorderRadius.circular(7.0),
+    return Center(
+      child: Container(
+        height: 100.0,
+        width: MediaQuery.of(context).size.width * 0.85,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              left: 10.0,
+              top: 15.0,
+              child: CircleAvatar(
+                radius: 17.0,
+                backgroundColor: Colors.grey,
+                backgroundImage:
+                    profile?.imageurl != null && profile!.imageurl.isNotEmpty
+                        ? NetworkImage(profile!.imageurl)
+                        : null,
               ),
             ),
-          ),
-          // Linear progress bar
-          Positioned(
-            left: 10.0,
-            top: 58.0,
-            child: Container(
-              height: 10.0, // Tinggi progress bar
-              width: (MediaQuery.of(context).size.width * 0.78) *
-                  progress, // Sesuai progress
-              decoration: BoxDecoration(
-                color: Colors.grey, // Warna progress
-                borderRadius: BorderRadius.circular(5.0),
+            Positioned(
+              left: 48.0,
+              top: 25.0,
+              child: Text(
+                'Daily Points: $currentPoints / $dailyLimit',
+                style:
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
               ),
             ),
-          ),
-          // Displaying the progress as "current/1000"
-          Positioned(
-            left: MediaQuery.of(context).size.width * 0.78 +
-                10.0, // Adjust for text placement
-            top: 55.0, // Adjust to align with progress bar
-            child: Text(
-              '$currentProgress/$maxProgress', // Display text
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 14.0,
-                fontWeight: FontWeight.bold,
+            // Garis putih latar belakang
+            Positioned(
+              left: 10.0,
+              top: 58.0,
+              child: Container(
+                height: 10.0, // Tinggi garis putih
+                width: MediaQuery.of(context).size.width * 0.78, // Lebar penuh
+                decoration: BoxDecoration(
+                  color: Colors.white, // Garis putih
+                  borderRadius: BorderRadius.circular(7.0),
+                ),
               ),
             ),
-          )
-        ],
+            // Linear progress bar
+            Positioned(
+              left: 10.0,
+              top: 58.0,
+              child: Container(
+                height: 10.0, // Tinggi progress bar
+                width: (MediaQuery.of(context).size.width * 0.78) *
+                    progress, // Sesuai progress
+                decoration: BoxDecoration(
+                  color: AppColors.primary, // Warna progress
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildCategoryButtons() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double horizontalPadding = screenWidth *
+        0.015; // Mengatur padding antar tombol berdasarkan lebar layar
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(pointProvider.categories.length, (index) {
+      children: List.generate(huraPointCategory.categories.length, (index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: _buildButton(pointProvider.categories[index], index),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: _buildButton(huraPointCategory.categories[index], index),
         );
       }),
     );
@@ -190,7 +175,8 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
             color: isSelected ? Colors.white : Colors.black,
           ),
         ),
@@ -202,7 +188,7 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
   Widget _buildCategoryContent() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: pointProvider.getPostWidgets(context),
+      children: huraPointCategory.getPostWidgets(context),
     );
   }
 }

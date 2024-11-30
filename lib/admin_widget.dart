@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'admin/huraEvents/edit_hura_event.dart';
+import '../admin/huraEvents/edit_hura_event.dart';
 
 class AdminWidget extends StatelessWidget {
   const AdminWidget({super.key});
@@ -15,8 +15,7 @@ class AdminWidget extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const EditHuraEventAdmin()),
+              MaterialPageRoute(builder: (context) => const EditHuraEvent()),
             );
           },
           child: const Text('Manage Hura Events'),
