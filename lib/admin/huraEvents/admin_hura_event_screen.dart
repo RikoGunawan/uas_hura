@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/admin/huraEvents/add_hura_event.dart';
 import 'package:myapp/admin/huraEvents/edit_hura_event.dart';
+import 'package:myapp/screens/huraEvents/edit_hura_event.dart';
 import 'package:provider/provider.dart';
 import '../../providers/event_provider.dart';
 
@@ -151,26 +152,29 @@ class AdminHuraEventScreen extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            Positioned(
-                              left: 8,
-                              //right: 8,
-                              top: 12,
-                              bottom: 2,
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.edit_square,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const EditHuraEvent()),
-                                  );
-                                },
-                              ),
-                            ),
+                          Positioned(
+                                    left: 8,
+                                    top: 12,
+                                    bottom: 2,
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.edit_square,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => EditHuraEvent(
+                                              event: event, // Pastikan event dioper ke halaman edit
+                                              events: Provider.of<EventProvider>(context, listen: false).events,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+
                             Positioned(
                               top: 8,
                               right: 8,
