@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/admin/admin_profile.dart';
+import 'package:myapp/providers/quest_provider.dart';
 import 'package:myapp/screens/home/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -36,6 +37,7 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
+        ChangeNotifierProvider(create: (_) => QuestProvider()),
       ],
       child: const MyApp(),
     ),
