@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/admin/admin_profile.dart';
 import 'package:myapp/admin_widget.dart';
-import 'package:myapp/providers/quest_provider.dart';
 import 'package:myapp/screens/creativeHura/add_post_screen_online.dart';
 import 'package:myapp/screens/creativeHura/creative_hura_screen.dart';
 import 'package:myapp/screens/home/get_started_screen.dart';
@@ -45,11 +44,6 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
-<<<<<<< HEAD
-        ChangeNotifierProvider(create: (_) => ProgressProvider()),
-        ChangeNotifierProvider(create: (_) => QuestProvider(), )
-=======
->>>>>>> 973f1ac581c1c9494bf399565fa16c44d1b64be5
       ],
       child: const MyApp(),
     ),
@@ -92,7 +86,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      initialRoute: AppRoutes.adminProfile,
+      initialRoute: AppRoutes.login,
       routes: {
         '/': (context) => const LoginScreen(), // Default route
         AppRoutes.first: (context) => const GetStartedScreen(),
@@ -103,7 +97,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.creativeHura: (context) => const CreativeHuraScreen(),
         AppRoutes.addCreativeHura: (context) => const AddPostScreenOnline(),
         AppRoutes.editProfileScreen: (context) => const EditProfileScreen(),
-        AppRoutes.adminProfile: (context) => const AdminProfileScreen(),
+        // AppRoutes.adminProfile: (context) => const AdminProfileScreen(),
       },
       // onUnknownRoute: (settings) {
       //   return MaterialPageRoute(
