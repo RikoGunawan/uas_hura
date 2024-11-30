@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/admin/huraPoints/add_point_screen.dart';
 import 'package:myapp/admin/huraPoints/edit_point_screen.dart';
-import 'package:provider/provider.dart';
 
-import '../../providers/progress_provider.dart';
 import 'leaderboard_widget.dart';
 import 'quest_widget.dart';
 import 'reward_widget.dart';
@@ -28,8 +26,8 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final progressProvider = context.watch<ProgressProvider>();
-    final progress = progressProvider.progress;
+    // final progressProvider = context.watch<ProgressProvider>();
+    // final progress = progressProvider.progress;
 
     return Scaffold(
       appBar: _buildAppBar(context),
@@ -39,7 +37,7 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildProgressBar(context, progress),
+              // _buildProgressBar(context, progress),
               const SizedBox(height: 14.0),
               _buildCategoryButtons(),
               const SizedBox(height: 14.0),

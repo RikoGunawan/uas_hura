@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../providers/progress_provider.dart';
+import '../../models/profile.dart';
+import '../../providers/hura_point_provider.dart';
+import '../../services/supabase_service.dart';
 import 'leaderboard_widget.dart';
 import 'quest_widget.dart';
 import 'reward_widget.dart';
 
 class HuraPointScreen extends StatefulWidget {
-  const HuraPointScreen({super.key});
+  final String? userId;
+  const HuraPointScreen({super.key, this.userId});
 
   @override
   State<HuraPointScreen> createState() => _HuraPointScreenState();
@@ -15,7 +19,28 @@ class HuraPointScreen extends StatefulWidget {
 
 class _HuraPointScreenState extends State<HuraPointScreen> {
   int _currentIndex = 0;
-  final PointProvider pointProvider = PointProvider();
+  Profile? profile;
+
+  final HuraPointCategory pointProvider = HuraPointCategory();
+  @override
+  void initState() {
+    super.initState();
+    _loadProfile();
+  }
+
+  Future<void> _loadProfile() async {
+    try {
+      final data = await SupabaseService.loadProfile(
+          widget.userId ?? Supabase.instance.client.auth.currentUser!.id);
+      if (data != null) {
+        setState(() {
+          profile = Profile.fromJson(data);
+        });
+      }
+    } catch (e) {
+      print('Error loading profile: $e');
+    }
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -26,8 +51,13 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final progressProvider = context.watch<ProgressProvider>();
-    final progress = progressProvider.progress;
+    // Ambil HuraPointProvider dari context
+    final huraPointProvider = Provider.of<HuraPointProvider>(context);
+
+    // Sederhanakan akses atribut dengan variabel lokal
+    final currentPoints = huraPointProvider.huraPoint.currentPoints;
+    final dailyLimit = huraPointProvider.huraPoint.dailyLimit;
+    final progress = huraPointProvider.progress;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -36,7 +66,8 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildProgressBar(context, progress),
+              // Panggil progress bar
+              _buildProgressBar(context, currentPoints, dailyLimit, progress),
               const SizedBox(height: 14.0),
               _buildCategoryButtons(),
               const SizedBox(height: 14.0),
@@ -48,7 +79,8 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
     );
   }
 
-  Widget _buildProgressBar(BuildContext context, double progress) {
+  Widget _buildProgressBar(BuildContext context, int currentPoints,
+      int dailyLimit, double progress) {
     return Container(
       height: 100.0,
       width: double.infinity,
@@ -58,12 +90,24 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
       ),
       child: Stack(
         children: [
-          const Positioned(
+          Positioned(
             left: 10.0,
             top: 15.0,
             child: CircleAvatar(
               radius: 17.0,
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.grey,
+              backgroundImage:
+                  profile?.imageurl != null && profile!.imageurl.isNotEmpty
+                      ? NetworkImage(profile!.imageurl)
+                      : null,
+            ),
+          ),
+          Positioned(
+            left: 48.0,
+            top: 25.0,
+            child: Text(
+              'Daily Points: $currentPoints / $dailyLimit',
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
             ),
           ),
           // Garis putih latar belakang
@@ -140,7 +184,7 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
   }
 }
 
-class PointProvider {
+class HuraPointCategory {
   String selectedCategory = 'Rank';
 
   final List<String> categories = ['Rank', 'Quest', 'Reward'];
