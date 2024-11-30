@@ -106,7 +106,7 @@ class EventScreen extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Image.asset(
-                                    'assets/images/default.jpg',
+                                    'assets/tahura.jpg',
                                     height: 110,
                                     width: double.infinity,
                                     fit: BoxFit.cover,

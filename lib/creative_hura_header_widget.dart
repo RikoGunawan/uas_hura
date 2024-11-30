@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/notification_screen.dart';
+import 'widgets/notification_icon.dart';
 
 class CreativeHuraHeaderWidget extends StatelessWidget {
   const CreativeHuraHeaderWidget({super.key});
@@ -8,12 +10,12 @@ class CreativeHuraHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 45.0, // Set a fixed height for the header
+      height: kIsWeb ? 45 : 70.0, // Set a fixed height for the header
       child: Stack(
         children: [
           Positioned(
             left: 20,
-            top: 18,
+            top: kIsWeb ? 18 : 40,
             child: const Text(
               'Creative Hura',
               style: TextStyle(
@@ -24,37 +26,18 @@ class CreativeHuraHeaderWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 10,
-            top: 10,
-            child: Container(
-              width: 35.0,
-              height: 35.0,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(40, 255, 255, 255),
-                shape: BoxShape.circle,
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.notifications_none_rounded,
-                      color: Colors.black,
-                      size: 20,
+              right: 20,
+              top: kIsWeb ? 10 : 32, // Sesuaikan posisi untuk web dan non-web
+              child: NotificationIcon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NotificationScreen(),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NotificationScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
+                  );
+                },
+              )),
         ],
       ),
     );

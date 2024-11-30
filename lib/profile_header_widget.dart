@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/profile/settings_screen.dart';
@@ -9,12 +10,12 @@ class ProfileHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 45.0, // Set a fixed height for the header
+      height: kIsWeb ? 45 : 70.0, // Set a fixed height for the header
       child: Stack(
         children: [
           Positioned(
             left: 20,
-            top: 18,
+            top: kIsWeb ? 18 : 40,
             child: const Text(
               'Profile',
               style: TextStyle(
@@ -25,8 +26,8 @@ class ProfileHeaderWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 10,
-            top: 10,
+            right: 20,
+            top: kIsWeb ? 10 : 32,
             child: Container(
               width: 35.0,
               height: 35.0,
