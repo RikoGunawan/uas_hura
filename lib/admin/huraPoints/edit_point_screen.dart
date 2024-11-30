@@ -23,34 +23,41 @@ class EditPointScreen extends StatelessWidget {
 
               return ListTile(
                 title: Text(quest.name),
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {
-                    // Open the edit dialog for each quest
-                    _openEditDialog(context, quest, questProvider);
-                  },
+                subtitle: Text('Progress: ${quest.progress.toStringAsFixed(1)}%'),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.blue),
+                      onPressed: () {
+                        _openEditDialog(context, quest, questProvider);
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () {
+                        questProvider.removeQuest(quest.id);
+                      },
+                    ),
+                  ],
                 ),
               );
             },
           );
         },
       ),
-      // Floating action button to add a new quest
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _openAddDialog(context, context.read<QuestProvider>());
         },
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  // Method to open the edit dialog for a specific quest
-  void _openEditDialog(
-      BuildContext context, Quest quest, QuestProvider questProvider) {
-    final TextEditingController questNameController =
-        TextEditingController(text: quest.name);
+  void _openEditDialog(BuildContext context, Quest quest, QuestProvider questProvider) {
+    final TextEditingController questNameController = TextEditingController(text: quest.name);
     double progress = quest.progress;
 
     showDialog(
@@ -59,13 +66,13 @@ class EditPointScreen extends StatelessWidget {
         return AlertDialog(
           title: const Text('Edit Quest'),
           content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: questNameController,
                 decoration: const InputDecoration(labelText: 'Quest Name'),
               ),
               TextField(
-                controller: TextEditingController(text: progress.toString()),
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Progress'),
                 onChanged: (value) {
@@ -77,7 +84,6 @@ class EditPointScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                // Save the updated quest
                 questProvider.updateQuest(
                   quest.id,
                   questNameController.text,
@@ -97,7 +103,6 @@ class EditPointScreen extends StatelessWidget {
     );
   }
 
-  // Method to open the add new quest dialog
   void _openAddDialog(BuildContext context, QuestProvider questProvider) {
     final TextEditingController questNameController = TextEditingController();
     double progress = 0.0;
@@ -106,15 +111,15 @@ class EditPointScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit Quest'),
+          title: const Text('Add New Quest'),
           content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: questNameController,
                 decoration: const InputDecoration(labelText: 'Quest Name'),
               ),
               TextField(
-                controller: TextEditingController(text: progress.toString()),
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Progress'),
                 onChanged: (value) {
@@ -123,6 +128,22 @@ class EditPointScreen extends StatelessWidget {
               ),
             ],
           ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                questProvider.addQuest(
+                  questNameController.text,
+                  progress,
+                );
+                Navigator.pop(context);
+              },
+              child: const Text('Add'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+          ],
         );
       },
     );
