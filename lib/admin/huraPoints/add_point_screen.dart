@@ -122,46 +122,50 @@ class _AddPointScreenState extends State<AddPointScreen> {
       appBar: AppBar(
         title: const Text('Add Quests'),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          // Daftar quest
-          Expanded(
-            child: ListView.builder(
-              itemCount: quests.length,
-              itemBuilder: (context, index) {
-                final quest = quests[index];
-                return ListTile(
-                  leading: CircularProgressIndicator(
-                    value: quest.progress / 100,
-                    backgroundColor: Colors.grey[300],
-                    color: Colors.blue,
-                  ),
-                  title: Text(quest.name),
-                  subtitle:
-                      Text('Progress: ${quest.progress.toStringAsFixed(1)}%'),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () => _showQuestDialog(quest: quest),
+          Column(
+            children: [
+              // Daftar quest
+              Expanded(
+                child: ListView.builder(
+                  itemCount: quests.length,
+                  itemBuilder: (context, index) {
+                    final quest = quests[index];
+                    return ListTile(
+                      leading: CircularProgressIndicator(
+                        value: quest.progress / 100,
+                        backgroundColor: Colors.grey[300],
+                        color: Colors.blue,
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _deleteQuest(quest),
+                      title: Text(quest.name),
+                      subtitle: Text(
+                          'Progress: ${quest.progress.toStringAsFixed(1)}%'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.blue),
+                            onPressed: () => _showQuestDialog(quest: quest),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => _deleteQuest(quest),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-          // Tombol untuk menambah quest baru
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FloatingActionButton.small(
+          Positioned(
+            bottom: 16.0,
+            right: 16.0,
+            child: FloatingActionButton(
               backgroundColor: const Color.fromRGBO(82, 170, 94, 1.0),
-              tooltip: 'Increment',
+              tooltip: 'Add Quest',
               onPressed: () => _showQuestDialog(),
               child: const Icon(Icons.add, color: Colors.white, size: 28),
             ),

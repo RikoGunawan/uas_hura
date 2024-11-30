@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/admin/admin_profile.dart';
 import 'package:myapp/admin_widget.dart';
+import 'package:myapp/providers/quest_provider.dart';
 import 'package:myapp/screens/creativeHura/add_post_screen_online.dart';
 import 'package:myapp/screens/creativeHura/creative_hura_screen.dart';
 import 'package:myapp/screens/home/get_started_screen.dart';
@@ -46,6 +47,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
+        ChangeNotifierProvider(create: (_) => QuestProvider(), )
       ],
       child: const MyApp(),
     ),
@@ -88,7 +90,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.adminProfile,
       routes: {
         '/': (context) => const LoginScreen(), // Default route
         AppRoutes.first: (context) => const GetStartedScreen(),

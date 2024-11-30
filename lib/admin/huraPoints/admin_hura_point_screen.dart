@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/admin/huraPoints/add_point_screen.dart';
-import 'package:myapp/admin/huraPoints/edit_point_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:myapp/admin/huraPoints/leaderboard_widget.dart';
+import 'package:myapp/admin/huraPoints/reward_widget.dart';
+import 'package:myapp/providers/quest_provider.dart'; // Import QuestProvider
+import 'package:provider/provider.dart'; // Importing provider for context.watch
 
-import '../../providers/progress_provider.dart';
-import 'leaderboard_widget.dart';
 import 'quest_widget.dart';
-import 'reward_widget.dart';
+import 'edit_point_screen.dart'; // Assuming this is the screen for editing quests
+import 'add_point_screen.dart'; // Assuming this is the screen for adding quests
 
 class AdminHuraPointScreen extends StatefulWidget {
   const AdminHuraPointScreen({super.key});
@@ -17,20 +17,15 @@ class AdminHuraPointScreen extends StatefulWidget {
 
 class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
   int _currentIndex = 0;
-  final PointProvider pointProvider = PointProvider();
 
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
-      pointProvider.selectedCategory = pointProvider.categories[index];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final progressProvider = context.watch<ProgressProvider>();
-    final progress = progressProvider.progress;
-
     return Scaffold(
       appBar: _buildAppBar(context),
       body: SingleChildScrollView(
@@ -39,11 +34,9 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildProgressBar(context, progress),
-              const SizedBox(height: 14.0),
               _buildCategoryButtons(),
               const SizedBox(height: 14.0),
-              _buildCategoryContent(),
+              _buildCategoryContent(context),
             ],
           ),
         ),
@@ -60,81 +53,47 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
         style: TextStyle(color: Colors.black, fontSize: 14),
       ),
       actions: [
+        // Edit icon
         IconButton(
           icon: const Icon(Icons.edit_square, color: Colors.green),
-          onPressed: () => _navigateTo(context, const EditPointScreen()),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const EditPointScreen()),
+            );
+          },
         ),
+        // Add icon
         IconButton(
           icon: const Icon(Icons.add_circle, color: Colors.red),
-          onPressed: () => _navigateTo(context, const AddPointScreen()),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddPointScreen()),
+            );
+          },
         ),
       ],
-    );
-  }
-
-  Widget _buildProgressBar(BuildContext context, double progress) {
-    return Container(
-      height: 100.0,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Stack(
-        children: [
-          const Positioned(
-            left: 10.0,
-            top: 15.0,
-            child: CircleAvatar(
-              radius: 17.0,
-              backgroundColor: Colors.white,
-            ),
-          ),
-          Positioned(
-            left: 10.0,
-            top: 58.0,
-            child: Container(
-              height: 10.0,
-              width: MediaQuery.of(context).size.width * 0.78,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(7.0),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 10.0,
-            top: 58.0,
-            child: Container(
-              height: 10.0,
-              width: (MediaQuery.of(context).size.width * 0.78) * progress,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
   Widget _buildCategoryButtons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(pointProvider.categories.length, (index) {
+      children: ['Rank', 'Quest', 'Reward'].map((category) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: _buildButton(pointProvider.categories[index], index),
+          child: _buildButton(category),
         );
-      }),
+      }).toList(),
     );
   }
 
-  Widget _buildButton(String text, int index) {
-    final isSelected = _currentIndex == index;
+  Widget _buildButton(String text) {
+    final isSelected =
+        _currentIndex == ['Rank', 'Quest', 'Reward'].indexOf(text);
     return GestureDetector(
-      onTap: () => _onTabTapped(index),
+      onTap: () => _onTabTapped(['Rank', 'Quest', 'Reward'].indexOf(text)),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
         decoration: BoxDecoration(
@@ -152,33 +111,20 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
     );
   }
 
-  Widget _buildCategoryContent() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: pointProvider.getPostWidgets(context),
-    );
-  }
+  Widget _buildCategoryContent(BuildContext context) {
+    return Consumer<QuestProvider>(builder: (context, questProvider, child) {
+      var quests = questProvider.quests;
 
-  void _navigateTo(BuildContext context, Widget screen) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
-  }
-}
-
-class PointProvider {
-  String selectedCategory = 'Rank';
-
-  final List<String> categories = ['Rank', 'Quest', 'Reward'];
-
-  List<Widget> getPostWidgets(BuildContext context) {
-    switch (selectedCategory) {
-      case 'Rank':
-        return [buildContainerLeader(context, "Leaderboard")];
-      case 'Quest':
-        return [buildContainerQuest(context, "Quest", 0)];
-      case 'Reward':
-        return [buildContainerReward(context, "Reward", 0)];
-      default:
-        return [];
-    }
+      switch (_currentIndex) {
+        case 0:
+          return buildContainerLeader(context, "Leaderboard");
+        case 1:
+          return buildContainerQuest(context, "Quest", quests); // Pass quests directly
+        case 2:
+          return buildContainerReward(context, "Reward", 0);
+        default:
+          return Container();
+      }
+    });
   }
 }

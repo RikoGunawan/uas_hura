@@ -166,7 +166,7 @@ class AdminHuraEventScreen extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const EditHuraEventAdmin()),
+                                            const EditHuraEvent()),
                                   );
                                 },
                               ),

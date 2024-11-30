@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/models/quest.dart';
 
-Widget buildContainerQuest(BuildContext context, String type, double progress) {
+Widget buildContainerQuest(BuildContext context, String type, List<Quest> quests) {
   return GestureDetector(
     child: Container(
       decoration: BoxDecoration(
@@ -8,13 +9,12 @@ Widget buildContainerQuest(BuildContext context, String type, double progress) {
         borderRadius: BorderRadius.circular(10.0),
       ),
       padding: const EdgeInsets.all(16.0),
-      width: MediaQuery.of(context).size.width * 0.85, // 90% dari lebar layar
+      width: MediaQuery.of(context).size.width * 0.85, // 85% of screen width
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height *
-            0.5, // Maksimal 50% dari tinggi layar
+        maxHeight: MediaQuery.of(context).size.height * 0.5, // Max height 50% of screen height
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // Mengatur ukuran minimum
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
             'Hura Point',
@@ -26,8 +26,9 @@ Widget buildContainerQuest(BuildContext context, String type, double progress) {
           const SizedBox(height: 16.0),
           Expanded(
             child: ListView.builder(
-              itemCount: 5,
+              itemCount: quests.length,
               itemBuilder: (context, index) {
+                final quest = quests[index];
                 return Column(
                   children: [
                     Row(
@@ -38,11 +39,12 @@ Widget buildContainerQuest(BuildContext context, String type, double progress) {
                         ),
                         const SizedBox(width: 8.0),
                         Text(
-                            style: TextStyle(fontSize: 12),
-                            'Quest ${index + 1}'), // Menampilkan nama quest
+                          style: const TextStyle(fontSize: 12),
+                          'Quest ${quest.id}: ${quest.name}', // Display quest ID and name
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 8.0), // Gap between players
+                    const SizedBox(height: 8.0), // Gap between quests
                   ],
                 );
               },

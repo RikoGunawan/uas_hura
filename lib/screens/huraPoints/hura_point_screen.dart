@@ -49,6 +49,11 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
   }
 
   Widget _buildProgressBar(BuildContext context, double progress) {
+    double maxProgress = 1000.0; // Maximum progress value
+
+    // Calculate the current progress in terms of the maximum (0-1000 range)
+    int currentProgress = (progress * maxProgress).toInt();
+
     return Container(
       height: 100.0,
       width: double.infinity,
@@ -93,6 +98,20 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
               ),
             ),
           ),
+          // Displaying the progress as "current/1000"
+          Positioned(
+            left: MediaQuery.of(context).size.width * 0.78 +
+                10.0, // Adjust for text placement
+            top: 55.0, // Adjust to align with progress bar
+            child: Text(
+              '$currentProgress/$maxProgress', // Display text
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 14.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
         ],
       ),
     );

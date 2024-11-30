@@ -1,6 +1,8 @@
+// models/quest.dart
 class Quest {
-  final String name;
-  final double progress;
+  final int id;
+  String name;
+  double progress;
 
-  Quest({required this.name, required this.progress});
+  Quest({required this.id, required this.name, required this.progress});
 }
