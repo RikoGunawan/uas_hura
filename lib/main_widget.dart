@@ -7,7 +7,6 @@ import 'providers/event_provider.dart';
 
 import 'screens/huraEvents/event_screen.dart';
 import 'screens/home/home_screen.dart';
-import 'screens/huraPoints/hura_point_screen.dart';
 import 'screens/notification_screen.dart';
 import 'screens/profile/profile_screen.dart';
 

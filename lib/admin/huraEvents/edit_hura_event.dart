@@ -6,10 +6,10 @@ class EditHuraEvent extends StatefulWidget {
   final List<Event> events; // Referensi list event
 
   const EditHuraEvent({
-    super.key,
+    Key? key,
     required this.event,
     required this.events,
-  });
+  }) : super(key: key);
 
   @override
   State<EditHuraEvent> createState() => _EditHuraEventState();
@@ -61,7 +61,7 @@ class _EditHuraEventState extends State<EditHuraEvent> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Event Has Successfully Updated!'),
+          content: Text('Event has successfully updated!'),
         ),
       );
 
