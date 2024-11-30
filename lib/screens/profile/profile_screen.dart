@@ -53,7 +53,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
 
     try {
-      List<Post> fetchedPosts = await SupabaseService.getAllPosts();
+      // Ambil userId dari profil
+      final String currentUserId =
+          profile?.id ?? Supabase.instance.client.auth.currentUser!.id;
+
+      // Ambil postingan berdasarkan userId
+      List<Post> fetchedPosts =
+          await SupabaseService.getPostsByUserId(currentUserId);
+
       setState(() {
         posts = fetchedPosts;
       });

@@ -67,20 +67,19 @@ class SupabaseService {
     }
   }
 
-  static Future<Post?> getPostById(String postId) async {
+  static Future<List<Post>> getPostsByUserId(String userId) async {
     try {
-      final data = await Supabase.instance.client.from('posts').select().match(
-          {'id': postId}).maybeSingle(); // Use maybeSingle to fetch one post
+      final data = await Supabase.instance.client
+          .from('posts')
+          .select()
+          .eq('user_id', userId);
 
-      if (data != null) {
-        return Post.fromJson(data); // Convert the fetched data to Post2
-      } else {
-        print('Post not found for ID: $postId');
-        return null; // Return null if no post is found
-      }
+      return (data as List<dynamic>)
+          .map((data) => Post.fromJson(data as Map<String, dynamic>))
+          .toList();
     } catch (e) {
-      print('Error fetching post: $e');
-      return null; // Return null in case of an error
+      print('Error fetching posts by user ID: $e');
+      return [];
     }
   }
 
