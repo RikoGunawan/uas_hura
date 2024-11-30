@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'models/event.dart';
-import 'providers/event_provider.dart';
-import 'screens/huraEvents/event_detail_screen.dart';
+import '../models/event.dart';
+import '../providers/event_provider.dart';
+import '../screens/huraEvents/event_detail_screen.dart';
 
 class MainEventWidget extends StatelessWidget {
   const MainEventWidget({super.key});

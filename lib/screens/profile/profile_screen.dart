@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../profile_header_widget.dart';
+import '../../widgets/profile_header_widget.dart';
 
 import '../../models/post.dart';
 import '../../models/profile.dart';

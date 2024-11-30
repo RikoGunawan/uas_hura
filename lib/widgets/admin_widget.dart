@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'admin/huraEvents/edit_hura_event.dart';
+import '../admin/huraEvents/edit_hura_event.dart';
 
 class AdminWidget extends StatelessWidget {
   const AdminWidget({super.key});

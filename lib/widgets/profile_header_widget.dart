@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/profile/settings_screen.dart';
-import 'utils/app_colors.dart';
+import '../screens/profile/settings_screen.dart';
+import '../utils/app_colors.dart';
 
 class ProfileHeaderWidget extends StatelessWidget {
   const ProfileHeaderWidget({super.key});

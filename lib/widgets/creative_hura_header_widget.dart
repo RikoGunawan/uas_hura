@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/notification_screen.dart';
-import 'widgets/notification_icon.dart';
+import '../screens/notification_screen.dart';
+import 'notification_icon.dart';
 
 class CreativeHuraHeaderWidget extends StatelessWidget {
   const CreativeHuraHeaderWidget({super.key});
