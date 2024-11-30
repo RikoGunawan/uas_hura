@@ -19,7 +19,8 @@ Widget buildContainerQuest(BuildContext context, String type, double progress) {
           const Text(
             'Hura Point',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),

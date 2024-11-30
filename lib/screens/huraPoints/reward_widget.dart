@@ -21,7 +21,8 @@ Widget buildContainerReward(
           Text(
             type,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),

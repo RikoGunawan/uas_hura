@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -21,7 +22,7 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
   int _currentIndex = 0;
   Profile? profile;
 
-  final HuraPointCategory pointProvider = HuraPointCategory();
+  final HuraPointCategory huraPointCategory = HuraPointCategory();
   @override
   void initState() {
     super.initState();
@@ -45,7 +46,7 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
-      pointProvider.selectedCategory = pointProvider.categories[index];
+      huraPointCategory.selectedCategory = huraPointCategory.categories[index];
     });
   }
 
@@ -132,7 +133,7 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
               width: (MediaQuery.of(context).size.width * 0.78) *
                   progress, // Sesuai progress
               decoration: BoxDecoration(
-                color: Colors.grey, // Warna progress
+                color: AppColors.primary, // Warna progress
                 borderRadius: BorderRadius.circular(5.0),
               ),
             ),
@@ -143,12 +144,16 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
   }
 
   Widget _buildCategoryButtons() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double horizontalPadding = screenWidth *
+        0.015; // Mengatur padding antar tombol berdasarkan lebar layar
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(pointProvider.categories.length, (index) {
+      children: List.generate(huraPointCategory.categories.length, (index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: _buildButton(pointProvider.categories[index], index),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: _buildButton(huraPointCategory.categories[index], index),
         );
       }),
     );
@@ -167,7 +172,8 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
             color: isSelected ? Colors.white : Colors.black,
           ),
         ),
@@ -179,7 +185,7 @@ class _HuraPointScreenState extends State<HuraPointScreen> {
   Widget _buildCategoryContent() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: pointProvider.getPostWidgets(context),
+      children: huraPointCategory.getPostWidgets(context),
     );
   }
 }

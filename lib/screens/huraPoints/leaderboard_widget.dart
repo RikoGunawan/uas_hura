@@ -22,7 +22,8 @@ Widget buildContainerLeader(BuildContext context, String type) {
           Text(
             type,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),

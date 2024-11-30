@@ -4,8 +4,6 @@ import 'dart:collection';
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
-//~~~ Made by Riko Gunawan ~~~
-// import '../models/cart_item.dart';
 import '../main.dart';
 import '../models/event.dart';
 import '../screens/huraEvents/event_detail_screen.dart';
