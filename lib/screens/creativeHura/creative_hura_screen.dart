@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../utils/app_colors.dart';
 import '../../widgets/creative_hura_header_widget.dart';
 import '../../models/post.dart';
 
@@ -68,6 +69,7 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primary,
       body: FutureBuilder<Profile?>(
         future: _loadProfile(), // Panggil metode untuk memuat profil
         builder: (context, snapshot) {

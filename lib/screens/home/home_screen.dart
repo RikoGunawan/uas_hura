@@ -1,9 +1,47 @@
 import 'package:flutter/material.dart';
 
+import '../../models/post.dart';
+import '../../services/post_service.dart';
+import '../../utils/app_colors.dart';
 import '../../widgets/main_event_widget.dart';
+import '../creativeHura/post_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<Post> posts = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchLimitedPosts();
+  }
+
+  Future<void> _fetchLimitedPosts() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      List<Post> fetchedPosts =
+          await fetchPosts(limit: 3); // Ambil hanya 3 postingan
+      setState(() {
+        posts = fetchedPosts;
+      });
+    } catch (e) {
+      print('Error fetching limited posts: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +80,7 @@ class HomeScreen extends StatelessWidget {
             Stack(
               children: [
                 Container(
-                  color: Colors.red,
+                  color: AppColors.primary,
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                   child: Column(
@@ -57,17 +95,20 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      ListView(
-                        shrinkWrap:
-                            true, // Menambahkan shrinkWrap agar tidak menyebabkan konflik scroll
-                        physics:
-                            const NeverScrollableScrollPhysics(), // Disable scroll khusus untuk ListView
-                        children: const [
-                          CardWidget(),
-                          SizedBox(height: 20),
-                          CardWidget(),
-                        ],
-                      ),
+                      isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : ListView.builder(
+                              shrinkWrap:
+                                  true, // Untuk menyesuaikan tinggi ListView
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: posts.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 20),
+                                  child: PostCard(post: posts[index]),
+                                );
+                              },
+                            ),
                     ],
                   ),
                 ),
@@ -75,61 +116,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class CardWidget extends StatelessWidget {
-  const CardWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 250,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: const Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CircleAvatar(
-                  radius: 15,
-                  backgroundColor: Colors.grey,
-                ),
-                CircleAvatar(
-                  radius: 15,
-                  backgroundColor: Colors.grey,
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(
-                    Icons.favorite,
-                    color: Color.fromARGB(255, 229, 66, 37),
-                    size: 30,
-                  ),
-                  Icon(
-                    Icons.arrow_forward,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
