@@ -1,13 +1,14 @@
-// import 'package:flutter/material.dart';
-// import 'package:myapp/admin/huraPoints/add_point_screen.dart';
-// import 'package:myapp/admin/huraPoints/edit_point_screen.dart';
-// import 'package:myapp/providers/quest_provider.dart';
-// import 'package:myapp/screens/huraPoints/reward_widget.dart';
-// import 'package:provider/provider.dart';
-// import 'leaderboard_widget.dart';
-// import 'quest_widget.dart';
-// // Assuming this is the screen for editing quests
-// // Assuming this is the screen for adding quests
+import 'package:flutter/material.dart';
+import 'package:myapp/admin/huraPoints/add_point_screen.dart';
+import 'package:myapp/admin/huraPoints/edit_point_screen.dart';
+import 'package:myapp/screens/huraPoints/reward_widget.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/progress_provider.dart';
+import 'leaderboard_widget.dart';
+import 'quest_widget.dart';
+import 'edit_point_screen.dart'; // Assuming this is the screen for editing quests
+import 'add_point_screen.dart'; // Assuming this is the screen for adding quests
 
 // class AdminHuraPointScreen extends StatefulWidget {
 //   const AdminHuraPointScreen({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/profile_header_widget.dart';
+import 'package:myapp/widgets/profile_header_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/profile.dart';
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/widgets/admin_widget.dart';
+import 'package:myapp/widgets/main_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../main.dart';
 import '../../providers/hura_point_provider.dart';
 import '../../utils/app_colors.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,9 +45,16 @@ class _LoginScreenState extends State<LoginScreen> {
     final role = await _getUserRole();
 
     if (role == 'admin') {
-      Navigator.of(context).pushReplacementNamed('/admin');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => AdminWidget()),
+      );
     } else {
-      Navigator.of(context).pushReplacementNamed('/main');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainWidget()),
+      );
+      ;
     }
   }
 
@@ -281,7 +290,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildRegisterLink() {
     return TextButton(
       onPressed: () {
-        Navigator.of(context).pushNamed(AppRoutes.register);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RegisterScreen()),
+        );
       },
       child: const Text('Don\'t have an account? Register here.'),
     );

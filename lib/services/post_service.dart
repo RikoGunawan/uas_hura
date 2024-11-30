@@ -153,16 +153,14 @@ Future<void> uploadAndCreatePostWeb(Uint8List imageBytes, Post post) async {
       userId: user.id,
       userImageUrl:
           userProfile.imageurl ?? '', // Assign user_image_url from profile
-      width: dimensions['width'] != null
-          ? dimensions['width']!.toDouble()
-          : 0.0,
-      height: dimensions['height'] != null
-          ? dimensions['height']!.toDouble()
-          : 0.0,
+      width:
+          dimensions['width'] != null ? dimensions['width']!.toDouble() : 0.0,
+      height:
+          dimensions['height'] != null ? dimensions['height']!.toDouble() : 0.0,
     );
 
     await createPost(newPost); // Call createPost
-        // Fetch image data to calculate dimensions
+    // Fetch image data to calculate dimensions
   } else {
     print('Failed to upload image, post creation aborted.');
   }
@@ -281,5 +279,14 @@ void loadImage(String imageUrl) async {
     // Display the image using Image.memory or any other widget
   } catch (e) {
     print('Error: $e');
+  }
+}
+
+Future<List<Post>> fetchPosts({int limit = 3}) async {
+  try {
+    final fetchedPosts = await getAllPosts();
+    return fetchedPosts.take(limit).toList(); // Ambil hanya sebanyak `limit`
+  } catch (e) {
+    throw Exception('Error fetching posts: $e');
   }
 }
