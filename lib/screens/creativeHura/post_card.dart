@@ -4,7 +4,7 @@ import 'package:myapp/services/supabase_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/post.dart';
 import '../../models/profile.dart';
-import '../../providers/like_provider.dart';
+import '../../services/like_service.dart';
 import 'post_screen.dart';
 
 class PostCard extends StatefulWidget {

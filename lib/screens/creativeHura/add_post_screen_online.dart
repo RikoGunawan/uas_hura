@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../models/post.dart';
 import '../../models/profile.dart';
-import '../../providers/post_provider.dart';
+import '../../services/post_service.dart';
 
 class AddPostScreenOnline extends StatefulWidget {
   const AddPostScreenOnline({super.key});

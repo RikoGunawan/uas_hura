@@ -4,7 +4,7 @@ import '../../creative_hura_header_widget.dart';
 import '../../models/post.dart';
 
 import '../../models/profile.dart';
-import '../../providers/post_provider.dart';
+import '../../services/post_service.dart';
 import '../../services/supabase_service.dart';
 import 'add_post_screen_online.dart';
 import 'post_card.dart';
