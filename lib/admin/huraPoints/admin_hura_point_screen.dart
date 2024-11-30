@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/admin/huraPoints/add_point_screen.dart';
 import 'package:myapp/admin/huraPoints/edit_point_screen.dart';
+import 'package:myapp/screens/huraPoints/reward_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/progress_provider.dart';
@@ -38,7 +39,6 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildProgressBar(context, progress),
               const SizedBox(height: 14.0),
               _buildCategoryButtons(),
               const SizedBox(height: 14.0),
