@@ -12,7 +12,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'providers/event_provider.dart';
 import 'providers/hura_point_provider.dart';
 
-import 'providers/progress_provider.dart';
 import 'screens/home/login_screen.dart';
 import 'screens/home/register_screen.dart';
 import 'main_widget.dart';
@@ -46,8 +45,11 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => HuraPointProvider()),
+<<<<<<< HEAD
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
         ChangeNotifierProvider(create: (_) => QuestProvider(), )
+=======
+>>>>>>> 973f1ac581c1c9494bf399565fa16c44d1b64be5
       ],
       child: const MyApp(),
     ),

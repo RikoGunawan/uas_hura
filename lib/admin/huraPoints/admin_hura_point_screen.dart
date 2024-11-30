@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/admin/huraPoints/leaderboard_widget.dart';
-import 'package:myapp/admin/huraPoints/reward_widget.dart';
-import 'package:myapp/providers/quest_provider.dart'; // Import QuestProvider
-import 'package:provider/provider.dart'; // Importing provider for context.watch
+import 'package:myapp/admin/huraPoints/add_point_screen.dart';
+import 'package:myapp/admin/huraPoints/edit_point_screen.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/progress_provider.dart';
+import 'leaderboard_widget.dart';
 import 'quest_widget.dart';
 import 'edit_point_screen.dart'; // Assuming this is the screen for editing quests
 import 'add_point_screen.dart'; // Assuming this is the screen for adding quests
@@ -26,6 +27,9 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final progressProvider = context.watch<ProgressProvider>();
+    final progress = progressProvider.progress;
+
     return Scaffold(
       appBar: _buildAppBar(context),
       body: SingleChildScrollView(
@@ -34,6 +38,8 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _buildProgressBar(context, progress),
+              const SizedBox(height: 14.0),
               _buildCategoryButtons(),
               const SizedBox(height: 14.0),
               _buildCategoryContent(context),

@@ -5,13 +5,41 @@ import '../models/hura_point.dart';
 
 class HuraPointProvider extends ChangeNotifier {
   HuraPointModel huraPoint = HuraPointModel(
-    currentPoints: 0,
-    dailyLimit: 10,
-    totalPoints: 0,
+    currentPoints: 10,
+    dailyLimit: 20,
+    totalPoints: 100,
   );
 
-  DateTime? _lastLoginDate; // Tanggal login terakhir (null jika belum login)
+  DateTime? _lastLoginDate;
 
+  // Getter untuk progress
+  double get progress {
+    return (huraPoint.dailyLimit > 0)
+        ? huraPoint.currentPoints / huraPoint.dailyLimit
+        : 0.0;
+  }
+
+  // Update poin harian
+  void updateCurrentPoints(int newPoints) {
+    if (newPoints <= huraPoint.dailyLimit) {
+      huraPoint.currentPoints = newPoints;
+      notifyListeners();
+    } else {
+      throw Exception("Current points cannot exceed the daily limit!");
+    }
+  }
+
+  void updateDailyLimit(int newLimit) {
+    huraPoint.dailyLimit = newLimit;
+    notifyListeners();
+  }
+
+  void updateTotalPoints(int newTotal) {
+    huraPoint.totalPoints = newTotal;
+    notifyListeners();
+  }
+
+  // Tambah poin harian
   void addDailyPoints(int points) {
     huraPoint.addPoints(points);
     notifyListeners();
@@ -27,14 +55,13 @@ class HuraPointProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Cek apakah login di hari yang sama
-  void updateDailyPointsOnLogin() async {
+  // Login harian: update poin dan simpan tanggal
+  Future<void> updateDailyPointsOnLogin() async {
     final today = DateTime.now();
     if (_lastLoginDate == null || !_isSameDay(_lastLoginDate!, today)) {
       addDailyPoints(1);
       _lastLoginDate = today;
 
-      // Simpan tanggal ke SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('lastLoginDate', today.toIso8601String());
 
@@ -42,6 +69,7 @@ class HuraPointProvider extends ChangeNotifier {
     }
   }
 
+  // Load tanggal login terakhir dari SharedPreferences
   Future<void> loadLastLoginDate() async {
     final prefs = await SharedPreferences.getInstance();
     final savedDate = prefs.getString('lastLoginDate');
@@ -50,7 +78,7 @@ class HuraPointProvider extends ChangeNotifier {
     }
   }
 
-  // Fungsi helper untuk mengecek apakah dua tanggal ada di hari yang sama
+  // Fungsi helper untuk cek apakah dua tanggal sama
   bool _isSameDay(DateTime date1, DateTime date2) {
     return date1.year == date2.year &&
         date1.month == date2.month &&
