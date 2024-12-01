@@ -5,9 +5,9 @@ class AddHuraEvent extends StatefulWidget {
   final List<Event> events; // Referensi list event
 
   const AddHuraEvent({
-    Key? key,
+    super.key,
     required this.events,
-  }) : super(key: key);
+  });
 
   @override
   State<AddHuraEvent> createState() => _AddHuraEventState();

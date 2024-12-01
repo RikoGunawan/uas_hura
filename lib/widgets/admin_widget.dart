@@ -1,50 +1,92 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/admin/huraEvents/edit_hura_event.dart';
-import 'package:myapp/providers/event_provider.dart';
-import 'package:myapp/screens/huraEvents/edit_hura_event.dart';
-import 'package:provider/provider.dart';
+import 'package:myapp/admin/admin_profile.dart';
+import 'package:myapp/admin/data_pengunjung.dart';
+import 'package:myapp/admin/huraEvents/admin_hura_event_screen.dart';
+import 'package:myapp/admin/huraPoints/admin_hura_point_screen.dart';
+import 'package:myapp/main_widget.dart';
 
-class AdminWidget extends StatelessWidget {
+class AdminWidget extends StatefulWidget {
   const AdminWidget({super.key});
 
   @override
+  State<AdminWidget> createState() => _AdminWidgetState();
+}
+
+class _AdminWidgetState extends State<AdminWidget> {
+  int _currentIndex = 0;
+
+  final List<Widget> _pages = [
+    const AdminHuraEventScreen(),
+    const AdminHuraPointScreen(),
+    const DataPengunjung(),
+    const AdminProfileScreen(),
+  ];
+
+  final List<String> _titles = [
+    'Hura Event Admin',
+    'Hura Point Admin',
+    'Data Pengunjung',
+    'Admin Profile',
+  ];
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final eventProvider = Provider.of<EventProvider>(context, listen: false);
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Dashboard'),
+      appBar: CustomAppBar(
+        title: _titles[_currentIndex],
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Pastikan `event` dipilih dengan benar.
-            final event = eventProvider.events.isNotEmpty
-                ? eventProvider.events.first
-                : null;
+      body: _pages[_currentIndex],
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTabTapped: _onTabTapped,
+      ),
+    );
+  }
+}
 
-            if (event != null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditHuraEvent(
-                    event: event,
-                    events: eventProvider.events,
-                  ),
-                ),
-              );
-            } else {
-              // Tampilkan pesan jika tidak ada event
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('No events available to edit.'),
-                ),
-              );
-            }
-          },
-          child: const Text('Manage Hura Events'),
+// Custom Bottom Navigation Bar
+class CustomBottomNavigationBar extends StatelessWidget {
+  final int currentIndex;
+  final Function(int) onTabTapped;
+
+  const CustomBottomNavigationBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTabTapped,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      currentIndex: currentIndex,
+      onTap: onTabTapped,
+      selectedItemColor: Colors.green,
+      unselectedItemColor: Colors.grey,
+      type: BottomNavigationBarType.fixed,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.event),
+          label: 'Hura Event',
         ),
-      ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.point_of_sale),
+          label: 'Hura Point',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.people),
+          label: 'Data Pengunjung',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ],
     );
   }
 }

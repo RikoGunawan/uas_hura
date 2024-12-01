@@ -6,10 +6,10 @@ class EditHuraEvent extends StatefulWidget {
   final List<Event> events; // Referensi list event
 
   const EditHuraEvent({
-    Key? key,
+    super.key,
     required this.event,
     required this.events,
-  }) : super(key: key);
+  });
 
   @override
   State<EditHuraEvent> createState() => _EditHuraEventState();
