@@ -1,6 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/providers/hura_point_provider.dart';
+import 'package:provider/provider.dart'; // Make sure to add provider to your dependencies
+import 'package:shared_preferences/shared_preferences.dart';
 
-Widget buildContainerReward(BuildContext context, String type) {
+class RewardScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => HuraPointProvider(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Rewards"),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const Text(
+                'Available Rewards',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              Consumer<HuraPointProvider>(
+                builder: (context, provider, child) {
+                  return buildContainerReward(
+                    context,
+                    'Reward',
+                    provider.progress,
+                    provider.huraPoint.totalPoints,
+                    provider.huraPoint.currentPoints,
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Modify the reward widget to use data from the provider
+Widget buildContainerReward(BuildContext context, String type, double progress,
+    int totalPoints, int currentPoints) {
   // Define the reward data
   final List<Map<String, String>> rewardList = [
     {'points': '50', 'reward': 'Tiket gratis'},
@@ -11,16 +53,8 @@ Widget buildContainerReward(BuildContext context, String type) {
   return GestureDetector(
     child: Container(
       decoration: BoxDecoration(
-        color: Colors.grey[200], // Lighter background color
+        color: Colors.grey[300],
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3), // Shadow position
-          ),
-        ],
       ),
       padding: const EdgeInsets.all(16.0),
       width: MediaQuery.of(context).size.width * 0.85, // 85% of screen width
@@ -46,8 +80,9 @@ Widget buildContainerReward(BuildContext context, String type) {
               itemCount: rewardList.length,
               itemBuilder: (context, index) {
                 final reward = rewardList[index];
-                bool isClaimed =
-                    index % 2 == 0; // Simulate claim status (for illustration)
+                bool isClaimed = currentPoints >=
+                    int.parse(reward[
+                        'points']!); // Check if points are enough for claim
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),

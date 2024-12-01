@@ -139,7 +139,7 @@ class HuraPointCategory {
       case 'Quest':
         return [buildContainerQuest(context, "Quest", 0)];
       case 'Reward':
-        return [buildContainerReward(context, "Reward")];
+        return [buildContainerReward(context, "Reward", 0, 0, 0)];
       default:
         return [];
     }
