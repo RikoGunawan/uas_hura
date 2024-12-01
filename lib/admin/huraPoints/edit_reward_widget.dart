@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/providers/hura_point_provider.dart';
 import 'package:provider/provider.dart'; // Make sure to add provider to your dependencies
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RewardScreen extends StatelessWidget {
+  const RewardScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(

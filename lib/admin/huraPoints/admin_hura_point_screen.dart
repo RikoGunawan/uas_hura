@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:myapp/admin/huraPoints/edit_leaderboard_widget.dart';
 import 'package:myapp/admin/huraPoints/edit_quest_widget.dart';
 import 'package:myapp/admin/huraPoints/edit_reward_widget.dart';
-import 'package:myapp/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

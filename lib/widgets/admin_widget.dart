@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/admin/admin_profile.dart';
 import 'package:myapp/admin/data_pengunjung.dart';
@@ -45,25 +46,25 @@ class _AdminWidgetState extends State<AdminWidget> {
       body: _pages[_currentIndex],
       currentIndex: _currentIndex,
       onTabTapped: _onTabTapped,
-      title: _titles[_currentIndex], // Send the title based on the current tab
+      title: _titles[_currentIndex],
     );
   }
 }
 
-//---------------------------------------- Admin Widget Template
+//---------------------------------------- Main Widget Template
 
 class MainWidgetTemplate extends StatelessWidget {
-  final Widget body; // Screen content
-  final int currentIndex; // Index of selected tab
-  final Function(int) onTabTapped; // Callback for tab navigation
-  final String title; // Title for the AppBar
+  final Widget body;
+  final int currentIndex;
+  final Function(int) onTabTapped;
+  final String title;
 
   const MainWidgetTemplate({
     super.key,
     required this.body,
     required this.currentIndex,
     required this.onTabTapped,
-    required this.title, // Title of the AppBar
+    required this.title,
   });
 
   @override
@@ -83,7 +84,7 @@ class MainWidgetTemplate extends StatelessWidget {
   }
 }
 
-// ----------------------------------------- Custom AppBar for Admin
+//---------------------------------------- Custom AppBar
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -97,8 +98,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       flexibleSpace: Stack(
         children: [
           Positioned(
-            left: 20,
-            top: 40, // Adjust the position for mobile and web
+            left: kIsWeb ? 40 : 20,
+            top: kIsWeb ? 20 : 40,
             child: Text(
               title,
               style: const TextStyle(
@@ -110,8 +111,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           if (title == 'Hura Event') ...[
             Positioned(
-              right: 20,
-              top: 32,
+              right: kIsWeb ? 40 : 20,
+              top: kIsWeb ? 16 : 32,
               child: IconButton(
                 icon: const Icon(Icons.add_circle, color: Colors.red),
                 onPressed: () {
@@ -119,7 +120,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => AddHuraEvent(
-                        events: Provider.of<EventProvider>(context, listen: false).events,
+                        events:
+                            Provider.of<EventProvider>(context, listen: false)
+                                .events,
                       ),
                     ),
                   );
@@ -128,8 +131,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ] else if (title == 'Hura Point') ...[
             Positioned(
-              right: 20,
-              top: 32,
+              right: kIsWeb ? 40 : 20,
+              top: kIsWeb ? 16 : 32,
               child: IconButton(
                 icon: const Icon(Icons.edit_square, color: Colors.green),
                 onPressed: () {
@@ -143,8 +146,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             Positioned(
-              right: 60,
-              top: 32,
+              right: kIsWeb ? 80 : 60,
+              top: kIsWeb ? 16 : 32,
               child: IconButton(
                 icon: const Icon(Icons.add_circle, color: Colors.red),
                 onPressed: () {
@@ -157,7 +160,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 },
               ),
             ),
-          ]
+          ],
         ],
       ),
     );
@@ -167,7 +170,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-//-------------------------------- Bottom Navigation Bar
+//---------------------------------------- Custom Bottom Navigation Bar
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
