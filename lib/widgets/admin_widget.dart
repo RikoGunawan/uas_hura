@@ -41,64 +41,134 @@ class _AdminWidgetState extends State<AdminWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_titles[_currentIndex]),
-        actions: _currentIndex == 0
-            ? [
-                // Tambahkan action khusus untuk HuraEvent
-                IconButton(
-                  icon: const Icon(Icons.add_circle, color: Colors.red),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddHuraEvent(
-                          events: Provider.of<EventProvider>(context, listen: false).events,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ]
-            : _currentIndex == 1
-                ? [
-                    // Tambahkan action khusus untuk HuraPoint
-                    IconButton(
-                      icon: const Icon(Icons.edit_square, color: Colors.green),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const EditPointScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.add_circle, color: Colors.red),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AddPointScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ]
-                : null, // Tidak ada action untuk tab lain
-      ),
+    return MainWidgetTemplate(
       body: _pages[_currentIndex],
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTabTapped: _onTabTapped,
-      ),
+      currentIndex: _currentIndex,
+      onTabTapped: _onTabTapped,
+      title: _titles[_currentIndex], // Send the title based on the current tab
     );
   }
 }
 
-// Custom Bottom Navigation Bar
+//---------------------------------------- Admin Widget Template
+
+class MainWidgetTemplate extends StatelessWidget {
+  final Widget body; // Screen content
+  final int currentIndex; // Index of selected tab
+  final Function(int) onTabTapped; // Callback for tab navigation
+  final String title; // Title for the AppBar
+
+  const MainWidgetTemplate({
+    super.key,
+    required this.body,
+    required this.currentIndex,
+    required this.onTabTapped,
+    required this.title, // Title of the AppBar
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: body,
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: currentIndex,
+        onTabTapped: onTabTapped,
+      ),
+    );
+  }
+
+  _buildAppBar() {
+    return CustomAppBar(title: title);
+  }
+}
+
+// ----------------------------------------- Custom AppBar for Admin
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+
+  const CustomAppBar({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      flexibleSpace: Stack(
+        children: [
+          Positioned(
+            left: 20,
+            top: 40, // Adjust the position for mobile and web
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          if (title == 'Hura Event') ...[
+            Positioned(
+              right: 20,
+              top: 32,
+              child: IconButton(
+                icon: const Icon(Icons.add_circle, color: Colors.red),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddHuraEvent(
+                        events: Provider.of<EventProvider>(context, listen: false).events,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ] else if (title == 'Hura Point') ...[
+            Positioned(
+              right: 20,
+              top: 32,
+              child: IconButton(
+                icon: const Icon(Icons.edit_square, color: Colors.green),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditPointScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Positioned(
+              right: 60,
+              top: 32,
+              child: IconButton(
+                icon: const Icon(Icons.add_circle, color: Colors.red),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddPointScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ]
+        ],
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+//-------------------------------- Bottom Navigation Bar
+
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTabTapped;
@@ -111,30 +181,40 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: currentIndex,
-      onTap: onTabTapped,
-      selectedItemColor: Colors.green,
-      unselectedItemColor: Colors.grey,
-      type: BottomNavigationBarType.fixed,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.event),
-          label: 'Hura Event',
+    return BottomAppBar(
+      height: 50,
+      shape: const CircularNotchedRectangle(),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          _buildBottomNavigationItem(Icons.event, 0),
+          _buildBottomNavigationItem(Icons.point_of_sale, 1),
+          _buildBottomNavigationItem(Icons.people, 2),
+          _buildBottomNavigationItem(Icons.person, 3),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomNavigationItem(IconData icon, int index) {
+    final isSelected = currentIndex == index;
+
+    return GestureDetector(
+      onTap: () => onTabTapped(index),
+      child: Container(
+        padding: const EdgeInsets.all(3.0),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isSelected
+              ? const Color.fromARGB(255, 42, 62, 35)
+              : Colors.transparent,
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.point_of_sale),
-          label: 'Hura Point',
+        child: Icon(
+          icon,
+          color: isSelected ? Colors.white : Colors.black,
+          size: 20,
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.people),
-          label: 'Data Pengunjung',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
-        ),
-      ],
+      ),
     );
   }
 }
