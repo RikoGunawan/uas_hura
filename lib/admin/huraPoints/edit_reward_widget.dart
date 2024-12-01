@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget buildContainerReward(
-    BuildContext context, String type, double progress) {
+Widget buildContainerReward(BuildContext context, String type) {
   // Define the reward data
   final List<Map<String, String>> rewardList = [
     {'points': '50', 'reward': 'Tiket gratis'},
@@ -47,7 +46,8 @@ Widget buildContainerReward(
               itemCount: rewardList.length,
               itemBuilder: (context, index) {
                 final reward = rewardList[index];
-                bool isClaimed = index % 2 == 0; // Simulate claim status (for illustration)
+                bool isClaimed =
+                    index % 2 == 0; // Simulate claim status (for illustration)
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -55,8 +55,7 @@ Widget buildContainerReward(
                     children: [
                       CircleAvatar(
                         radius: 12.0,
-                        backgroundColor:
-                            isClaimed ? Colors.green : Colors.grey,
+                        backgroundColor: isClaimed ? Colors.green : Colors.grey,
                         child: Icon(
                           isClaimed ? Icons.check : Icons.lock,
                           size: 16,
@@ -64,32 +63,8 @@ Widget buildContainerReward(
                         ),
                       ),
                       const SizedBox(width: 12.0),
-                      Expanded(
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 10.0,
-                              decoration: BoxDecoration(
-                                color: Colors.white, // Progress line background
-                                borderRadius: BorderRadius.circular(7.0),
-                              ),
-                            ),
-                            Container(
-                              height: 10.0,
-                              width: MediaQuery.of(context).size.width *
-                                  0.8 *
-                                  progress, // Adjusted progress bar
-                              decoration: BoxDecoration(
-                                color: Colors.blue, // Progress bar color
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 12.0),
                       Text(
-                        '${reward['points']} poin = ${reward['reward']}',
+                        '${reward['points']} poin => ${reward['reward']}',
                         style: const TextStyle(
                           fontSize: 14.0,
                           color: Colors.black,
