@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      home: LoginScreen(),
+      home: AdminWidget(),
     );
   }
 }

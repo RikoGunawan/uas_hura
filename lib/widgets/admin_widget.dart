@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/admin/admin_profile.dart';
 import 'package:myapp/admin/data_pengunjung.dart';
+import 'package:myapp/admin/huraEvents/add_hura_event.dart';
 import 'package:myapp/admin/huraEvents/admin_hura_event_screen.dart';
+import 'package:myapp/admin/huraPoints/add_point_screen.dart';
 import 'package:myapp/admin/huraPoints/admin_hura_point_screen.dart';
-import 'package:myapp/main_widget.dart';
+import 'package:myapp/admin/huraPoints/edit_point_screen.dart';
+import 'package:myapp/providers/event_provider.dart';
+import 'package:provider/provider.dart';
 
 class AdminWidget extends StatefulWidget {
   const AdminWidget({super.key});
@@ -23,10 +27,10 @@ class _AdminWidgetState extends State<AdminWidget> {
   ];
 
   final List<String> _titles = [
-    'Hura Event Admin',
-    'Hura Point Admin',
+    'Hura Event',
+    'Hura Point',
     'Data Pengunjung',
-    'Admin Profile',
+    'Profile',
   ];
 
   void _onTabTapped(int index) {
@@ -38,8 +42,52 @@ class _AdminWidgetState extends State<AdminWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: _titles[_currentIndex],
+      appBar: AppBar(
+        title: Text(_titles[_currentIndex]),
+        actions: _currentIndex == 0
+            ? [
+                // Tambahkan action khusus untuk HuraEvent
+                IconButton(
+                  icon: const Icon(Icons.add_circle, color: Colors.red),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddHuraEvent(
+                          events: Provider.of<EventProvider>(context, listen: false).events,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ]
+            : _currentIndex == 1
+                ? [
+                    // Tambahkan action khusus untuk HuraPoint
+                    IconButton(
+                      icon: const Icon(Icons.edit_square, color: Colors.green),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditPointScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.add_circle, color: Colors.red),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AddPointScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ]
+                : null, // Tidak ada action untuk tab lain
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: CustomBottomNavigationBar(

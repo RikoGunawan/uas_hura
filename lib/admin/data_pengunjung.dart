@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/widgets/profile_header_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/profile.dart';
 
@@ -27,7 +26,8 @@ class _DataPengunjungState extends State<DataPengunjung> {
         final data = await Supabase.instance.client
             .from('profiles')
             .select()
-            .match({'id': user.id}).maybeSingle();
+            .match({'id': user.id})
+            .maybeSingle();
 
         if (data != null) {
           setState(() {
@@ -35,8 +35,7 @@ class _DataPengunjungState extends State<DataPengunjung> {
           });
         }
       } catch (e) {
-        // Handle error if needed
-        print('Error loading profile: $e');
+        debugPrint('Error loading profile: $e');
       } finally {
         setState(() {
           isLoading = false;
@@ -44,7 +43,7 @@ class _DataPengunjungState extends State<DataPengunjung> {
       }
     } else {
       setState(() {
-        isLoading = false; // Handle case when user is null
+        isLoading = false;
       });
     }
   }
@@ -55,52 +54,50 @@ class _DataPengunjungState extends State<DataPengunjung> {
       backgroundColor: Colors.white,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              // Wrap the body with SingleChildScrollView
-              child: Column(
-                children: [
-                  const ProfileHeaderWidget(),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 12, 16),
+          : LayoutBuilder(
+              builder: (context, constraints) {
+                final isSmallScreen = constraints.maxWidth < 600;
+
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        const SizedBox(height: 16.0),
                         const CircleAvatar(
                           backgroundColor: Color.fromARGB(255, 220, 216, 216),
                           radius: 50.0,
                         ),
                         const SizedBox(height: 16.0),
                         _buildProfileName(),
-                        const SizedBox(height: 16.0),
+                        const SizedBox(height: 24.0),
+                        GridView(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: isSmallScreen ? 1 : 2,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: isSmallScreen ? 2.5 : 1.5,
+                          ),
+                          children: [
+                            _buildContainerVisitor(),
+                            _buildContainerData(),
+                          ],
+                        ),
                       ],
                     ),
                   ),
-                  _buildContainerVisitor(),
-                  const SizedBox(height: 16.0),
-                  _buildContainerData(),
-                  const SizedBox(height: 18.0),
-                  _buildContainerData(),
-                  const SizedBox(height: 18.0),
-                  _buildContainerData(),
-                  const SizedBox(height: 18.0),
-                ],
-              ),
+                );
+              },
             ),
     );
   }
 
   Widget _buildProfileName() {
-    if (profile == null) {
-      return const Text(
-        'Profile not available',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      );
-    }
     return Text(
-      profile!.username,
+      profile?.username ?? 'Profile not available',
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
@@ -112,11 +109,10 @@ class _DataPengunjungState extends State<DataPengunjung> {
   Widget _buildContainerVisitor() {
     return GestureDetector(
       onTap: () {
-        // Add your onTap logic if needed
+        // Tambahkan logika onTap jika diperlukan
       },
       child: Container(
-        height: 50, // Responsive height
-        width: 150,
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(10.0),
@@ -135,7 +131,6 @@ class _DataPengunjungState extends State<DataPengunjung> {
   }
 
   Widget _buildContainerData() {
-    // Collect all the profile data
     List<Map<String, String>> profileData = [
       {'label': 'First Name', 'value': profile?.firstName ?? 'No First Name'},
       {'label': 'Last Name', 'value': profile?.lastName ?? 'No Last Name'},
@@ -144,42 +139,37 @@ class _DataPengunjungState extends State<DataPengunjung> {
       {'label': 'Image URL', 'value': profile?.imageurl ?? 'No Image URL'},
     ];
 
-    return GestureDetector(
-      onTap: () {
-        // Add your onTap logic if needed
-      },
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(0),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: profileData.map((data) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                children: [
-                  Text(
-                    '${data['label']}:',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: profileData.map((data) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Row(
+              children: [
+                Text(
+                  '${data['label']}:',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
                   ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: Text(
-                      data['value']!,
-                      style: const TextStyle(fontSize: 14),
-                    ),
+                ),
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: Text(
+                    data['value']!,
+                    style: const TextStyle(fontSize: 14),
                   ),
-                ],
-              ),
-            );
-          }).toList(),
-        ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }
