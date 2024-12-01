@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/admin/huraPoints/edit_leaderboard_widget.dart';
+import 'package:myapp/admin/huraPoints/edit_quest_widget.dart';
+import 'package:myapp/admin/huraPoints/edit_reward_widget.dart';
+import 'package:myapp/utils/app_colors.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../models/profile.dart';
+import '../../providers/hura_point_provider.dart';
+import '../../services/supabase_service.dart';
+
 
 class AdminHuraPointScreen extends StatefulWidget {
-  const AdminHuraPointScreen({super.key});
+  final String? userId;
+  const AdminHuraPointScreen({super.key, this.userId});
 
   @override
   State<AdminHuraPointScreen> createState() => _AdminHuraPointScreenState();
@@ -9,65 +21,162 @@ class AdminHuraPointScreen extends StatefulWidget {
 
 class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
   int _currentIndex = 0;
+  Profile? profile;
 
-  // Fungsi untuk mengubah tab
+  final HuraPointCategory huraPointCategory = HuraPointCategory();
+  @override
+  void initState() {
+    super.initState();
+    _loadProfile();
+  }
+
+  Future<void> _loadProfile() async {
+    try {
+      final data = await SupabaseService.loadProfile(
+          widget.userId ?? Supabase.instance.client.auth.currentUser!.id);
+      if (data != null) {
+        setState(() {
+          profile = Profile.fromJson(data);
+        });
+      }
+    } catch (e) {
+      print('Error loading profile: $e');
+    }
+  }
+
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
+      huraPointCategory.selectedCategory = huraPointCategory.categories[index];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          const SizedBox(height: 16.0),
-          // Tombol kategori
-          _buildCategoryButtons(),
-          const SizedBox(height: 16.0),
-          // Konten kategori
-          Expanded(
-            child: Center(
-              child: _buildCategoryContent(context),
-            ),
+    // Ambil HuraPointProvider dari context
+    final huraPointProvider = Provider.of<HuraPointProvider>(context);
+
+    // Sederhanakan akses atribut dengan variabel lokal
+    final currentPoints = huraPointProvider.huraPoint.currentPoints;
+    final dailyLimit = huraPointProvider.huraPoint.dailyLimit;
+    final progress = huraPointProvider.progress;
+
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Panggil progress bar
+              _buildProgressBar(context, currentPoints, dailyLimit, progress),
+              const SizedBox(height: 14.0),
+              _buildCategoryButtons(),
+              const SizedBox(height: 14.0),
+              _buildCategoryContent(),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  // Widget untuk kategori tombol
-  Widget _buildCategoryButtons() {
-    const categories = ['Rank', 'Quest', 'Reward'];
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: categories.map((category) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: _buildButton(category, categories.indexOf(category)),
-        );
-      }).toList(),
+  Widget _buildProgressBar(BuildContext context, int currentPoints,
+      int dailyLimit, double progress) {
+    return Center(
+      child: Container(
+        height: 100.0,
+        width: MediaQuery.of(context).size.width * 0.85,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              left: 10.0,
+              top: 15.0,
+              child: CircleAvatar(
+                radius: 17.0,
+                backgroundColor: Colors.grey,
+                backgroundImage:
+                    profile?.imageurl != null && profile!.imageurl.isNotEmpty
+                        ? NetworkImage(profile!.imageurl)
+                        : null,
+              ),
+            ),
+            Positioned(
+              left: 48.0,
+              top: 25.0,
+              child: Text(
+                'Daily Points: $currentPoints / $dailyLimit',
+                style:
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              ),
+            ),
+            // Garis putih latar belakang
+            Positioned(
+              left: 10.0,
+              top: 58.0,
+              child: Container(
+                height: 10.0, // Tinggi garis putih
+                width: MediaQuery.of(context).size.width * 0.78, // Lebar penuh
+                decoration: BoxDecoration(
+                  color: Colors.white, // Garis putih
+                  borderRadius: BorderRadius.circular(7.0),
+                ),
+              ),
+            ),
+            // Linear progress bar
+            Positioned(
+              left: 10.0,
+              top: 58.0,
+              child: Container(
+                height: 10.0, // Tinggi progress bar
+                width: (MediaQuery.of(context).size.width * 0.78) *
+                    progress, // Sesuai progress
+                decoration: BoxDecoration(
+                  color: AppColors.primary, // Warna progress
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  // Tombol kategori
+  Widget _buildCategoryButtons() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double horizontalPadding = screenWidth *
+        0.015; // Mengatur padding antar tombol berdasarkan lebar layar
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(huraPointCategory.categories.length, (index) {
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: _buildButton(huraPointCategory.categories[index], index),
+        );
+      }),
+    );
+  }
+
   Widget _buildButton(String text, int index) {
     final isSelected = _currentIndex == index;
     return GestureDetector(
       onTap: () => _onTabTapped(index),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
         decoration: BoxDecoration(
           color: isSelected ? Colors.red : Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.red, width: 1.0),
         ),
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 11,
             fontWeight: FontWeight.bold,
             color: isSelected ? Colors.white : Colors.black,
           ),
@@ -76,121 +185,30 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
     );
   }
 
-  // Konten kategori berdasarkan tab yang dipilih
-  Widget _buildCategoryContent(BuildContext context) {
-    switch (_currentIndex) {
-      case 0:
-        return buildContainerLeader(context, "Leaderboard");
-      case 1:
-        return buildContainerQuest(context, "Quest", []);
-      case 2:
-        return buildContainerReward(context, "Reward", 0);
-      default:
-        return const SizedBox.shrink();
-    }
+  // Widget untuk menyimpan isi dari setiap category content
+  Widget _buildCategoryContent() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: huraPointCategory.getPostWidgets(context),
+    );
   }
 }
 
-// Fungsi untuk membangun tampilan leaderboard
-Widget buildContainerLeader(BuildContext context, String type) {
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.grey[300],
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-    padding: const EdgeInsets.all(16.0),
-    width: MediaQuery.of(context).size.width * 0.85,
-    constraints: BoxConstraints(
-      maxHeight: MediaQuery.of(context).size.height * 0.5,
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          type,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Expanded(
-          child: ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 12.0,
-                      backgroundColor: Colors.white,
-                    ),
-                    const SizedBox(width: 8.0),
-                    Text(
-                      'Username ${index + 1}',
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    const Spacer(),
-                    Text(
-                      '${1000 - index}',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    ),
-  );
-}
+class HuraPointCategory {
+  String selectedCategory = 'Rank';
 
-// Fungsi untuk membangun tampilan quest (dummy)
-Widget buildContainerQuest(BuildContext context, String type, List quests) {
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.grey[300],
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-    padding: const EdgeInsets.all(16.0),
-    width: MediaQuery.of(context).size.width * 0.85,
-    child: Center(
-      child: Text(
-        type,
-        style: const TextStyle(
-          fontSize: 16,
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  );
-}
+  final List<String> categories = ['Rank', 'Quest', 'Reward'];
 
-// Fungsi untuk membangun tampilan reward (dummy)
-Widget buildContainerReward(BuildContext context, String type, int rewardCount) {
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.grey[300],
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-    padding: const EdgeInsets.all(16.0),
-    width: MediaQuery.of(context).size.width * 0.85,
-    child: Center(
-      child: Text(
-        type,
-        style: const TextStyle(
-          fontSize: 16,
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  );
+  List<Widget> getPostWidgets(BuildContext context) {
+    switch (selectedCategory) {
+      case 'Rank':
+        return [buildContainerLeader(context, "Leaderboard")];
+      case 'Quest':
+        return [buildContainerQuest(context, "Quest", 0)];
+      case 'Reward':
+        return [buildContainerReward(context, "Reward", 0)];
+      default:
+        return [];
+    }
+  }
 }
