@@ -34,17 +34,18 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // Fetch user role from Supabase
-  Future<String?> _getUserRole() async {
+  // Fetch user email from Supabase
+  Future<String?> _getUserEmail() async {
     final user = Supabase.instance.client.auth.currentUser;
-    return user?.userMetadata?['role'];
+    print("Current User Metadata: ${user?.userMetadata}");
+    return user?.userMetadata?['email'];
   }
 
-  // Handle navigation based on user role
+  // Handle navigation based on user email
   Future<void> _handleNavigation() async {
-    final role = await _getUserRole();
+    final email = await _getUserEmail();
 
-    if (role == 'admin') {
+    if (email == 'admin1@test.com') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => AdminWidget()),
@@ -79,8 +80,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
           // Show success dialog
           await _showSuccessDialog();
+          print("User Metadata: ${response.user!.userMetadata}");
+          // Lanjutkan dengan navigasi
+          await Supabase.instance.client.auth.refreshSession();
 
-          // Navigate based on user role
+          // Navigate based on user email
           await _handleNavigation();
         }
       } on AuthException catch (error) {
