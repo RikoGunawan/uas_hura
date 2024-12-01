@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart'; // Untuk kIsWeb
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:myapp/widgets/main_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -111,6 +112,12 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
     );
 
     _resetForm();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MainWidget(),
+      ),
+    );
   }
 
   void _resetForm() {

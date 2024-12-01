@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/creativeHura/edit_post_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../widgets/profile_header_widget.dart';
 
@@ -184,7 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PostScreen(post: post),
+                builder: (context) => EditPostScreen(post: post),
               ),
             );
           },

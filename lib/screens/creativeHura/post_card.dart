@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/profile/referred_profile_screen.dart';
 import 'package:myapp/services/supabase_service.dart';
@@ -89,8 +90,8 @@ class _PostCardState extends State<PostCard> {
                       ),
                     ),
                     Positioned(
-                      left: 10,
-                      bottom: 10,
+                      left: kIsWeb ? 10 : 15,
+                      bottom: kIsWeb ? 10 : 15,
                       child: InkWell(
                         onTap: () {
                           Navigator.push(

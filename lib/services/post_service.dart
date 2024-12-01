@@ -199,15 +199,17 @@ Future<Post?> getPostById(String postId) async {
 }
 
 // Update an existing post
-Future<void> updatePost(Post post) async {
+
+Future<void> updatePost(String id, String title, String description) async {
   try {
-    await Supabase.instance.client
-        .from('posts')
-        .update({'description': post.description}) // Only updates description
-        .eq('id', post.id);
+    await Supabase.instance.client.from('posts').update({
+      'name': title,
+      'description': description,
+    }).eq('id', id); // Identifikasi post berdasarkan ID
     print('Post updated successfully!');
   } catch (e) {
     print('Error updating post: $e');
+    rethrow; // Lempar ulang error agar bisa ditangani di UI
   }
 }
 

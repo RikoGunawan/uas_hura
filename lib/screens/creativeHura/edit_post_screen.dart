@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-
 import '../../models/post.dart';
 import '../../services/post_service.dart';
+import 'edit_post_form.dart';
+import 'edit_post_screen.dart';
 
-class PostScreen extends StatefulWidget {
+class EditPostScreen extends StatefulWidget {
   final Post post;
 
-  const PostScreen({super.key, required this.post});
+  const EditPostScreen({super.key, required this.post});
 
   @override
-  State<PostScreen> createState() => _PostScreenState();
+  State<EditPostScreen> createState() => _EditPostScreenState();
 }
 
-class _PostScreenState extends State<PostScreen> {
+class _EditPostScreenState extends State<EditPostScreen> {
   late Future<Post?> postFuture;
 
   @override
@@ -24,44 +25,67 @@ class _PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Post Details'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () async {
+              final updated = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditPostForm(post: widget.post),
+                ),
+              );
+
+              if (updated == true) {
+                // Refresh data jika postingan diperbarui
+                setState(() {
+                  postFuture = getPostById(widget.post.id);
+                });
+              }
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder<Post?>(
         future: postFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data == null) {
-            return Center(child: Text('Post not found'));
+            return const Center(child: Text('Post not found'));
           }
 
           final post = snapshot.data!;
 
           return SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 44, 24, 24),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AspectRatio(
-                    aspectRatio: widget.post.aspectRatio ?? 1.0,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.network(
-                        widget.post.imageUrl,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey[300],
-                            child: const Center(
-                              child: Text('Image not available'),
-                            ),
-                          );
-                        },
-                      ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.network(
+                      post.imageUrl,
+                      height: 200,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 200,
+                          width: double.infinity,
+                          color: Colors.grey[300],
+                          child: const Center(
+                            child: Text('Image not available'),
+                          ),
+                        );
+                      },
                     ),
                   ),
-
                   const SizedBox(height: 16.0),
 
                   // Statistik dengan Ikon
@@ -90,7 +114,6 @@ class _PostScreenState extends State<PostScreen> {
                   const SizedBox(height: 16.0),
 
                   // Post Title
-
                   Text(
                     post.name,
                     style: const TextStyle(
@@ -116,7 +139,7 @@ class _PostScreenState extends State<PostScreen> {
     );
   }
 
-// Widget Statistik Like dengan Ikon
+  // Widget Statistik Like dengan Ikon
   Widget _buildStatLike({
     required IconData icon,
     required Color color,
@@ -142,12 +165,13 @@ class _PostScreenState extends State<PostScreen> {
     );
   }
 
-// Widget Statistik Share dengan Ikon
-  Widget _buildStatShare(
-      {required IconData icon,
-      required Color color,
-      required String value,
-      required VoidCallback onTap}) {
+  // Widget Statistik Share dengan Ikon
+  Widget _buildStatShare({
+    required IconData icon,
+    required Color color,
+    required String value,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Column(

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../utils/app_colors.dart';
 import '../../widgets/creative_hura_header_widget.dart';
 import '../../models/post.dart';
 
 import '../../models/profile.dart';
 import '../../services/post_service.dart';
 import '../../services/supabase_service.dart';
-import 'add_post_screen_online.dart';
 import 'post_card.dart';
 
 class CreativeHuraScreen extends StatefulWidget {
@@ -103,18 +101,6 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const AddPostScreenOnline()),
-          );
-        },
-        backgroundColor: Colors.red,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 }
