@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:myapp/admin/data_pengunjung.dart';
 import 'package:myapp/admin/huraEvents/admin_hura_event_screen.dart';
 import 'package:myapp/admin/huraPoints/admin_hura_point_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../models/profile.dart';
 
 class AdminProfileScreen extends StatefulWidget {
@@ -59,15 +58,13 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
           ? const Center(child: CircularProgressIndicator())
           : LayoutBuilder(
               builder: (context, constraints) {
-                final isSmallScreen = constraints.maxWidth < 600;
-
                 return SingleChildScrollView(
                   child: Column(
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          vertical: isSmallScreen ? 8 : 16,
-                          horizontal: isSmallScreen ? 12 : 24,
+                          vertical: 16.0,
+                          horizontal: 24.0,
                         ),
                         child: Column(
                           children: [
@@ -82,7 +79,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                           ],
                         ),
                       ),
-                      _buildResponsiveGrid(context, isSmallScreen),
+                      _buildResponsiveGrid(context),
                     ],
                   ),
                 );
@@ -102,17 +99,17 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
     );
   }
 
-  Widget _buildResponsiveGrid(BuildContext context, bool isSmallScreen) {
+  Widget _buildResponsiveGrid(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GridView(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: isSmallScreen ? 1 : 2,
+          crossAxisCount: 1, // Use 1 column for smaller screens
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: isSmallScreen ? 3 : 2.5,
+          childAspectRatio: 4, // Adjust the aspect ratio to fit the containers
         ),
         children: [
           _buildContainerVisitor(context),
@@ -161,19 +158,18 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 40.0, // Tinggi container
-        width: 100.0, // Lebar container
+        height: 60.0, // Increase height for a more button-like appearance
         decoration: BoxDecoration(
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(10.0),
         ),
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Text(
           label,
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.center,
