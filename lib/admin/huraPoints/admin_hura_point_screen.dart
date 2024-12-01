@@ -68,8 +68,6 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Panggil progress bar
-              _buildProgressBar(context, currentPoints, dailyLimit, progress),
               const SizedBox(height: 14.0),
               _buildCategoryButtons(),
               const SizedBox(height: 14.0),
@@ -81,71 +79,6 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
     );
   }
 
-  Widget _buildProgressBar(BuildContext context, int currentPoints,
-      int dailyLimit, double progress) {
-    return Center(
-      child: Container(
-        height: 100.0,
-        width: MediaQuery.of(context).size.width * 0.85,
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              left: 10.0,
-              top: 15.0,
-              child: CircleAvatar(
-                radius: 17.0,
-                backgroundColor: Colors.grey,
-                backgroundImage:
-                    profile?.imageurl != null && profile!.imageurl.isNotEmpty
-                        ? NetworkImage(profile!.imageurl)
-                        : null,
-              ),
-            ),
-            Positioned(
-              left: 48.0,
-              top: 25.0,
-              child: Text(
-                'Daily Points: $currentPoints / $dailyLimit',
-                style:
-                    const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              ),
-            ),
-            // Garis putih latar belakang
-            Positioned(
-              left: 10.0,
-              top: 58.0,
-              child: Container(
-                height: 10.0, // Tinggi garis putih
-                width: MediaQuery.of(context).size.width * 0.78, // Lebar penuh
-                decoration: BoxDecoration(
-                  color: Colors.white, // Garis putih
-                  borderRadius: BorderRadius.circular(7.0),
-                ),
-              ),
-            ),
-            // Linear progress bar
-            Positioned(
-              left: 10.0,
-              top: 58.0,
-              child: Container(
-                height: 10.0, // Tinggi progress bar
-                width: (MediaQuery.of(context).size.width * 0.78) *
-                    progress, // Sesuai progress
-                decoration: BoxDecoration(
-                  color: AppColors.primary, // Warna progress
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildCategoryButtons() {
     double screenWidth = MediaQuery.of(context).size.width;

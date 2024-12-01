@@ -2,69 +2,97 @@ import 'package:flutter/material.dart';
 
 Widget buildContainerReward(
     BuildContext context, String type, double progress) {
+  // Define the reward data
+  final List<Map<String, String>> rewardList = [
+    {'points': '50', 'reward': 'Tiket gratis'},
+    {'points': '100', 'reward': 'Paket Sponsor 1'},
+    // Add more rewards here as needed
+  ];
+
   return GestureDetector(
     child: Container(
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: Colors.grey[200], // Lighter background color
         borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3), // Shadow position
+          ),
+        ],
       ),
       padding: const EdgeInsets.all(16.0),
-      width: MediaQuery.of(context).size.width * 0.85, // 90% dari lebar layar
+      width: MediaQuery.of(context).size.width * 0.85, // 85% of screen width
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height *
-            0.5, // Maksimal 50% dari tinggi layar
+        maxHeight: MediaQuery.of(context).size.height * 0.5, // Max height 50%
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        // crossAxisAlignment:
-        //     CrossAxisAlignment.start, // Konten tidak terlalu ke tengah
         children: [
           Text(
             type,
             style: const TextStyle(
-              fontSize: 15,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),
           const SizedBox(height: 16.0),
-          Flexible(
+          Expanded(
             child: ListView.builder(
-              shrinkWrap: true, // Menyesuaikan tinggi dengan konten
-              physics: const ClampingScrollPhysics(), // Membatasi scrolling
-              itemCount: 5,
+              shrinkWrap: true, // Adjust height based on content
+              physics: const ClampingScrollPhysics(),
+              itemCount: rewardList.length,
               itemBuilder: (context, index) {
+                final reward = rewardList[index];
+                bool isClaimed = index % 2 == 0; // Simulate claim status (for illustration)
+
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 12.0,
-                        backgroundColor: Colors.white,
+                        backgroundColor:
+                            isClaimed ? Colors.green : Colors.grey,
+                        child: Icon(
+                          isClaimed ? Icons.check : Icons.lock,
+                          size: 16,
+                          color: Colors.white,
+                        ),
                       ),
-                      const SizedBox(width: 8.0),
+                      const SizedBox(width: 12.0),
                       Expanded(
                         child: Stack(
                           children: [
                             Container(
-                              height: 10.0, // Tinggi garis putih
+                              height: 10.0,
                               decoration: BoxDecoration(
-                                color: Colors.white, // Garis putih
+                                color: Colors.white, // Progress line background
                                 borderRadius: BorderRadius.circular(7.0),
                               ),
                             ),
                             Container(
-                              height: 10.0, // Tinggi progress bar
+                              height: 10.0,
                               width: MediaQuery.of(context).size.width *
                                   0.8 *
-                                  progress, // Sesuai progress (disesuaikan ke 80% dari lebar layar)
+                                  progress, // Adjusted progress bar
                               decoration: BoxDecoration(
-                                color: Colors.grey, // Warna progress
+                                color: Colors.blue, // Progress bar color
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                      const SizedBox(width: 12.0),
+                      Text(
+                        '${reward['points']} poin = ${reward['reward']}',
+                        style: const TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.black,
                         ),
                       ),
                     ],
