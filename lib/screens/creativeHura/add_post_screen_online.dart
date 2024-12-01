@@ -4,11 +4,13 @@ import 'package:flutter/foundation.dart'; // Untuk kIsWeb
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myapp/widgets/main_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/post.dart';
 import '../../models/profile.dart';
+import '../../providers/hura_point_provider.dart';
 import '../../services/post_service.dart';
 
 class AddPostScreenOnline extends StatefulWidget {
@@ -112,6 +114,11 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
     );
 
     _resetForm();
+    // Update daily points on login
+    final huraPointProvider =
+        Provider.of<HuraPointProvider>(context, listen: false);
+    huraPointProvider.addDailyPoints(2);
+
     Navigator.push(
       context,
       MaterialPageRoute(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/profile/profile_screen.dart';
 import '../../models/post.dart';
 import '../../services/post_service.dart';
 import 'edit_post_form.dart';
@@ -43,6 +44,50 @@ class _EditPostScreenState extends State<EditPostScreen> {
                 setState(() {
                   postFuture = getPostById(widget.post.id);
                 });
+              }
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () async {
+              final confirmDelete = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Delete Post'),
+                    content: const Text(
+                        'Are you sure you want to delete this post?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () =>
+                            Navigator.pop(context, false), // Batalkan
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () =>
+                            Navigator.pop(context, true), // Konfirmasi
+                        child: const Text('Delete'),
+                      ),
+                    ],
+                  );
+                },
+              );
+
+              if (confirmDelete == true) {
+                try {
+                  await deletePost(widget.post.id); // Panggil metode deletePost
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Post deleted successfully!')),
+                  );
+
+                  // Setelah dihapus, kembali ke halaman sebelumnya
+                  Navigator.pop(context,
+                      true); // Kembalikan true untuk memberi tahu halaman sebelumnya
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error deleting post: $e')),
+                  );
+                }
               }
             },
           ),
