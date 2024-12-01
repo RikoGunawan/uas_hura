@@ -6,7 +6,6 @@ import '../../widgets/profile_header_widget.dart';
 import '../../models/post.dart';
 import '../../models/profile.dart';
 import '../../services/supabase_service.dart';
-import '../creativeHura/post_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String? userId; // Tambahkan parameter userId

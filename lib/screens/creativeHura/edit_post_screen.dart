@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/profile/profile_screen.dart';
 import '../../models/post.dart';
 import '../../services/post_service.dart';
 import 'edit_post_form.dart';
-import 'edit_post_screen.dart';
 
 class EditPostScreen extends StatefulWidget {
   final Post post;

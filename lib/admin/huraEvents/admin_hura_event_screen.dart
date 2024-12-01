@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/admin/huraEvents/add_hura_event.dart';
 import 'package:myapp/admin/huraEvents/edit_hura_event.dart';
 import 'package:provider/provider.dart';
 import '../../providers/event_provider.dart';

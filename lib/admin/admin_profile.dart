@@ -72,7 +72,8 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                         child: Column(
                           children: [
                             const CircleAvatar(
-                              backgroundColor: Color.fromARGB(255, 220, 216, 216),
+                              backgroundColor:
+                                  Color.fromARGB(255, 220, 216, 216),
                               radius: 50.0,
                             ),
                             const SizedBox(height: 16.0),
@@ -160,12 +161,14 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        height: 40.0, // Tinggi container
+        width: 100.0, // Lebar container
         decoration: BoxDecoration(
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(10.0),
         ),
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
         child: Text(
           label,
           style: const TextStyle(

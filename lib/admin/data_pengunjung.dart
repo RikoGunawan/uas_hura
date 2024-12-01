@@ -59,74 +59,17 @@ class _DataPengunjungState extends State<DataPengunjung> {
                 final isSmallScreen = constraints.maxWidth < 600;
 
                 return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 16.0),
-                        const CircleAvatar(
-                          backgroundColor: Color.fromARGB(255, 220, 216, 216),
-                          radius: 50.0,
-                        ),
-                        const SizedBox(height: 16.0),
-                        _buildProfileName(),
-                        const SizedBox(height: 24.0),
-                        GridView(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: isSmallScreen ? 1 : 2,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                            childAspectRatio: isSmallScreen ? 2.5 : 1.5,
-                          ),
-                          children: [
-                            _buildContainerVisitor(),
-                            _buildContainerData(),
-                          ],
-                        ),
-                      ],
-                    ),
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildContainerData(),
+                      const SizedBox(height: 18.0),
+                    ],
                   ),
                 );
               },
             ),
-    );
-  }
-
-  Widget _buildProfileName() {
-    return Text(
-      profile?.username ?? 'Profile not available',
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
-      ),
-    );
-  }
-
-  Widget _buildContainerVisitor() {
-    return GestureDetector(
-      onTap: () {
-        // Tambahkan logika onTap jika diperlukan
-      },
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        alignment: Alignment.center,
-        child: const Text(
-          'Data Pengunjung',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
     );
   }
 
@@ -140,10 +83,10 @@ class _DataPengunjungState extends State<DataPengunjung> {
     ];
 
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
       decoration: BoxDecoration(
         color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
