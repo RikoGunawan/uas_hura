@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/home/login_screen.dart';
+import 'package:myapp/screens/home/register_screen.dart';
 
 class GetStartedScreen extends StatefulWidget {
   const GetStartedScreen({super.key});
@@ -91,14 +93,21 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   _buildButtonLogin(
                     text: 'Login',
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/login');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
                     },
                   ),
                   const SizedBox(height: 16),
                   _buildButtonNew(
                     text: 'Create New Account',
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/register');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegisterScreen()),
+                      );
                     },
                   ),
                 ],

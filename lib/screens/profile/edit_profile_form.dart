@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:myapp/screens/home/login_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../services/supabase_service.dart';
 
@@ -142,7 +143,10 @@ class _EditProfileFormState extends State<EditProfileForm> {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text('Successfully signed out'),
             ));
-            Navigator.pushReplacementNamed(context, '/login');
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
           },
           child: const Text('Sign Out'),
         ),

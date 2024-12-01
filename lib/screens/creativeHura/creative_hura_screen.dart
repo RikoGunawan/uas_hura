@@ -69,7 +69,6 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary,
       body: FutureBuilder<Profile?>(
         future: _loadProfile(), // Panggil metode untuk memuat profil
         builder: (context, snapshot) {
