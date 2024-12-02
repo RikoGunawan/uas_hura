@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myapp/main_widget.dart';
 import 'package:myapp/providers/quest_provider.dart';
+import 'package:myapp/screens/home/login_screen.dart';
+import 'package:myapp/widgets/admin_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -66,7 +67,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      home: MainWidget(),
+      home: LoginScreen(),
     );
   }
 }

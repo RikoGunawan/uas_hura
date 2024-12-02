@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/admin/admin_profile.dart';
 import 'package:myapp/admin/data_pengunjung.dart';
@@ -98,8 +97,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       flexibleSpace: Stack(
         children: [
           Positioned(
-            left: kIsWeb ? 40 : 20,
-            top: kIsWeb ? 20 : 40,
+            left: 20,
+            top: 35,
             child: Text(
               title,
               style: const TextStyle(
@@ -111,8 +110,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           if (title == 'Hura Event') ...[
             Positioned(
-              right: kIsWeb ? 40 : 20,
-              top: kIsWeb ? 16 : 32,
+              right: 10,
+              bottom: 20,
+              top: 50,
               child: IconButton(
                 icon: const Icon(Icons.add_circle, color: Colors.red),
                 onPressed: () {
@@ -131,8 +131,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ] else if (title == 'Hura Point') ...[
             Positioned(
-              right: kIsWeb ? 40 : 20,
-              top: kIsWeb ? 16 : 32,
+              right: 10,
+              top: 10,
               child: IconButton(
                 icon: const Icon(Icons.edit_square, color: Colors.green),
                 onPressed: () {
@@ -146,8 +146,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             Positioned(
-              right: kIsWeb ? 80 : 60,
-              top: kIsWeb ? 16 : 32,
+              right: 50,
+              top: 10,
               child: IconButton(
                 icon: const Icon(Icons.add_circle, color: Colors.red),
                 onPressed: () {
