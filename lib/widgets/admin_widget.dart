@@ -50,8 +50,6 @@ class _AdminWidgetState extends State<AdminWidget> {
   }
 }
 
-//---------------------------------------- Main Widget Template
-
 class MainWidgetTemplate extends StatelessWidget {
   final Widget body;
   final int currentIndex;
@@ -69,7 +67,7 @@ class MainWidgetTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: CustomAppBar(title: title),
       body: body,
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: currentIndex,
@@ -77,14 +75,7 @@ class MainWidgetTemplate extends StatelessWidget {
       ),
     );
   }
-
-  _buildAppBar() {
-    return CustomAppBar(title: title);
-  }
 }
-
-//---------------------------------------- Custom AppBar
-
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
@@ -94,71 +85,63 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
-      flexibleSpace: Stack(
+      centerTitle: false,
+      titleSpacing: 20.0,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Positioned(
-            left: 20,
-            top: 35,
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
+          // Title Text
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
           ),
+          // Conditional Actions
           if (title == 'Hura Event') ...[
-            Positioned(
-              right: 10,
-              bottom: 20,
-              top: 50,
-              child: IconButton(
-                icon: const Icon(Icons.add_circle, color: Colors.red),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddHuraEvent(
-                        events:
-                            Provider.of<EventProvider>(context, listen: false)
-                                .events,
+            IconButton(
+              icon: const Icon(Icons.add_circle, color: Colors.red),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddHuraEvent(
+                      events: Provider.of<EventProvider>(context, listen: false).events,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+          if (title == 'Hura Point') ...[
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.add_circle, color: Colors.red),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AddPointScreen(),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ] else if (title == 'Hura Point') ...[
-            Positioned(
-              right: 10,
-              top: 10,
-              child: IconButton(
-                icon: const Icon(Icons.edit_square, color: Colors.green),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditPointScreen(),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Positioned(
-              right: 50,
-              top: 10,
-              child: IconButton(
-                icon: const Icon(Icons.add_circle, color: Colors.red),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddPointScreen(),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.edit_square, color: Colors.green),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EditPointScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ],
@@ -170,7 +153,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-//---------------------------------------- Custom Bottom Navigation Bar
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;

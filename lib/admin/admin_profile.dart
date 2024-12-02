@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:myapp/admin/data_pengunjung.dart';
 import 'package:myapp/admin/huraEvents/admin_hura_event_screen.dart';
 import 'package:myapp/admin/huraPoints/admin_hura_point_screen.dart';
@@ -62,15 +62,14 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           vertical: 16.0,
                           horizontal: 24.0,
                         ),
                         child: Column(
                           children: [
                             const CircleAvatar(
-                              backgroundColor:
-                                  Color.fromARGB(255, 220, 216, 216),
+                              backgroundColor: Color.fromARGB(255, 220, 216, 216),
                               radius: 50.0,
                             ),
                             const SizedBox(height: 16.0),
@@ -79,7 +78,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                           ],
                         ),
                       ),
-                      _buildResponsiveGrid(context),
+                      _buildResponsiveGrid(context, constraints.maxWidth),
                     ],
                   ),
                 );
@@ -99,17 +98,18 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
     );
   }
 
-  Widget _buildResponsiveGrid(BuildContext context) {
+  Widget _buildResponsiveGrid(BuildContext context, double maxWidth) {
+    final isWide = maxWidth > 600; // Check for wide screen
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GridView(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1, // Use 1 column for smaller screens
+          crossAxisCount: isWide ? 2 : 1, // Responsive grid
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: 4, // Adjust the aspect ratio to fit the containers
+          childAspectRatio: 4,
         ),
         children: [
           _buildContainerVisitor(context),
@@ -124,10 +124,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
     return _buildActionContainer(
       context,
       label: 'Data Pengunjung',
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const DataPengunjung()),
-      ),
+      onTap: () => _navigateToPage(context, const DataPengunjung()),
     );
   }
 
@@ -135,10 +132,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
     return _buildActionContainer(
       context,
       label: 'Edit Hura Point',
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const AdminHuraPointScreen()),
-      ),
+      onTap: () => _navigateToPage(context, const AdminHuraPointScreen()),
     );
   }
 
@@ -146,10 +140,15 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
     return _buildActionContainer(
       context,
       label: 'Edit Hura Event',
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const AdminHuraEventScreen()),
-      ),
+      onTap: () => _navigateToPage(context, const AdminHuraEventScreen()),
+    );
+  }
+
+  // Navigate to the specified page
+  void _navigateToPage(BuildContext context, Widget page) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => page),
     );
   }
 
@@ -158,7 +157,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 60.0, // Increase height for a more button-like appearance
+        height: 60.0,
         decoration: BoxDecoration(
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(10.0),

@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
   // Fetch user email from Supabase
   Future<String?> _getUserEmail() async {
     final user = Supabase.instance.client.auth.currentUser;
-    print("Current User Metadata: ${user?.userMetadata}");
+    "Current User Metadata: ${user?.userMetadata}";
     return user?.userMetadata?['email'];
   }
 

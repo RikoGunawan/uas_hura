@@ -12,6 +12,7 @@ class DataPengunjung extends StatefulWidget {
 class _DataPengunjungState extends State<DataPengunjung> {
   Profile? profile;
   bool isLoading = true;
+  final bool _isAppBarVisible = false;
 
   @override
   void initState() {
@@ -26,8 +27,7 @@ class _DataPengunjungState extends State<DataPengunjung> {
         final data = await Supabase.instance.client
             .from('profiles')
             .select()
-            .match({'id': user.id})
-            .maybeSingle();
+            .match({'id': user.id}).maybeSingle();
 
         if (data != null) {
           setState(() {
@@ -51,6 +51,18 @@ class _DataPengunjungState extends State<DataPengunjung> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: _isAppBarVisible
+          ? AppBar(
+              title: const Text('Data Pengunjung'),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(
+                      context); // Pop the current screen and return to the previous screen
+                },
+              ),
+            )
+          : null, // AppBar will be null if not visible
       backgroundColor: Colors.white,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())

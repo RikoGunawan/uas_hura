@@ -8,6 +8,10 @@ class EditPointScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Ensure quests are loaded
+    final questProvider = Provider.of<QuestProvider>(context);
+    questProvider.getQuests();  // Ensure we get quests if not already loaded
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Quests'),
@@ -76,7 +80,7 @@ class EditPointScreen extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Progress'),
                 onChanged: (value) {
-                  progress = double.tryParse(value) ?? 0.0;
+                  progress = double.tryParse(value) ?? progress; // Keep old progress if invalid input
                 },
               ),
             ],
@@ -123,7 +127,7 @@ class EditPointScreen extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Progress'),
                 onChanged: (value) {
-                  progress = double.tryParse(value) ?? 0.0;
+                  progress = double.tryParse(value) ?? progress; // Handle invalid input
                 },
               ),
             ],

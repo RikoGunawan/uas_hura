@@ -105,10 +105,11 @@ class AdminHuraEventScreen extends StatelessWidget {
         ),
         Positioned(
           left: 8,
-          top: 8,
+          top: 15,
+          bottom: 25,
           child: IconButton(
             icon: const Icon(
-              Icons.edit,
+              Icons.edit_square,
               color: Colors.white,
             ),
             onPressed: () {
@@ -142,7 +143,7 @@ class AdminHuraEventScreen extends StatelessWidget {
     );
   }
 
-  // Dialog konfirmasi penghapusan
+// Dialog konfirmasi penghapusan
   void _showDeleteConfirmationDialog(BuildContext context, event) {
     showDialog(
       context: context,
@@ -154,16 +155,24 @@ class AdminHuraEventScreen extends StatelessWidget {
             TextButton(
               child: const Text("Batal"),
               onPressed: () {
-                Navigator.of(context).pop(); // Tutup dialog
+                Navigator.of(context)
+                    .pop(); // Close the dialog without doing anything
               },
             ),
             TextButton(
               child: const Text("Hapus"),
               onPressed: () {
-                // Panggil metode untuk menghapus event
-                Provider.of<EventProvider>(context, listen: false)
-                    .removeEvent(event.id);
-                Navigator.of(context).pop(); // Tutup dialog
+                // Delete the event and close the dialog immediately
+                Provider.of<EventProvider>(context, listen: false).removeEvent(
+                    event); // Make sure you're passing the whole event object or use event.id
+
+                // Close the confirmation dialog
+                Navigator.of(context).pop();
+
+                // Optional: Show a snackbar or other notification indicating success
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Event berhasil dihapus!')),
+                );
               },
             ),
           ],
