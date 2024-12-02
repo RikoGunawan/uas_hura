@@ -28,7 +28,7 @@ class CreativeHuraHeaderWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 20,
+            right: 12,
             top: kIsWeb ? 10 : 32, // Sesuaikan posisi untuk web dan non-web
             child: NotificationIcon(
               onPressed: () {
@@ -42,7 +42,7 @@ class CreativeHuraHeaderWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 47,
+            right: 40,
             top: kIsWeb ? 8.8 : 26.5,
             child: IconButton(
               icon: const Icon(Icons.add_circle, color: AppColors.secondary),

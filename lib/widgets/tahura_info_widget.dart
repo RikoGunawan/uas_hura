@@ -12,16 +12,11 @@ class TahuraInfoWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
         ),
         padding: const EdgeInsets.all(16.0),
-        width: MediaQuery.of(context).size.width * 0.9,
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height *
-              0.5, // Maksimal 50% dari tinggi layar
-        ),
+        width: MediaQuery.of(context).size.width * 0.9, // Lebar 90% layar
         child: Column(
-          mainAxisSize: MainAxisSize
-              .min, // Mengatur agar konten hanya sesuai dengan ukuran minimum
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+          crossAxisAlignment: CrossAxisAlignment.start, // Rata kiri
+          children: const [
             SizedBox(height: 16.0),
             Text(
               'Taman Hutan Raya Ir H Djuanda',
@@ -31,8 +26,9 @@ class TahuraInfoWidget extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
+            SizedBox(height: 8.0), // Jarak antar teks
             Text(
-              '\nBuka Setiap Hari 08.00-16.00 WIB\nKomplek Taman Hutan Raya Ir. H. Djuanda No.99 Dago Pakar, Bandung 40198',
+              'Buka Setiap Hari 08.00-16.00 WIB\nKomplek Taman Hutan Raya Ir. H. Djuanda No.99 Dago Pakar, Bandung 40198',
               style: TextStyle(
                 fontSize: 15,
                 color: Colors.black,

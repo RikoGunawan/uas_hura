@@ -26,7 +26,7 @@ class ProfileHeaderWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 20,
+            right: 12,
             top: kIsWeb ? 10 : 32,
             child: Container(
               width: 35.0,

@@ -14,11 +14,6 @@ class RewardScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              const Text(
-                'Available Rewards',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
               Consumer<HuraPointProvider>(
                 builder: (context, provider, child) {
                   return buildContainerReward(
@@ -38,14 +33,14 @@ class RewardScreen extends StatelessWidget {
   }
 }
 
-// Modify the reward widget to use data from the provider
 Widget buildContainerReward(BuildContext context, String type, double progress,
     int totalPoints, int currentPoints) {
-  // Define the reward data
   final List<Map<String, String>> rewardList = [
-    {'points': '50', 'reward': 'Tiket gratis'},
-    {'points': '100', 'reward': 'Paket Sponsor 1'},
-    // Add more rewards here as needed
+    {'points': '50', 'reward': '1 Tiket Gratis'},
+    {'points': '100', 'reward': 'Free Welcome Snack & Drink'},
+    {'points': '200', 'reward': '1 Free Merchandise'},
+    {'points': '500', 'reward': 'Voucher Makan Gratis Rp 50.000'},
+    {'points': '1000', 'reward': '2 Voucher Hotel Gratis'},
   ];
 
   return GestureDetector(
@@ -55,9 +50,9 @@ Widget buildContainerReward(BuildContext context, String type, double progress,
         borderRadius: BorderRadius.circular(10.0),
       ),
       padding: const EdgeInsets.all(16.0),
-      width: MediaQuery.of(context).size.width * 0.85, // 85% of screen width
+      width: MediaQuery.of(context).size.width * 0.85,
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.5, // Max height 50%
+        maxHeight: MediaQuery.of(context).size.height * 0.5,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -73,18 +68,17 @@ Widget buildContainerReward(BuildContext context, String type, double progress,
           const SizedBox(height: 16.0),
           Expanded(
             child: ListView.builder(
-              shrinkWrap: true, // Adjust height based on content
+              shrinkWrap: true,
               physics: const ClampingScrollPhysics(),
               itemCount: rewardList.length,
               itemBuilder: (context, index) {
                 final reward = rewardList[index];
-                bool isClaimed = currentPoints >=
-                    int.parse(reward[
-                        'points']!); // Check if points are enough for claim
+                bool isClaimed = currentPoints >= int.parse(reward['points']!);
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CircleAvatar(
                         radius: 12.0,
@@ -96,11 +90,26 @@ Widget buildContainerReward(BuildContext context, String type, double progress,
                         ),
                       ),
                       const SizedBox(width: 12.0),
-                      Text(
-                        '${reward['points']} poin => ${reward['reward']}',
-                        style: const TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.black,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${reward['points']} poin',
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              reward['reward']!,
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],

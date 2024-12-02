@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/admin/huraPoints/edit_leaderboard_widget.dart';
-import 'package:myapp/admin/huraPoints/edit_quest_widget.dart';
-import 'package:myapp/admin/huraPoints/edit_reward_widget.dart';
-import 'package:provider/provider.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../models/profile.dart';
-import '../../providers/hura_point_provider.dart';
+import '../../screens/huraPoints/leaderboard_widget.dart';
+import '../../screens/huraPoints/quest_widget.dart';
+import '../../screens/huraPoints/reward_widget.dart';
 import '../../services/supabase_service.dart';
-
 
 class AdminHuraPointScreen extends StatefulWidget {
   final String? userId;
@@ -52,14 +50,6 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Ambil HuraPointProvider dari context
-    final huraPointProvider = Provider.of<HuraPointProvider>(context);
-
-    // Sederhanakan akses atribut dengan variabel lokal
-    final currentPoints = huraPointProvider.huraPoint.currentPoints;
-    final dailyLimit = huraPointProvider.huraPoint.dailyLimit;
-    final progress = huraPointProvider.progress;
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -77,7 +67,6 @@ class _AdminHuraPointScreenState extends State<AdminHuraPointScreen> {
       ),
     );
   }
-
 
   Widget _buildCategoryButtons() {
     double screenWidth = MediaQuery.of(context).size.width;

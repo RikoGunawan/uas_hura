@@ -115,7 +115,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           Positioned(
-              right: 20,
+              right: 12,
               top: kIsWeb ? 10 : 32, // Sesuaikan posisi untuk web dan non-web
               child: NotificationIcon(
                 onPressed: () {
