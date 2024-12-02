@@ -275,30 +275,37 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           padding: const EdgeInsets.symmetric(vertical: 8),
         ),
-        child: _isLoading
-            ? const CircularProgressIndicator()
-            : const Text(
-                'Login',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+        child: Text(
+          'Login',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
 
   // Build Register Link
   Widget _buildRegisterLink() {
-    return TextButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => RegisterScreen()),
-        );
-      },
-      child: const Text('Don\'t have an account? Register here.'),
+    return Center(
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RegisterScreen()),
+          );
+        },
+        child: const Text(
+          'Don\'t have an account? Register here.',
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.black,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+      ),
     );
   }
 

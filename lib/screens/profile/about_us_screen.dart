@@ -10,19 +10,15 @@ class AboutUsScreen extends StatelessWidget {
         title: const Text('About Us'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(32.0, 8, 32, 32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'About Us',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
             const SizedBox(height: 16),
-            // const Text(
-            //   'This application is designed to help users manage their profiles and connect with others.',
-            //   style: TextStyle(fontSize: 16),
-            // ),
+            const Text(
+              'Made by Riko Gunawan & Sulistiani',
+              style: TextStyle(fontSize: 16),
+            ),
             const SizedBox(height: 16),
             const Text(
               'Version: 1.0.0',

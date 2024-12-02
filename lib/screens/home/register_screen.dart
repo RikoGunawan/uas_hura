@@ -143,12 +143,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ? const CircularProgressIndicator()
                   : const Text('Daftar'),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/login');
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
               },
-              child: const Text('Sudah punya akun? Login'),
-            ),
+              child: const Text(
+                'Already have an account? Login here.',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.black,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            )
           ],
         ),
       ),

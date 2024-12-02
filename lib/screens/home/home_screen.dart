@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/widgets/tahura_info_widget.dart';
 
 import '../../models/post.dart';
 import '../../services/post_service.dart';
@@ -66,9 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 2),
                   Text(
-                    'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ?',
+                    'Apakah sudah saatnya rehat sejenak dan berjalan menikmati alam? Ah masa yang indah...',
                     style: TextStyle(
-                      color: Color.fromARGB(185, 0, 0, 0),
+                      color: Color.fromARGB(211, 0, 0, 0),
                       fontSize: 9,
                     ),
                   ),
@@ -114,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
+            TahuraInfoWidget()
           ],
         ),
       ),

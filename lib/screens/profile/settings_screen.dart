@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/profile/edit_profile_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../home/login_screen.dart';
 import 'about_us_screen.dart'; // Pastikan untuk membuat file ini
 
 class SettingsScreen extends StatelessWidget {
@@ -38,7 +40,20 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             const Divider(),
-            // Tambahkan lebih banyak opsi di sini jika diperlukan
+            ListTile(
+              title: const Text('Sign Out'),
+              onTap: () async {
+                await Supabase.instance.client.auth.signOut();
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Successfully signed out'),
+                ));
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+              },
+            ),
+            const Divider(),
           ],
         ),
       ),

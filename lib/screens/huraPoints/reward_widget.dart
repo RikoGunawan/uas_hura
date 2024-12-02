@@ -10,9 +10,6 @@ class RewardScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => HuraPointProvider(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Rewards"),
-        ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -68,7 +65,7 @@ Widget buildContainerReward(BuildContext context, String type, double progress,
           Text(
             type,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 15,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
@@ -102,7 +99,7 @@ Widget buildContainerReward(BuildContext context, String type, double progress,
                       Text(
                         '${reward['points']} poin => ${reward['reward']}',
                         style: const TextStyle(
-                          fontSize: 14.0,
+                          fontSize: 12.0,
                           color: Colors.black,
                         ),
                       ),
