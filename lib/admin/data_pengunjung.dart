@@ -10,6 +10,7 @@ class DataPengunjung extends StatefulWidget {
 }
 
 class _DataPengunjungState extends State<DataPengunjung> {
+  List<Profile> profiles = [];
   Profile? profile;
   bool isLoading = true;
   final bool _isAppBarVisible = false;
@@ -17,31 +18,37 @@ class _DataPengunjungState extends State<DataPengunjung> {
   @override
   void initState() {
     super.initState();
-    _loadProfile();
+    _fetchProfiles();
   }
 
-  Future<void> _loadProfile() async {
-    final user = Supabase.instance.client.auth.currentUser;
-    if (user != null) {
-      try {
-        final data = await Supabase.instance.client
-            .from('profiles')
-            .select()
-            .match({'id': user.id}).maybeSingle();
+  Future<List<Profile>> getAllProfiles() async {
+    try {
+      final response = await Supabase.instance.client.from('profiles').select();
+      return (response as List<dynamic>)
+          .map((data) => Profile.fromJson(data as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print('Error fetching profiles: $e');
+      return []; // Kembalikan list kosong jika ada kesalahan
+    }
+  }
 
-        if (data != null) {
-          setState(() {
-            profile = Profile.fromJson(data);
-          });
-        }
-      } catch (e) {
-        debugPrint('Error loading profile: $e');
-      } finally {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    } else {
+  Future<void> _fetchProfiles() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      List<Profile> fetchedProfiles = await getAllProfiles();
+      setState(() {
+        profiles = fetchedProfiles;
+      });
+    } catch (e) {
+      'Error fetching profiles: $e';
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to load profiles')),
+      );
+    } finally {
       setState(() {
         isLoading = false;
       });
@@ -57,74 +64,63 @@ class _DataPengunjungState extends State<DataPengunjung> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
-                  Navigator.pop(
-                      context); // Pop the current screen and return to the previous screen
+                  Navigator.pop(context);
                 },
               ),
             )
-          : null, // AppBar will be null if not visible
+          : null,
       backgroundColor: Colors.white,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : LayoutBuilder(
-              builder: (context, constraints) {
-                final isSmallScreen = constraints.maxWidth < 600;
-
-                return SingleChildScrollView(
+          : profiles.isEmpty
+              ? const Center(child: Text('No profiles found'))
+              : ListView.builder(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildContainerData(),
-                      const SizedBox(height: 18.0),
-                    ],
-                  ),
-                );
-              },
-            ),
+                  itemCount: profiles.length,
+                  itemBuilder: (context, index) {
+                    final profile = profiles[index];
+                    return _buildProfileCard(profile);
+                  },
+                ),
     );
   }
 
-  Widget _buildContainerData() {
-    List<Map<String, String>> profileData = [
-      {'label': 'First Name', 'value': profile?.firstName ?? 'No First Name'},
-      {'label': 'Last Name', 'value': profile?.lastName ?? 'No Last Name'},
-      {'label': 'Username', 'value': profile?.username ?? 'No Username'},
-      {'label': 'Bio', 'value': profile?.bio ?? 'No Bio'},
-      {'label': 'Image URL', 'value': profile?.imageurl ?? 'No Image URL'},
-    ];
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(8.0),
+  Widget _buildProfileCard(Profile profile) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      elevation: 2.0,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildProfileField('First Name', profile.firstName),
+            _buildProfileField('Last Name', profile.lastName),
+            _buildProfileField('Username', profile.username),
+            _buildProfileField('Bio', profile.bio),
+            _buildProfileField('Image URL', profile.imageurl),
+          ],
+        ),
       ),
-      child: Column(
+    );
+  }
+
+  Widget _buildProfileField(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6.0),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: profileData.map((data) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Row(
-              children: [
-                Text(
-                  '${data['label']}:',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(width: 8.0),
-                Expanded(
-                  child: Text(
-                    data['value']!,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
+        children: [
+          Text(
+            '$label:',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(width: 8.0),
+          Expanded(
+            child: Text(value ?? 'No $label'),
+          ),
+        ],
       ),
     );
   }
