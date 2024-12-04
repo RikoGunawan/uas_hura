@@ -18,7 +18,7 @@ class EventProvider extends ChangeNotifier {
       image: 'assets/event_terraquest.jpg',
       description:
           'Lomba Lintas Alam Terraquest memanggil para petualang untuk kembali dengan keindahan alam Tahura, melakukan pembersihan sungai, menanam pohon',
-      eventDate: DateTime(2024, 12, 14, 08, 00), // 2024 Nov 23 10:46
+      eventDate: DateTime(2024, 12, 5, 10, 00), // 2024 Nov 23 10:46
     ),
     Event(
       id: 2,
@@ -27,7 +27,7 @@ class EventProvider extends ChangeNotifier {
       image: 'assets/event_brionyjourney.jpg',
       description:
           'Flower Arrangement & Creative Journaling. Mari temukan harmoni antara alam, seni, dan kreativitas di tengah indahnya hutan Tahura!',
-      eventDate: DateTime(2024, 12, 15, 10, 00),
+      eventDate: DateTime(2024, 12, 5, 13, 00),
     ),
     Event(
       id: 3,
@@ -45,7 +45,7 @@ class EventProvider extends ChangeNotifier {
       image: 'assets/event_sejalanbareng.jpg',
       description:
           'Mengajak peserta jalan santai 3 KM sekaligus berkontribusi untuk menyantuni Anak Yatim dan Saudara di Palestina. Setiap langkah kecil yang kamu tempuh, sangat bernilai besar bagi mereka. ',
-      eventDate: DateTime(2024, 11, 29, 07, 00),
+      eventDate: DateTime(2024, 12, 07, 07, 00),
     ),
     Event(
       id: 5,
@@ -55,7 +55,7 @@ class EventProvider extends ChangeNotifier {
       description:
           'Dalam memperingati Hari Habitat Sedunia, FIOF mengajak sobat bumi untuk hadir dalam Bincang Forest Episode 23! “Eksplorasi Keanekaragaman Hayati dan Hewani di Tahura Djuanda untuk Masa Depan Bumi” Kami berkolaborasi dengan @tahuradjuanda.official untuk membahas Harmoni Manusia dan Alam di Tahura Ir. H. Djuanda bersama Bapak Diki, A.Md. (Pengendali Ekosistem Hutan Tahura Ir. H. Djuanda) sebagai pembicara!',
       eventDate:
-          DateTime(2024, 10, 06, 10, 00), // Tanggal acara yang ditentukan
+          DateTime(2024, 12, 07, 10, 00), // Tanggal acara yang ditentukan
     ),
     Event(
       id: 6,
@@ -64,7 +64,7 @@ class EventProvider extends ChangeNotifier {
       image: 'assets/event_balabala.jpg',
       description:
           'Pasar pasisian leuweung Perhutanan Sosial akan dilaksanakan di Tahura Ir. H. Djuanda pada Minggu, 18 Agustus 2024 dalam rangka memeriahkan HUT Republik Indonesia dan HUT Jawa Barat. Kegiatan ini akan diramaikan oleh produk-produk hasil hutan yang berasal dari Jawa Barat serta hiburan yang seru loh. Sobat Tahura yang tertarik untuk berpartisipasi mengisi booth di acara tersebut dapat melakukan pendaftaran melalui link tersebut: https://bit.ly/KurasiPengisiStandPasleuwPS_Tahura atau bisa klik link yang ada di bio kami yah.',
-      eventDate: DateTime(2024, 11, 28, 11, 00),
+      eventDate: DateTime(2024, 12, 5, 15, 00),
     ),
     // Tambahkan produk lain sesuai kebutuhan
   ];
