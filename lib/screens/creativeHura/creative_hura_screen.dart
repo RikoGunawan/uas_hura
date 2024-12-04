@@ -38,7 +38,7 @@ class _CreativeHuraScreenState extends State<CreativeHuraScreen> {
         posts = fetchedPosts;
       });
     } catch (e) {
-      print('Error fetching posts: $e');
+      'Error fetching posts: $e';
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to load posts')),
       );

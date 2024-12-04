@@ -1,4 +1,3 @@
-// models/quest.dart
 class Quest {
   final int id;
   String name;

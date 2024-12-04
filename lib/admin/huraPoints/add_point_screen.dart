@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-
-// Model untuk Quest
-class Quest {
-  final String name;
-  final double progress;
-
-  Quest({required this.name, required this.progress});
-}
+import 'package:myapp/providers/quest_provider.dart';
+import 'package:provider/provider.dart';
 
 class AddPointScreen extends StatefulWidget {
   const AddPointScreen({super.key});
@@ -16,10 +10,6 @@ class AddPointScreen extends StatefulWidget {
 }
 
 class _AddPointScreenState extends State<AddPointScreen> {
-  // List untuk menyimpan data quest
-  final List<Quest> quests = [];
-
-  // Controller untuk input teks
   final TextEditingController nameController = TextEditingController();
   final TextEditingController progressController = TextEditingController();
 
@@ -30,147 +20,50 @@ class _AddPointScreenState extends State<AddPointScreen> {
     super.dispose();
   }
 
-  // Menampilkan dialog untuk menambah atau mengedit quest
-  void _showQuestDialog({Quest? quest}) {
-    if (quest != null) {
-      // Jika mengedit, isi controller dengan data quest yang ada
-      nameController.text = quest.name;
-      progressController.text = quest.progress.toString();
-    } else {
-      // Jika menambah, kosongkan controller
-      nameController.clear();
-      progressController.clear();
+  void _saveQuest() {
+    if (nameController.text.isEmpty ||
+        double.tryParse(progressController.text) == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter valid data')),
+      );
+      return;
     }
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(quest == null ? 'Add Quest' : 'Edit Quest'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Quest Name'),
-                ),
-                TextField(
-                  controller: progressController,
-                  decoration: const InputDecoration(labelText: 'Progress (%)'),
-                  keyboardType: TextInputType.number,
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                final newQuest = Quest(
-                  name: nameController.text,
-                  progress: double.tryParse(progressController.text) ?? 0.0,
-                );
+    final name = nameController.text;
+    final progress = double.parse(progressController.text);
 
-                // Menambah atau mengedit quest
-                if (quest == null) {
-                  _addQuest(newQuest);
-                } else {
-                  _editQuest(quest, newQuest);
-                }
+    Provider.of<QuestProvider>(context, listen: false).addQuest(name, progress);
 
-                Navigator.pop(context);
-              },
-              child: const Text('Save'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // Fungsi untuk menambah quest baru
-  void _addQuest(Quest quest) {
-    setState(() {
-      quests.add(quest);
-    });
-  }
-
-  // Fungsi untuk mengedit quest
-  void _editQuest(Quest oldQuest, Quest updatedQuest) {
-    setState(() {
-      final index = quests.indexOf(oldQuest);
-      if (index != -1) {
-        quests[index] = updatedQuest;
-      }
-    });
-  }
-
-  // Fungsi untuk menghapus quest
-  void _deleteQuest(Quest quest) {
-    setState(() {
-      quests.remove(quest);
-    });
+    Navigator.pop(context); // Kembali ke layar sebelumnya
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Quests'),
+        title: const Text('Add Quest'),
       ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              // Daftar quest
-              Expanded(
-                child: ListView.builder(
-                  itemCount: quests.length,
-                  itemBuilder: (context, index) {
-                    final quest = quests[index];
-                    return ListTile(
-                      leading: CircularProgressIndicator(
-                        value: quest.progress / 100,
-                        backgroundColor: Colors.grey[300],
-                        color: Colors.blue,
-                      ),
-                      title: Text(quest.name),
-                      subtitle: Text(
-                          'Progress: ${quest.progress.toStringAsFixed(1)}%'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.blue),
-                            onPressed: () => _showQuestDialog(quest: quest),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () => _deleteQuest(quest),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: 16.0,
-            right: 16.0,
-            child: FloatingActionButton(
-              backgroundColor: const Color.fromRGBO(82, 170, 94, 1.0),
-              tooltip: 'Add Quest',
-              onPressed: () => _showQuestDialog(),
-              child: const Icon(Icons.add, color: Colors.white, size: 28),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'Quest Name'),
             ),
-          ),
-        ],
+            const SizedBox(height: 16),
+            TextField(
+              controller: progressController,
+              decoration: const InputDecoration(labelText: 'Progress (%)'),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _saveQuest,
+              child: const Text('Save Quest'),
+            ),
+          ],
+        ),
       ),
     );
   }

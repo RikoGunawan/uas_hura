@@ -7,6 +7,7 @@ class Profile {
   final String imageurl;
   final int totalLikes;
   final int totalShares;
+  final int totalPoints; // Tambahkan totalPoints untuk leaderboard
 
   Profile({
     required this.id,
@@ -17,9 +18,9 @@ class Profile {
     required this.imageurl,
     required this.totalLikes,
     required this.totalShares,
+    required this.totalPoints,  // Inisialisasi totalPoints
   });
 
-  // Convert JSON to Post object
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(
       id: json['id'],
@@ -30,9 +31,10 @@ class Profile {
       imageurl: json['imageurl'] ?? '',
       totalLikes: json['total_likes'] ?? 0,
       totalShares: json['total_shares'] ?? 0,
+      totalPoints: json['total_points'] ?? 0,  // Parsing totalPoints
     );
   }
-  // Convert Post object to JSON
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -43,6 +45,7 @@ class Profile {
       'imageurl': imageurl,
       'total_likes': totalLikes,
       'total_shares': totalShares,
+      'total_points': totalPoints,  // Menambahkan totalPoints
     };
   }
 }

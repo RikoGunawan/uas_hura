@@ -203,7 +203,7 @@ class HuraPointCategory {
       case 'Rank':
         return [buildContainerLeader(context, "Leaderboard")];
       case 'Quest':
-        return [buildContainerQuest(context, "Quest", 0)];
+        return [buildContainerQuest(context)];
       case 'Reward':
         return [buildContainerReward(context, "Reward", 0, 0, 0)];
       default:

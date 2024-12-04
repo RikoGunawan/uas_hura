@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'package:myapp/models/event.dart';
 
 class EditHuraEvent extends StatefulWidget {
@@ -24,6 +26,7 @@ class _EditHuraEventState extends State<EditHuraEvent> {
   final TextEditingController _descriptionController = TextEditingController();
 
   DateTime? _selectedDate;
+  File? _imageFile; // Untuk menyimpan gambar yang dipilih
 
   @override
   void initState() {
@@ -66,6 +69,19 @@ class _EditHuraEventState extends State<EditHuraEvent> {
       );
 
       Navigator.pop(context);
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+        _imageController.text =
+            _imageFile!.path; // Menyimpan path gambar di text controller
+      });
     }
   }
 
@@ -115,13 +131,21 @@ class _EditHuraEventState extends State<EditHuraEvent> {
                     : null,
               ),
               const SizedBox(height: 16),
-              _buildTextField(
-                controller: _imageController,
-                label: 'Image URL',
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter an image URL.'
-                    : null,
+              // Tombol untuk memilih gambar
+              ElevatedButton(
+                onPressed: _pickImage,
+                child: const Text('Pick Image'),
               ),
+              const SizedBox(height: 8),
+              // Menampilkan gambar yang dipilih
+              if (_imageFile != null)
+                SizedBox(
+                  height: 150,
+                  child: Image.file(
+                    _imageFile!,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: _submit,

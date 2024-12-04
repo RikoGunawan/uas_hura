@@ -7,6 +7,7 @@ import 'package:myapp/admin/huraPoints/add_point_screen.dart';
 import 'package:myapp/admin/huraPoints/admin_hura_point_screen.dart';
 import 'package:myapp/admin/huraPoints/edit_point_screen.dart';
 import 'package:myapp/providers/event_provider.dart';
+import 'package:myapp/providers/quest_provider.dart';
 import 'package:provider/provider.dart';
 
 class AdminWidget extends StatefulWidget {
@@ -76,6 +77,7 @@ class MainWidgetTemplate extends StatelessWidget {
     );
   }
 }
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
@@ -99,7 +101,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          // Conditional Actions
+          // Conditional Actions for specific titles
           if (title == 'Hura Event') ...[
             IconButton(
               icon: const Icon(Icons.add_circle, color: Colors.red),
@@ -108,7 +110,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AddHuraEvent(
-                      events: Provider.of<EventProvider>(context, listen: false).events,
+                      events: Provider.of<EventProvider>(context, listen: false)
+                          .events,
                     ),
                   ),
                 );
@@ -133,12 +136,27 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 IconButton(
                   icon: const Icon(Icons.edit_square, color: Colors.green),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EditPointScreen(),
-                      ),
-                    );
+                    final questProvider =
+                        Provider.of<QuestProvider>(context, listen: false);
+
+                    // Pastikan ada quest untuk diedit
+                    if (questProvider.quests.isNotEmpty) {
+                      final quest =
+                          questProvider.quests.first; // Edit quest pertama
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EditHuraQuest(quests: questProvider.quests),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('No quest available to edit'),
+                        ),
+                      );
+                    }
                   },
                 ),
               ],
@@ -152,7 +170,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
-
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;

@@ -1,8 +1,11 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:myapp/models/event.dart';
 
 class AddHuraEvent extends StatefulWidget {
-  final List<Event> events; // Referensi list event
+  final List<Event> events;
 
   const AddHuraEvent({
     super.key,
@@ -18,18 +21,65 @@ class _AddHuraEventState extends State<AddHuraEvent> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _imageController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
+  Uint8List? _imageBytes;
   DateTime? _selectedDate;
 
-  void _submit() {
+  Future<void> _pickImage() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
+
+    if (result != null) {
+      setState(() {
+        _imageBytes = result.files.single.bytes!;
+      });
+    }
+  }
+
+  Future<String?> _uploadImage(Uint8List imageBytes, String fileName) async {
+    const bucketName = 'creative_hura';
+    final path = 'uploads/${DateTime.now().millisecondsSinceEpoch}_$fileName';
+
+    try {
+      await Supabase.instance.client.storage.from(bucketName).uploadBinary(
+            path,
+            imageBytes,
+          );
+
+      return Supabase.instance.client.storage
+          .from(bucketName)
+          .getPublicUrl(path);
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
+  }
+
+  Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
+      if (_imageBytes == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select an image.')),
+        );
+        return;
+      }
+
+      final imageUrl = await _uploadImage(_imageBytes!, _nameController.text);
+      if (imageUrl == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to upload image.')),
+        );
+        return;
+      }
+
       final newEvent = Event(
-        id: widget.events.length + 1, // ID baru berdasarkan panjang list
+        id: widget.events.length + 1,
         name: _nameController.text,
         price: double.parse(_priceController.text),
-        image: _imageController.text,
+        image: imageUrl,
         description: _descriptionController.text,
         eventDate: _selectedDate!,
       );
@@ -39,9 +89,7 @@ class _AddHuraEventState extends State<AddHuraEvent> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Event has been added successfully!'),
-        ),
+        const SnackBar(content: Text('Event has been added successfully!')),
       );
 
       Navigator.pop(context);
@@ -51,16 +99,13 @@ class _AddHuraEventState extends State<AddHuraEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Event'),
-      ),
+      appBar: AppBar(title: const Text('Add Event')),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
-              const SizedBox(height: 16),
               _buildTextField(
                 controller: _nameController,
                 label: 'Event Name',
@@ -94,26 +139,11 @@ class _AddHuraEventState extends State<AddHuraEvent> {
                     : null,
               ),
               const SizedBox(height: 16),
-              _buildTextField(
-                controller: _imageController,
-                label: 'Image URL',
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter an image URL.'
-                    : null,
-              ),
+              _buildImagePicker(),
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: _submit,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 48),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                child: const Text(
-                  'Add Event',
-                  style: TextStyle(fontSize: 16),
-                ),
+                child: const Text('Add Event'),
               ),
             ],
           ),
@@ -130,12 +160,8 @@ class _AddHuraEventState extends State<AddHuraEvent> {
   }) {
     return TextFormField(
       controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-      ),
+      decoration:
+          InputDecoration(labelText: label, border: OutlineInputBorder()),
       validator: validator,
       keyboardType: keyboardType,
     );
@@ -147,9 +173,7 @@ class _AddHuraEventState extends State<AddHuraEvent> {
       readOnly: true,
       decoration: InputDecoration(
         labelText: 'Event Date',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        border: OutlineInputBorder(),
         suffixIcon: IconButton(
           icon: const Icon(Icons.calendar_today),
           onPressed: () async {
@@ -171,6 +195,28 @@ class _AddHuraEventState extends State<AddHuraEvent> {
       ),
       validator: (value) =>
           value == null || value.isEmpty ? 'Please pick a date.' : null,
+    );
+  }
+
+  Widget _buildImagePicker() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Event Image'),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            ElevatedButton.icon(
+              onPressed: _pickImage,
+              icon: const Icon(Icons.image),
+              label: const Text('Choose Image'),
+            ),
+            const SizedBox(width: 16),
+            if (_imageBytes != null)
+              const Icon(Icons.check_circle, color: Colors.green),
+          ],
+        ),
+      ],
     );
   }
 }

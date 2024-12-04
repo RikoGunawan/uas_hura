@@ -102,4 +102,6 @@ class SupabaseService {
       return null;
     }
   }
+
+  static loadLeaderboard() {}
 }
