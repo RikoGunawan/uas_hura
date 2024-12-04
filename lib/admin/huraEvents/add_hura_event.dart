@@ -183,13 +183,11 @@ class _AddHuraEventState extends State<AddHuraEvent> {
               firstDate: DateTime(2000),
               lastDate: DateTime(2100),
             );
-            if (pickedDate != null) {
-              setState(() {
-                _selectedDate = pickedDate;
-                _dateController.text =
-                    '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
-              });
-            }
+            setState(() {
+              _selectedDate = pickedDate;
+              _dateController.text =
+                  '${pickedDate?.day}/${pickedDate?.month}/${pickedDate?.year}';
+            });
           },
         ),
       ),

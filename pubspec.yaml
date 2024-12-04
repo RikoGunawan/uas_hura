@@ -37,7 +37,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/Tahura.png"
+  image_path: "assets/tahura.png"
 
   # Recommended linting package for better coding practices
 flutter_lints: ^5.0.0
