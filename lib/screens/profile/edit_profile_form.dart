@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myapp/screens/home/login_screen.dart';
+import 'package:myapp/utils/app_colors.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../services/supabase_service.dart';
 
@@ -69,11 +70,41 @@ class _EditProfileFormState extends State<EditProfileForm> {
         setState(() {
           _profileImageUrl = imageUrl;
         });
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Profile photo uploaded successfully!'),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile photo uploaded successfully!')),
+        );
       }
     }
+  }
+
+  Future<void> _saveProfile() async {
+    final userId = Supabase.instance.client.auth.currentUser!.id;
+    final firstName = _firstNameController.text;
+    final lastName = _lastNameController.text;
+    final username = _usernameController.text;
+
+    try {
+      await SupabaseService.updateProfile(
+          userId, firstName, lastName, username, _profileImageUrl);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile saved successfully!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error saving profile: $e')),
+      );
+    }
+  }
+
+  Future<void> _signOut() async {
+    await Supabase.instance.client.auth.signOut();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Successfully signed out')),
+    );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
   }
 
   @override
@@ -82,73 +113,77 @@ class _EditProfileFormState extends State<EditProfileForm> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       children: [
         if (_profileImageUrl != null)
-          Image.network(
-            _profileImageUrl!,
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
+          CircleAvatar(
+            backgroundImage: NetworkImage(_profileImageUrl!),
+            radius: 50,
           ),
         const SizedBox(height: 16),
         TextFormField(
           controller: _firstNameController,
           decoration: const InputDecoration(
-            label: Text('First Name'),
+            labelText: 'First Name',
+            border: OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 16),
         TextFormField(
           controller: _lastNameController,
           decoration: const InputDecoration(
-            label: Text('Last Name'),
+            labelText: 'Last Name',
+            border: OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 16),
         TextFormField(
           controller: _usernameController,
           decoration: const InputDecoration(
-            label: Text('Username'),
+            labelText: 'Username',
+            border: OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 16),
         ElevatedButton(
           onPressed: _selectAndUploadPhoto,
-          child: const Text('Upload Photo'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: const Text(
+            'Upload Photo',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white, // White text for better contrast
+            ),
+          ),
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: () async {
-            final userId = Supabase.instance.client.auth.currentUser!.id;
-            final firstName = _firstNameController.text;
-            final lastName = _lastNameController.text;
-            final username = _usernameController.text;
-
-            try {
-              await SupabaseService.updateProfile(
-                  userId, firstName, lastName, username, _profileImageUrl);
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Saved profile'),
-              ));
-            } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Error saving profile: $e'),
-              ));
-            }
-          },
-          child: const Text('Save'),
+          onPressed: _saveProfile,
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            backgroundColor: AppColors.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: const Text(
+            'Save Profile',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white, // White text for better contrast
+            ),
+          ),
         ),
         const SizedBox(height: 16),
         TextButton(
-          onPressed: () async {
-            await Supabase.instance.client.auth.signOut();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Successfully signed out'),
-            ));
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-            );
-          },
-          child: const Text('Sign Out'),
+          onPressed: _signOut,
+          child: const Text(
+            'Sign Out',
+            style: TextStyle(color: Colors.red),
+          ),
         ),
       ],
     );

@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart'; // Untuk kIsWeb
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:myapp/utils/app_colors.dart';
 import 'package:myapp/widgets/main_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -35,23 +36,18 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
 
   Future<void> _pickImage() async {
     if (kIsWeb) {
-      // Logika untuk Web
       final result = await FilePicker.platform.pickFiles(
         type: FileType.image,
         allowMultiple: false,
       );
-
       if (result != null && result.files.single.bytes != null) {
         setState(() {
-          _selectedImageWeb =
-              result.files.single.bytes; // Web menggunakan Uint8List
+          _selectedImageWeb = result.files.single.bytes;
         });
       }
     } else {
-      // Logika untuk Android/iOS
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
       if (pickedFile != null) {
         setState(() {
           _selectedImageFile = File(pickedFile.path);
@@ -71,12 +67,11 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
     final user = Supabase.instance.client.auth.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('User  not authenticated.')),
+        const SnackBar(content: Text('User not authenticated.')),
       );
       return;
     }
 
-    // Fetch user profile to get user_image_url
     final profileResponse = await Supabase.instance.client
         .from('profiles')
         .select()
@@ -85,27 +80,24 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
 
     final userProfile = Profile.fromJson(profileResponse);
 
-    // Create a new post
     final post = Post(
       id: Uuid().v4(),
       name: _nameController.text,
       description: _descriptionController.text,
-      imageUrl: '', // This will be filled after upload
+      imageUrl: '',
       likes: 0,
       shares: 0,
       userId: user.id,
-      userImageUrl: userProfile.imageurl, // Set user_image_url from profile
+      userImageUrl: userProfile.imageurl,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Uploading...')),
     );
 
     if (kIsWeb && _selectedImageWeb != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Uploading...')),
-      );
       await uploadAndCreatePostWeb(_selectedImageWeb!, post);
     } else if (_selectedImageFile != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Uploading...')),
-      );
       await uploadAndCreatePost(_selectedImageFile!, post);
     }
 
@@ -114,16 +106,14 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
     );
 
     _resetForm();
-    // Update daily points on login
+
     final huraPointProvider =
         Provider.of<HuraPointProvider>(context, listen: false);
     huraPointProvider.addDailyPoints(2);
 
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => MainWidget(),
-      ),
+      MaterialPageRoute(builder: (context) => MainWidget()),
     );
   }
 
@@ -138,19 +128,16 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
 
   Widget buildImagePreview() {
     if (_selectedImageWeb != null) {
-      // Untuk platform Web
       return Image.memory(
         _selectedImageWeb!,
         fit: BoxFit.contain,
       );
     } else if (_selectedImageFile != null) {
-      // Untuk platform Android/iOS
       return Image.file(
         _selectedImageFile!,
         fit: BoxFit.contain,
       );
     } else {
-      // Jika belum ada gambar dipilih
       return Container(
         height: 200,
         alignment: Alignment.center,
@@ -174,13 +161,11 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Gambar
             AspectRatio(
-              aspectRatio: 16 / 9, // Default rasio jika gambar belum ada
+              aspectRatio: 16 / 9,
               child: buildImagePreview(),
             ),
             const SizedBox(height: 16),
-            // TextField untuk Nama
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
@@ -189,7 +174,6 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
               ),
             ),
             const SizedBox(height: 16),
-            // TextField untuk Deskripsi
             TextField(
               controller: _descriptionController,
               decoration: const InputDecoration(
@@ -199,14 +183,33 @@ class _AddPostScreenOnlineState extends State<AddPostScreenOnline> {
               maxLines: 3,
             ),
             const SizedBox(height: 16),
-            // Tombol untuk memilih gambar
-
             ElevatedButton(
               onPressed: _pickImage,
-              child: const Text('Pick Image'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+              ),
+              child: const Text(
+                'Pick Image',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white, // White text for better contrast
+                ),
+              ),
             ),
+            const SizedBox(height: 8),
             ElevatedButton(
               onPressed: _createPost,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryLight,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+              ),
               child: const Text('Create Post'),
             ),
           ],

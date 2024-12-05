@@ -27,27 +27,22 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
             ),
           ),
           // Positioned overlay with text
+          // Positioned overlay with the small image at the top center
+          // Positioned overlay with the image at the top center
           Positioned(
-            top: 50, // Position the title near the top
+            top: 20, // Posisi lebih dekat ke bagian atas layar
             left: 0,
             right: 0,
-            child: Text(
-              'TAHURA',
-              textAlign: TextAlign.center, // Center the text
-              style: const TextStyle(
-                fontSize: 40, // Increased font size
-                fontWeight: FontWeight.bold,
-                color: Colors.white, // White text for better contrast
-                shadows: [
-                  Shadow(
-                    blurRadius: 10.0, // Blur radius of the shadow
-                    color: Colors.black54, // Color of the shadow
-                    offset: Offset(2.0, 2.0), // Offset of the shadow
-                  ),
-                ],
+            child: Center(
+              child: Image.asset(
+                'assets/Transparent.png',
+                height: 120, // Ukuran tinggi sedang
+                width: 120, // Ukuran lebar sedang
+                fit: BoxFit.contain, // Menjaga proporsi gambar
               ),
             ),
           ),
+
           // Explore text at the bottom left
           Positioned(
             top: 330, // Position the text near the bottom
@@ -122,7 +117,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
   Widget _buildButtonLogin(
       {required String text, required VoidCallback onPressed}) {
     return SizedBox(
-      width: 400, // Set a fixed width for the button
+      width: 300, // Set a fixed width for the button
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -144,7 +139,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
   Widget _buildButtonNew(
       {required String text, required VoidCallback onPressed}) {
     return SizedBox(
-      width: 400, // Set a fixed width for the button
+      width: 300, // Set a fixed width for the button
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
