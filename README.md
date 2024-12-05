@@ -3,17 +3,45 @@
 Made by Riko Gunawan - 2022130016
 rikogunawan100@gmail.com
 
+Sulistiani - 2021110055 
+sulistiani3399@gmail.com
+
 **Catatan**
 
 - Flutter Project dikerjakan dengan Project IDX
 - Selengkapnya dapat dilihat dalam project.
 
 ## Screenshot
-![Screenshot 2024-10-23 092048](https://github.com/user-attachments/assets/0c19c12a-eba4-4d39-a5e8-d0a6eb89cb02)
-![Screenshot 2024-10-23 092133](https://github.com/user-attachments/assets/a6f261cc-629c-44a8-af19-7ce2d21b8798)
-![Screenshot 2024-10-23 092203](https://github.com/user-attachments/assets/c99df165-5d2b-465b-bdeb-833d12e24c63)
-![Screenshot 2024-10-23 092300](https://github.com/user-attachments/assets/c75f661a-e649-473e-8e83-8b97b5763117)
-![Screenshot 2024-10-23 092348](https://github.com/user-attachments/assets/6f0e19e8-4c5e-4973-8ea2-609ee8e23807)
+![image](https://github.com/user-attachments/assets/9b435803-c138-4807-ac13-ed00cd78beea)
+![image](https://github.com/user-attachments/assets/e306c41d-180b-434f-b52b-96269c1c44e7)
+![image](https://github.com/user-attachments/assets/9dafa544-d30d-4f07-a6a8-93db24336597)
+
+Halaman User:
+![image](https://github.com/user-attachments/assets/f1fc84c6-b247-4dd9-804e-ef8a7f9cb46d)
+![image](https://github.com/user-attachments/assets/cffb513d-5126-4b8d-b507-63471218b79e)
+![image](https://github.com/user-attachments/assets/7221dcab-cff0-49bc-ba12-acc174a9da88)
+![image](https://github.com/user-attachments/assets/847fb34a-a8bd-4288-8e43-21182f2bfc7e)
+![image](https://github.com/user-attachments/assets/83dd452e-b679-4978-9a0c-283271106659)
+![image](https://github.com/user-attachments/assets/6c9d09c7-c788-4c0d-8342-913c83c3e67a)
+![image](https://github.com/user-attachments/assets/6f9865fa-3129-4277-936b-6e0928274029)
+![image](https://github.com/user-attachments/assets/d1bed7aa-7920-40b2-b910-53908fd1d3b5)
+![image](https://github.com/user-attachments/assets/a4c381d8-1ac8-49a5-96eb-ec10df27dcbf)
+![image](https://github.com/user-attachments/assets/ac9ef933-44c9-473c-9c68-6876eff99f02)
+![image](https://github.com/user-attachments/assets/63c656c2-4daf-4e14-b66a-fa6ce72ca849)
+![image](https://github.com/user-attachments/assets/38182fdd-ae9e-4f5f-8ef8-d3ccfcf0140b)
+![image](https://github.com/user-attachments/assets/9cc3da4e-c94a-4692-842f-be46a71966b5)
+![image](https://github.com/user-attachments/assets/13a031e9-7265-4f81-ba10-65402bd89683)
+
+Halaman Admin:
+![image](https://github.com/user-attachments/assets/86b25742-b247-41d9-b410-6404f95b5c3b)
+![image](https://github.com/user-attachments/assets/c1ded1b0-56ee-48f1-b938-1330d5e35210)
+![image](https://github.com/user-attachments/assets/ef2148ac-077a-4633-9386-067007bda6ff)
+![image](https://github.com/user-attachments/assets/088f7dcc-dc40-426b-a734-4c7e156c927e)
+![image](https://github.com/user-attachments/assets/fe6d389a-f73a-4c29-a3d0-33091767deb2)
+![image](https://github.com/user-attachments/assets/01313c7c-7bcd-4325-a944-d83ebe8f3d0a)
+![image](https://github.com/user-attachments/assets/38b76b10-c794-46a9-837a-2f77ac9c3cce)
+![image](https://github.com/user-attachments/assets/566888a4-3d2a-4672-81d0-214922e63803)
+
 
 ## Target/Goal/Model
 ![Screenshot 2024-10-20 222430](https://github.com/user-attachments/assets/c25e34dd-ff14-4013-9293-d4c61533f685)
