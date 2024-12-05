@@ -69,37 +69,29 @@ class EventProvider extends ChangeNotifier {
     // Tambahkan produk lain sesuai kebutuhan
   ];
 
-//------------------------------- Search Event (not used)
-
-  List<Event> _filteredEvents = []; // Daftar produk yang difilter
+  // -------------------------------------------- Search Event
+  List<Event> _filteredEvents = [];
   List<Event> get events => _filteredEvents.isEmpty ? _events : _filteredEvents;
+
   void searchEvent(String query) {
-    if (query.isEmpty) {
-      _filteredEvents = _events;
-    } else {
-      _filteredEvents = _events
-          .where(
-              (event) => event.name.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    }
+    _filteredEvents = query.isEmpty
+        ? _events
+        : _events
+            .where((event) =>
+                event.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+    notifyListeners();
   }
 
-// ------------------------------- Countdown + Notifikasi Event
+  // -------------------------------------------- Countdown + Notifikasi Event
   final List<Event> _eventsWithNotification = [];
   List<Event> get eventsWithNotification => _eventsWithNotification;
 
-  // Queue untuk menyimpan event yang belum ditampilkan notifikasinya
   final Queue<Event> _notificationQueue = Queue();
-
-  // Flag untuk mengecek apakah sedang menampilkan notifikasi
   bool _isShowingNotification = false;
-
-  // Tambahkan variabel untuk mengatur jeda antar notifikasi
   Timer? _notificationDelayTimer;
-  static const Duration notificationDelay = Duration(seconds: 5);
-
-  Duration? countdownDuration;
   Timer? countdownTimer;
+  static const Duration notificationDelay = Duration(seconds: 5);
 
   EventProvider() {
     startCountdown();
@@ -107,15 +99,13 @@ class EventProvider extends ChangeNotifier {
 
   void startCountdown() {
     countdownTimer?.cancel();
-    countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      for (var event in _events.toList()) {
-        final duration = event.eventDate.difference(DateTime.now());
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      for (var event in _events) {
+        final duration = _calculateEventDuration(event);
 
-        if (duration.isNegative) {
-          // Hapus event dari daftar notifikasi
+        if (duration == null || duration.isNegative) {
           _removeEventFromNotification(event);
         } else if (duration.inDays <= 1) {
-          countdownDuration = duration;
           _addEventToNotification(event);
         }
       }
@@ -123,13 +113,11 @@ class EventProvider extends ChangeNotifier {
     });
   }
 
-  void _addEventToNotification(Event event) {
-    final duration = event.eventDate.difference(DateTime.now());
-    if (duration.isNegative) {
-      _removeEventFromNotification(event);
-      return;
-    }
+  Duration? _calculateEventDuration(Event event) {
+    return event.eventDate.difference(DateTime.now());
+  }
 
+  void _addEventToNotification(Event event) {
     if (!_eventsWithNotification.contains(event)) {
       _eventsWithNotification.add(event);
       _queueNotification(event);
@@ -138,13 +126,14 @@ class EventProvider extends ChangeNotifier {
   }
 
   void _removeEventFromNotification(Event event) {
-    _eventsWithNotification.remove(event);
-    notifyListeners();
+    if (_eventsWithNotification.contains(event)) {
+      _eventsWithNotification.remove(event);
+      notifyListeners();
+    }
   }
 
   void _queueNotification(Event event) {
-    // Cek apakah event sudah ada di queue
-    if (!_notificationQueue.contains(event)) {
+    if (!_notificationQueue.contains(event) && _isEventUpcoming(event)) {
       _notificationQueue.add(event);
       _processNotificationQueue();
     }
@@ -152,21 +141,15 @@ class EventProvider extends ChangeNotifier {
 
   void _processNotificationQueue() {
     if (!_isShowingNotification && _notificationQueue.isNotEmpty) {
-      Event event = _notificationQueue.first;
+      final event = _notificationQueue.removeFirst();
 
-      // Pastikan event belum lewat sebelum menampilkan notifikasi
-      if (event.eventDate.isBefore(DateTime.now())) {
-        _notificationQueue.removeFirst();
-        return; // Jangan proses event yang sudah lewat
+      if (!_isEventUpcoming(event)) {
+        return; // Skip expired events
       }
 
       _isShowingNotification = true;
-      _notificationQueue.removeFirst();
-
-      // Tampilkan notifikasi
       _showEventNotification(event);
 
-      // Set timer untuk jeda notifikasi
       _notificationDelayTimer = Timer(notificationDelay, () {
         _isShowingNotification = false;
         _processNotificationQueue();
@@ -174,94 +157,71 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
+  bool _isEventUpcoming(Event event) {
+    final duration = _calculateEventDuration(event);
+    return duration != null && !duration.isNegative;
+  }
+
   void _showEventNotification(Event event) {
-    final screenWidth = MediaQuery.of(navigatorKey.currentContext!).size.width;
-    if (navigatorKey.currentContext != null) {
-      // Hitung ulang durasi saat notifikasi ditampilkan
-      final duration = event.eventDate.difference(DateTime.now());
+    final context = navigatorKey.currentContext;
+    if (context == null) return;
 
-      ElegantNotification(
-        icon: const Icon(
-          Icons.access_alarm,
-          color: Colors.orange,
-        ),
-        progressIndicatorColor: Colors.orange,
-        width: screenWidth * 0.85,
-        toastDuration: const Duration(seconds: 5),
-        isDismissable: false,
-        position: Alignment.topCenter,
-        animation: AnimationType.fromTop,
-        title: Text(
-          event.name,
-          style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        description: Text(
-          _truncateDescription(
-            'Event live dalam ${duration.inHours} jam!',
-          ),
-          style: const TextStyle(
-            fontSize: 9,
-          ),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        onDismiss: () {
-          // Batalkan timer sebelumnya jika ada
-          _notificationDelayTimer?.cancel();
+    final duration = _calculateEventDuration(event);
+    if (duration == null || duration.isNegative) return;
 
-          // Reset status notifikasi
-          _isShowingNotification = false;
-          _processNotificationQueue();
-        },
-        onNotificationPressed: () {
-          Navigator.push(
-              navigatorKey.currentContext!,
-              MaterialPageRoute(
-                  builder: (_) => EventDetailScreen(event: event)));
-        },
-      ).show(navigatorKey.currentContext!);
-    }
+    ElegantNotification(
+      icon: const Icon(Icons.access_alarm, color: Colors.orange),
+      progressIndicatorColor: Colors.orange,
+      width: MediaQuery.of(context).size.width * 0.85,
+      toastDuration: const Duration(seconds: 5),
+      isDismissable: false,
+      position: Alignment.topCenter,
+      animation: AnimationType.fromTop,
+      title: Text(
+        event.name,
+        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+      ),
+      description: Text(
+        'Event live dalam ${duration.inHours} jam!',
+        style: const TextStyle(fontSize: 9),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+      onDismiss: () {
+        _isShowingNotification = false;
+        _processNotificationQueue();
+      },
+      onNotificationPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => EventDetailScreen(event: event),
+          ),
+        );
+      },
+    ).show(context);
   }
 
-  // Fungsi untuk memotong deskripsi
-  String _truncateDescription(String description, {int maxLength = 70}) {
-    if (description.length <= maxLength) {
-      return description;
-    }
-    return '${description.substring(0, maxLength)}...';
-  }
-
-  // Tambahan method untuk mendapatkan durasi event
-  Duration? getEventCountdownDuration(Event event) {
-    return event.eventDate.difference(DateTime.now());
-  }
-
-  // Metode CRUD untuk event (tidak diakses user)
+  // CRUD Methods
   void addEvent(Event event) {
     _events.add(event);
     notifyListeners();
   }
 
   void editEvent(Event event) {
-    final index = _events.indexWhere((element) => element.id == event.id);
-    _events[index] = event;
-    notifyListeners();
+    final index = _events.indexWhere((e) => e.id == event.id);
+    if (index != -1) {
+      _events[index] = event;
+      notifyListeners();
+    }
   }
 
   void removeEvent(Event event) {
     _events.remove(event);
+    _removeEventFromNotification(event);
     notifyListeners();
   }
 
-  void clearEvents() {
-    _events.clear();
-    notifyListeners();
-  }
-
-  // Pastikan membersihkan timer saat provider di dispose
   @override
   void dispose() {
     countdownTimer?.cancel();

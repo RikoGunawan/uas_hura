@@ -66,6 +66,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
+      navigatorKey: navigatorKey,
       home: LoginScreen(),
     );
   }
