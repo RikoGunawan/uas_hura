@@ -12,8 +12,7 @@ sulistiani3399@gmail.com
 - Selengkapnya dapat dilihat dalam project.
 
 ## Screenshot
-**Get Started Screen**
-![image](https://github.com/user-attachments/assets/9b435803-c138-4807-ac13-ed00cd78beea)
+![Get Started Screen](https://github.com/user-attachments/assets/9b435803-c138-4807-ac13-ed00cd78beea)
 
 ![Login Screen](https://github.com/user-attachments/assets/e306c41d-180b-434f-b52b-96269c1c44e7)
 
