@@ -67,16 +67,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-<<<<<<< HEAD
-<<<<<<< HEAD
       navigatorKey: navigatorKey,
-      home: LoginScreen(),
-=======
-      home: MainWidget(),
->>>>>>> 6037bf2 (Finishing)
-=======
       home: GetStartedScreen(),
->>>>>>> 2989980 (Finishing)
     );
   }
 }
