@@ -15,8 +15,6 @@ sulistiani3399@gmail.com
 ![image](https://github.com/user-attachments/assets/9b435803-c138-4807-ac13-ed00cd78beea)
 ![image](https://github.com/user-attachments/assets/e306c41d-180b-434f-b52b-96269c1c44e7)
 ![image](https://github.com/user-attachments/assets/9dafa544-d30d-4f07-a6a8-93db24336597)
-
-Halaman User:
 ![image](https://github.com/user-attachments/assets/f1fc84c6-b247-4dd9-804e-ef8a7f9cb46d)
 ![image](https://github.com/user-attachments/assets/cffb513d-5126-4b8d-b507-63471218b79e)
 ![image](https://github.com/user-attachments/assets/7221dcab-cff0-49bc-ba12-acc174a9da88)
@@ -31,8 +29,6 @@ Halaman User:
 ![image](https://github.com/user-attachments/assets/38182fdd-ae9e-4f5f-8ef8-d3ccfcf0140b)
 ![image](https://github.com/user-attachments/assets/9cc3da4e-c94a-4692-842f-be46a71966b5)
 ![image](https://github.com/user-attachments/assets/13a031e9-7265-4f81-ba10-65402bd89683)
-
-Halaman Admin:
 ![image](https://github.com/user-attachments/assets/86b25742-b247-41d9-b410-6404f95b5c3b)
 ![image](https://github.com/user-attachments/assets/c1ded1b0-56ee-48f1-b938-1330d5e35210)
 ![image](https://github.com/user-attachments/assets/ef2148ac-077a-4633-9386-067007bda6ff)
@@ -42,10 +38,6 @@ Halaman Admin:
 ![image](https://github.com/user-attachments/assets/38b76b10-c794-46a9-837a-2f77ac9c3cce)
 ![image](https://github.com/user-attachments/assets/566888a4-3d2a-4672-81d0-214922e63803)
 
-
-## Target/Goal/Model
-![Screenshot 2024-10-20 222430](https://github.com/user-attachments/assets/c25e34dd-ff14-4013-9293-d4c61533f685)
-![Screenshot 2024-10-20 222400](https://github.com/user-attachments/assets/7580b855-2eaf-4e31-a4e5-37cc18bc330b)
 
 **Referensi**
 https://nekoto-kun.github.io/course-ppb/docs/intro
