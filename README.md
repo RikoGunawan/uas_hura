@@ -8,6 +8,15 @@
 
 ---
 
+## 🚀 **Techs & Services**  
+- **Flutter**: Framework utama untuk membangun aplikasi berbasis mobile dan web.  
+- **Project IDX**: Platform pengembangan cloud untuk mempermudah kolaborasi dan pengelolaan proyek.  
+- **Supabase**: Backend sebagai layanan untuk autentikasi dan pengelolaan database.  
+- **Website [pub.dev](https://pub.dev/)**: Sumber utama untuk menemukan dan mengelola library Flutter.  
+- **Libraries Flutter**: Mendukung berbagai fungsi seperti desain UI, state management, dan animasi.  
+
+---
+
 ## 📋 **Tentang Proyek**
 Proyek ini merupakan tugas akhir dari mata kuliah Pemrograman Perangkat Bergerak. Aplikasi dibangun menggunakan **Flutter** dengan platform **Project IDX** dan dirancang untuk memberikan pengalaman interaktif kepada pengguna dengan berbagai fitur menarik.  
 
