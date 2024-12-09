@@ -26,9 +26,6 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               fit: BoxFit.cover, // Cover the entire area
             ),
           ),
-          // Positioned overlay with text
-          // Positioned overlay with the small image at the top center
-          // Positioned overlay with the image at the top center
           Positioned(
             top: 20, // Posisi lebih dekat ke bagian atas layar
             left: 0,
@@ -88,7 +85,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   _buildButtonLogin(
                     text: 'Login',
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => LoginScreen()),
                       );
@@ -98,7 +95,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   _buildButtonNew(
                     text: 'Create New Account',
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => RegisterScreen()),
@@ -117,7 +114,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
   Widget _buildButtonLogin(
       {required String text, required VoidCallback onPressed}) {
     return SizedBox(
-      width: 300, // Set a fixed width for the button
+      width: MediaQuery.of(context).size.width * 0.85,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -139,7 +136,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
   Widget _buildButtonNew(
       {required String text, required VoidCallback onPressed}) {
     return SizedBox(
-      width: 300, // Set a fixed width for the button
+      width: MediaQuery.of(context).size.width * 0.85,
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(

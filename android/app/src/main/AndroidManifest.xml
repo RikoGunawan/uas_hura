@@ -3,9 +3,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     
     <application
-        android:label="Hura"
+        android:label="myapp"
         android:name="${applicationName}"
-        android:icon="@mipmap/tahura">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
